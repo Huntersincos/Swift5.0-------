@@ -1,0 +1,619 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6EB799FC2493696900B56296 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB799FB2493696900B56296 /* AppDelegate.swift */; };
+		6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB799FD2493696900B56296 /* SceneDelegate.swift */; };
+		6EB79A032493696900B56296 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EB79A012493696900B56296 /* Main.storyboard */; };
+		6EB79A052493697000B56296 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EB79A042493697000B56296 /* Assets.xcassets */; };
+		6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EB79A062493697000B56296 /* LaunchScreen.storyboard */; };
+		6EB79A132493697100B56296 /* VedioPlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A122493697100B56296 /* VedioPlayTests.swift */; };
+		6EB79A1E2493697100B56296 /* VedioPlayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A1D2493697100B56296 /* VedioPlayUITests.swift */; };
+		6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A2C2493700200B56296 /* MyTabBarViewController.swift */; };
+		6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A30249374DF00B56296 /* MyVedioViewController.swift */; };
+		6EB79A332493757D00B56296 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A322493757D00B56296 /* ViewController.swift */; };
+		6EB79A352493768700B56296 /* BaseNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A342493768600B56296 /* BaseNavViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6EB79A0F2493697000B56296 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EB799F02493696800B56296 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EB799F72493696900B56296;
+			remoteInfo = VedioPlay;
+		};
+		6EB79A1A2493697100B56296 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EB799F02493696800B56296 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6EB799F72493696900B56296;
+			remoteInfo = VedioPlay;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6EB799F82493696900B56296 /* VedioPlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VedioPlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EB799FB2493696900B56296 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6EB799FD2493696900B56296 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		6EB79A022493696900B56296 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6EB79A042493697000B56296 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6EB79A072493697000B56296 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6EB79A092493697000B56296 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EB79A0E2493697000B56296 /* VedioPlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VedioPlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EB79A122493697100B56296 /* VedioPlayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VedioPlayTests.swift; sourceTree = "<group>"; };
+		6EB79A142493697100B56296 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EB79A192493697100B56296 /* VedioPlayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VedioPlayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EB79A1D2493697100B56296 /* VedioPlayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VedioPlayUITests.swift; sourceTree = "<group>"; };
+		6EB79A1F2493697100B56296 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EB79A2C2493700200B56296 /* MyTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarViewController.swift; sourceTree = "<group>"; };
+		6EB79A30249374DF00B56296 /* MyVedioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyVedioViewController.swift; sourceTree = "<group>"; };
+		6EB79A322493757D00B56296 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6EB79A342493768600B56296 /* BaseNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6EB799F52493696900B56296 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EB79A0B2493697000B56296 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EB79A162493697100B56296 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6EB799EF2493696800B56296 = {
+			isa = PBXGroup;
+			children = (
+				6EB799FA2493696900B56296 /* VedioPlay */,
+				6EB79A112493697100B56296 /* VedioPlayTests */,
+				6EB79A1C2493697100B56296 /* VedioPlayUITests */,
+				6EB799F92493696900B56296 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6EB799F92493696900B56296 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6EB799F82493696900B56296 /* VedioPlay.app */,
+				6EB79A0E2493697000B56296 /* VedioPlayTests.xctest */,
+				6EB79A192493697100B56296 /* VedioPlayUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6EB799FA2493696900B56296 /* VedioPlay */ = {
+			isa = PBXGroup;
+			children = (
+				6EB79A2F249374B400B56296 /* HomePage */,
+				6EB79A2E249374A100B56296 /* Vedio */,
+				6EB799FB2493696900B56296 /* AppDelegate.swift */,
+				6EB799FD2493696900B56296 /* SceneDelegate.swift */,
+				6EB79A2C2493700200B56296 /* MyTabBarViewController.swift */,
+				6EB79A342493768600B56296 /* BaseNavViewController.swift */,
+				6EB79A012493696900B56296 /* Main.storyboard */,
+				6EB79A042493697000B56296 /* Assets.xcassets */,
+				6EB79A062493697000B56296 /* LaunchScreen.storyboard */,
+				6EB79A092493697000B56296 /* Info.plist */,
+			);
+			path = VedioPlay;
+			sourceTree = "<group>";
+		};
+		6EB79A112493697100B56296 /* VedioPlayTests */ = {
+			isa = PBXGroup;
+			children = (
+				6EB79A122493697100B56296 /* VedioPlayTests.swift */,
+				6EB79A142493697100B56296 /* Info.plist */,
+			);
+			path = VedioPlayTests;
+			sourceTree = "<group>";
+		};
+		6EB79A1C2493697100B56296 /* VedioPlayUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6EB79A1D2493697100B56296 /* VedioPlayUITests.swift */,
+				6EB79A1F2493697100B56296 /* Info.plist */,
+			);
+			path = VedioPlayUITests;
+			sourceTree = "<group>";
+		};
+		6EB79A2E249374A100B56296 /* Vedio */ = {
+			isa = PBXGroup;
+			children = (
+				6EB79A30249374DF00B56296 /* MyVedioViewController.swift */,
+			);
+			path = Vedio;
+			sourceTree = "<group>";
+		};
+		6EB79A2F249374B400B56296 /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				6EB79A322493757D00B56296 /* ViewController.swift */,
+			);
+			path = HomePage;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6EB799F72493696900B56296 /* VedioPlay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EB79A222493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlay" */;
+			buildPhases = (
+				6EB799F42493696900B56296 /* Sources */,
+				6EB799F52493696900B56296 /* Frameworks */,
+				6EB799F62493696900B56296 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VedioPlay;
+			productName = VedioPlay;
+			productReference = 6EB799F82493696900B56296 /* VedioPlay.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6EB79A0D2493697000B56296 /* VedioPlayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EB79A252493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlayTests" */;
+			buildPhases = (
+				6EB79A0A2493697000B56296 /* Sources */,
+				6EB79A0B2493697000B56296 /* Frameworks */,
+				6EB79A0C2493697000B56296 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6EB79A102493697000B56296 /* PBXTargetDependency */,
+			);
+			name = VedioPlayTests;
+			productName = VedioPlayTests;
+			productReference = 6EB79A0E2493697000B56296 /* VedioPlayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6EB79A182493697100B56296 /* VedioPlayUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EB79A282493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlayUITests" */;
+			buildPhases = (
+				6EB79A152493697100B56296 /* Sources */,
+				6EB79A162493697100B56296 /* Frameworks */,
+				6EB79A172493697100B56296 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6EB79A1B2493697100B56296 /* PBXTargetDependency */,
+			);
+			name = VedioPlayUITests;
+			productName = VedioPlayUITests;
+			productReference = 6EB79A192493697100B56296 /* VedioPlayUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6EB799F02493696800B56296 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1120;
+				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = wenze;
+				TargetAttributes = {
+					6EB799F72493696900B56296 = {
+						CreatedOnToolsVersion = 11.2.1;
+					};
+					6EB79A0D2493697000B56296 = {
+						CreatedOnToolsVersion = 11.2.1;
+						TestTargetID = 6EB799F72493696900B56296;
+					};
+					6EB79A182493697100B56296 = {
+						CreatedOnToolsVersion = 11.2.1;
+						TestTargetID = 6EB799F72493696900B56296;
+					};
+				};
+			};
+			buildConfigurationList = 6EB799F32493696800B56296 /* Build configuration list for PBXProject "VedioPlay" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6EB799EF2493696800B56296;
+			productRefGroup = 6EB799F92493696900B56296 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6EB799F72493696900B56296 /* VedioPlay */,
+				6EB79A0D2493697000B56296 /* VedioPlayTests */,
+				6EB79A182493697100B56296 /* VedioPlayUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6EB799F62493696900B56296 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */,
+				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
+				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EB79A0C2493697000B56296 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EB79A172493697100B56296 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6EB799F42493696900B56296 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EB79A332493757D00B56296 /* ViewController.swift in Sources */,
+				6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */,
+				6EB799FC2493696900B56296 /* AppDelegate.swift in Sources */,
+				6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */,
+				6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */,
+				6EB79A352493768700B56296 /* BaseNavViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EB79A0A2493697000B56296 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EB79A132493697100B56296 /* VedioPlayTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EB79A152493697100B56296 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6EB79A1E2493697100B56296 /* VedioPlayUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6EB79A102493697000B56296 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EB799F72493696900B56296 /* VedioPlay */;
+			targetProxy = 6EB79A0F2493697000B56296 /* PBXContainerItemProxy */;
+		};
+		6EB79A1B2493697100B56296 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6EB799F72493696900B56296 /* VedioPlay */;
+			targetProxy = 6EB79A1A2493697100B56296 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6EB79A012493696900B56296 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6EB79A022493696900B56296 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6EB79A062493697000B56296 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6EB79A072493697000B56296 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6EB79A202493697100B56296 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6EB79A212493697100B56296 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6EB79A232493697100B56296 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = VedioPlay/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6EB79A242493697100B56296 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = VedioPlay/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6EB79A262493697100B56296 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = VedioPlayTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VedioPlay.app/VedioPlay";
+			};
+			name = Debug;
+		};
+		6EB79A272493697100B56296 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = VedioPlayTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VedioPlay.app/VedioPlay";
+			};
+			name = Release;
+		};
+		6EB79A292493697100B56296 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = VedioPlayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VedioPlay;
+			};
+			name = Debug;
+		};
+		6EB79A2A2493697100B56296 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = VedioPlayUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlayUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VedioPlay;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6EB799F32493696800B56296 /* Build configuration list for PBXProject "VedioPlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EB79A202493697100B56296 /* Debug */,
+				6EB79A212493697100B56296 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6EB79A222493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EB79A232493697100B56296 /* Debug */,
+				6EB79A242493697100B56296 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6EB79A252493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EB79A262493697100B56296 /* Debug */,
+				6EB79A272493697100B56296 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6EB79A282493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlayUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EB79A292493697100B56296 /* Debug */,
+				6EB79A2A2493697100B56296 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6EB799F02493696800B56296 /* Project object */;
+}
