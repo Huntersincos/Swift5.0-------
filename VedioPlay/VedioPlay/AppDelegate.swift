@@ -8,7 +8,7 @@
 
 import UIKit
 
-//@available(iOS 13.0, *)
+//@available(iOS 13.0, *) 工程用stroyboard搭建 简单界面用xlb 复杂界面用代码实现
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

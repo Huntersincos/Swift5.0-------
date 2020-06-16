@@ -18,6 +18,7 @@ class BaseNavViewController: UINavigationController,UIGestureRecognizerDelegate 
         navigationBar.isTranslucent = false
         navigationBar.titleTextAttributes  = [NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationBar.barTintColor = UIColor.blue
+    
     }
     
    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

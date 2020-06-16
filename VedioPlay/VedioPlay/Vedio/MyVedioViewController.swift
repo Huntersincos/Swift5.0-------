@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class MyVedioViewController: UIViewController {
    
     override func viewDidLoad() {
@@ -16,6 +17,7 @@ class MyVedioViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .red
         title = "视频"
+        
     }
 
     /*

@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */; };
+		6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */; };
+		6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F524973A73008DA35A /* JPhotoManger.swift */; };
+		6EB5D4002498691A008DA35A /* JPhotoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3FF2498691A008DA35A /* JPhotoListView.swift */; };
+		6EB5D40224986E37008DA35A /* AJPhotoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D40124986E37008DA35A /* AJPhotoListCollectionViewCell.swift */; };
+		6EB5D40424989E5A008DA35A /* AJPhotoListCellTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D40324989E5A008DA35A /* AJPhotoListCellTapView.swift */; };
+		6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */; };
+		6EB5D4092498A272008DA35A /* ic_pic_choose@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */; };
 		6EB799FC2493696900B56296 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB799FB2493696900B56296 /* AppDelegate.swift */; };
 		6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB799FD2493696900B56296 /* SceneDelegate.swift */; };
 		6EB79A032493696900B56296 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EB79A012493696900B56296 /* Main.storyboard */; };
@@ -38,6 +46,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRAlbumViewController.swift; sourceTree = "<group>"; };
+		6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JRAlbumViewController.xib; sourceTree = "<group>"; };
+		6EB5D3F524973A73008DA35A /* JPhotoManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JPhotoManger.swift; sourceTree = "<group>"; };
+		6EB5D3FF2498691A008DA35A /* JPhotoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JPhotoListView.swift; sourceTree = "<group>"; };
+		6EB5D40124986E37008DA35A /* AJPhotoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJPhotoListCollectionViewCell.swift; sourceTree = "<group>"; };
+		6EB5D40324989E5A008DA35A /* AJPhotoListCellTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJPhotoListCellTapView.swift; sourceTree = "<group>"; };
+		6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_pic_choose@2x.png"; sourceTree = "<group>"; };
+		6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_pic_choose@3x.png"; sourceTree = "<group>"; };
 		6EB799F82493696900B56296 /* VedioPlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VedioPlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EB799FB2493696900B56296 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6EB799FD2493696900B56296 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +98,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6EB5D3F324973A50008DA35A /* HomePageView */ = {
+			isa = PBXGroup;
+			children = (
+				6EB5D3FF2498691A008DA35A /* JPhotoListView.swift */,
+				6EB5D40124986E37008DA35A /* AJPhotoListCollectionViewCell.swift */,
+				6EB5D40324989E5A008DA35A /* AJPhotoListCellTapView.swift */,
+			);
+			path = HomePageView;
+			sourceTree = "<group>";
+		};
+		6EB5D3F424973A50008DA35A /* HomePageModel */ = {
+			isa = PBXGroup;
+			children = (
+				6EB5D3F524973A73008DA35A /* JPhotoManger.swift */,
+			);
+			path = HomePageModel;
+			sourceTree = "<group>";
+		};
+		6EB5D4052498A23B008DA35A /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */,
+				6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
 		6EB799EF2493696800B56296 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +148,7 @@
 		6EB799FA2493696900B56296 /* VedioPlay */ = {
 			isa = PBXGroup;
 			children = (
+				6EB5D4052498A23B008DA35A /* Source */,
 				6EB79A2F249374B400B56296 /* HomePage */,
 				6EB79A2E249374A100B56296 /* Vedio */,
 				6EB799FB2493696900B56296 /* AppDelegate.swift */,
@@ -148,7 +192,11 @@
 		6EB79A2F249374B400B56296 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
+				6EB5D3F424973A50008DA35A /* HomePageModel */,
+				6EB5D3F324973A50008DA35A /* HomePageView */,
 				6EB79A322493757D00B56296 /* ViewController.swift */,
+				6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */,
+				6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -259,7 +307,10 @@
 			files = (
 				6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */,
 				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
+				6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */,
+				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
+				6EB5D4092498A272008DA35A /* ic_pic_choose@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,10 +336,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6EB79A332493757D00B56296 /* ViewController.swift in Sources */,
+				6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */,
+				6EB5D4002498691A008DA35A /* JPhotoListView.swift in Sources */,
 				6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */,
+				6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */,
 				6EB799FC2493696900B56296 /* AppDelegate.swift in Sources */,
+				6EB5D40224986E37008DA35A /* AJPhotoListCollectionViewCell.swift in Sources */,
 				6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */,
 				6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */,
+				6EB5D40424989E5A008DA35A /* AJPhotoListCellTapView.swift in Sources */,
 				6EB79A352493768700B56296 /* BaseNavViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

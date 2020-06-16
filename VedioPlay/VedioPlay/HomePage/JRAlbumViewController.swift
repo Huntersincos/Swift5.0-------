@@ -1,28 +1,21 @@
 //
-//  MyTabBarViewController.swift
+//  JRAlbumViewController.swift
 //  VedioPlay
 //
-//  Created by wenze on 2020/6/12.
+//  Created by wenze on 2020/6/15.
 //  Copyright © 2020 wenze. All rights reserved.
 //
 
 import UIKit
 
-class MyTabBarViewController: UITabBarController, UITabBarControllerDelegate{
+class JRAlbumViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.delegate = (self as UITabBarControllerDelegate)
+
         // Do any additional setup after loading the view.
-        UITabBar.appearance().backgroundColor = UIColor.white
-        //tabBarItem.badgeValue = "10";
-        
     }
-      
-    
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        
-    }
+
 
     /*
     // MARK: - Navigation
