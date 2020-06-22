@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E699BAB2499F3FF0065115C /* AJGradientView.swift */; };
+		6E908D2D24A09CF8003E9404 /* AssetsPickerVideo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */; };
 		6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */; };
 		6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */; };
 		6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F524973A73008DA35A /* JPhotoManger.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		6E699BAB2499F3FF0065115C /* AJGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJGradientView.swift; sourceTree = "<group>"; };
+		6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AssetsPickerVideo@2x.png"; sourceTree = "<group>"; };
 		6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRAlbumViewController.swift; sourceTree = "<group>"; };
 		6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JRAlbumViewController.xib; sourceTree = "<group>"; };
 		6EB5D3F524973A73008DA35A /* JPhotoManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JPhotoManger.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			children = (
 				6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */,
 				6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */,
+				6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
 				6EB5D4092498A272008DA35A /* ic_pic_choose@3x.png in Resources */,
+				6E908D2D24A09CF8003E9404 /* AssetsPickerVideo@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
