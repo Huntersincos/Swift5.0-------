@@ -42,8 +42,11 @@ class AJPhotoListCellTapView: UIView {
         
     }
     
+    
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+       // super.init(coder:coder)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -109,7 +112,7 @@ class AJPhotoListCellTapView: UIView {
     var disabled:Bool?{
         set{
             _disabled = newValue
-            if _disabled! {
+            if _disabled == nil {
                 self.backgroundColor = disabledColor
             }else{
                 self.backgroundColor = .clear
@@ -122,7 +125,7 @@ class AJPhotoListCellTapView: UIView {
     }
     var selected:Bool?{
         set{
-            if _disabled! {
+            if _disabled == nil {
                 self.backgroundColor = disabledColor
                 self.selectIcon?.image = nil
             }else{

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E699BAB2499F3FF0065115C /* AJGradientView.swift */; };
+		6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = 6E882B8B24A84AF80001710C /* viedio.MP4 */; };
+		6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */; };
+		6E8D79B024AF27F000974FFC /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8D79AF24AF27F000974FFC /* CoreServices.framework */; };
 		6E908D2D24A09CF8003E9404 /* AssetsPickerVideo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */; };
 		6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */; };
 		6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */; };
@@ -49,6 +52,9 @@
 
 /* Begin PBXFileReference section */
 		6E699BAB2499F3FF0065115C /* AJGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJGradientView.swift; sourceTree = "<group>"; };
+		6E882B8B24A84AF80001710C /* viedio.MP4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = viedio.MP4; sourceTree = "<group>"; };
+		6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRCameraHelper.swift; sourceTree = "<group>"; };
+		6E8D79AF24AF27F000974FFC /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AssetsPickerVideo@2x.png"; sourceTree = "<group>"; };
 		6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRAlbumViewController.swift; sourceTree = "<group>"; };
 		6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JRAlbumViewController.xib; sourceTree = "<group>"; };
@@ -82,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E8D79B024AF27F000974FFC /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +109,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E8D79AE24AF27F000974FFC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6E8D79AF24AF27F000974FFC /* CoreServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6EB5D3F324973A50008DA35A /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				6EB5D3F524973A73008DA35A /* JPhotoManger.swift */,
+				6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */,
 			);
 			path = HomePageModel;
 			sourceTree = "<group>";
@@ -127,6 +143,7 @@
 				6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */,
 				6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */,
 				6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */,
+				6E882B8B24A84AF80001710C /* viedio.MP4 */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -138,6 +155,7 @@
 				6EB79A112493697100B56296 /* VedioPlayTests */,
 				6EB79A1C2493697100B56296 /* VedioPlayUITests */,
 				6EB799F92493696900B56296 /* Products */,
+				6E8D79AE24AF27F000974FFC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -312,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */,
+				6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */,
 				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
 				6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */,
 				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
@@ -344,6 +363,7 @@
 			files = (
 				6EB79A332493757D00B56296 /* ViewController.swift in Sources */,
 				6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */,
+				6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */,
 				6EB5D4002498691A008DA35A /* JPhotoListView.swift in Sources */,
 				6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */,
 				6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */,

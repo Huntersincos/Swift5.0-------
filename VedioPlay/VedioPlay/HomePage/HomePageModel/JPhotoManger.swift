@@ -58,16 +58,21 @@ class JPhotoManger: NSObject {
         let tempList = NSMutableArray.init()
         let listGroupBlock:ALAssetsLibraryGroupsEnumerationResultsBlock? = {
              (group: ALAssetsGroup! ,stop:UnsafeMutablePointer<ObjCBool>!) in
-            let assetsFilter = ALAssetsFilter.allAssets()
-            group.setAssetsFilter(assetsFilter)
-            if group.numberOfAssets() > 0 {
-//                group.enumerateAssets { (ALAsset?, <#Int#>, UnsafeMutablePointer<ObjCBool>?) in
-//                    <#code#>
-//                }
-//                group.enumerateAssets { (<#ALAsset?#>, <#Int#>, <#UnsafeMutablePointer<ObjCBool>?#>) in
-//
-//                }
-                //UnsafeMutablePointer Cannot invoke 'enumerateAssets' with an argument list of type解决是加感叹号/?
+            let assetsFilter:ALAssetsFilter? = ALAssetsFilter.allAssets()
+//            if group == nil {
+//                return
+//            }
+            // 不能为空group
+            if group != nil {
+                 group.setAssetsFilter(assetsFilter)
+                  if group.numberOfAssets() > 0 {
+                //                group.enumerateAssets { (ALAsset?, <#Int#>, UnsafeMutablePointer<ObjCBool>?) in
+                //                    <#code#>
+                //                }
+                //                group.enumerateAssets { (<#ALAsset?#>, <#Int#>, <#UnsafeMutablePointer<ObjCBool>?#>) in
+                //
+                //                }
+                                //UnsafeMutablePointer Cannot invoke 'enumerateAssets' with an argument list of type解决是加感叹号/?
                 group.enumerateAssets{ (result:ALAsset?, index:NSInteger?, stop:UnsafeMutablePointer<ObjCBool>?) in
                     if (result != nil) {
                         tempList.add(result!)
@@ -75,18 +80,22 @@ class JPhotoManger: NSObject {
                 }
                 
                 let reversedArray = tempList.reverseObjectEnumerator().allObjects
+                
+                self.assets.removeAllObjects()
                 self.assets = NSMutableArray.init(array: reversedArray)
                 succeed(true)
-            
-        }
+                    
+                }
+            }
         
-    }
+       }
      
         let groupTypes = ALAssetsGroupAll
         assetsLibrary.enumerateGroupsWithTypes(groupTypes, usingBlock: listGroupBlock) { (error:Error?) in
             succeed(false)
             
         }
+       
     
 }
     

@@ -10,6 +10,7 @@ import UIKit
 import AssetsLibrary
 
 class AJPhotoListCollectionViewCell: UICollectionViewCell {
+
     var imageView:UIImageView?
     var asset:ALAsset?
     var tapAssetView:AJPhotoListCellTapView?
@@ -33,8 +34,10 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
         if (asset?.isKind(of: UIImage.self))! {
             self.imageView?.image = asset as? UIImage
         }else{
-            // 获取图片的缩列图 aspectRatioThumbnail
-            self.imageView?.image = UIImage.init(cgImage: asset?.aspectRatioThumbnail() as! CGImage)
+            // 获取图片的缩列图 aspectRatioThumbnail hread 1: EXC_BAD_INSTRUCTION (code=EXC_I386_INVOP, subcode=0x0)
+            //UIImage.init(cgImage: <#T##CGImage#>)
+           // self.imageView?.image = UIImage.init(cgImage: asset?.aspectRatioThumbnail() as! CGImage)
+            self.imageView?.image = UIImage(cgImage: (asset?.thumbnail()?.takeUnretainedValue())!)
             //Binary operator '==' cannot be applied to operands of type 'Any?' and 'String' 在swif中只有类才可以用== 值类型是不行的 asset?.value(forProperty:ALAssetPropertyType) == ALAssetTypeVideo 不对 == 必须类型对应
             let propertyType:String? =  asset?.value(forProperty:ALAssetPropertyType) as? String
             if propertyType == ALAssetTypeVideo {
@@ -55,9 +58,16 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
                     duration.textAlignment = .center
                     duration.autoresizingMask = .flexibleWidth
                     gradientView?.addSubview(duration)
-                    let valueNumber:NSString? = asset?.value(forProperty: ALAssetPropertyDuration) as? NSString
-                    let value:Double? = valueNumber?.doubleValue
-                    duration.text = self.timeFormatted(value!)
+                    // 强转字符串不对
+                    let valueNumber:Any? = asset?.value(forProperty: ALAssetPropertyDuration)
+                    if  valueNumber != nil{
+                        let value:Double? = (valueNumber as AnyObject).doubleValue
+                        if value != nil {
+                             duration.text = self.timeFormatted(value!)
+                        }
+                
+                    }
+                   
                     
                 }
             }
@@ -68,7 +78,7 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func isSelected(_ isSelected:Bool) {
+    func is_Selected(_ isSelected:Bool) {
         tapAssetView?.selected = isSelected
     }
     
