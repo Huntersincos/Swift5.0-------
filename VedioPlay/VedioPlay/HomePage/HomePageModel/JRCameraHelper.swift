@@ -51,6 +51,7 @@ class JRCameraHelper: NSObject,UIImagePickerControllerDelegate,UINavigationContr
             case .CameraTypeBoth:
                 imagePickerController.mediaTypes = [kUTTypeImage as String,kUTTypeMovie as String]
                 imagePickerController.videoMaximumDuration = 60
+                //
                 break
     
             default:
