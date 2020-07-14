@@ -15,7 +15,7 @@ import AssetsLibrary
    1 在相册中
    2 在相机中
 */
-class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource{
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,JRCameraHelperDelegate{
 
     let array = ["相册","相机"]
     @IBOutlet weak var dataTabView: UITableView!
@@ -26,6 +26,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         title = "采集"
         self.tabBarItem.title = "采集"
        // saveMediaToCameraRoll()
+       
     }
      
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,6 +51,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         }else{
             
             // 相机采集相册和相机
+            JRCameraHelper.sharedInstance.delegate = self
+            JRCameraHelper.sharedInstance.showCameraViewControllerCameraType(.CameraTypeBoth, onViewController: self)
         
             
         }
@@ -106,7 +109,21 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
            }
        }
 
-
+    //JRCameraHelperdelegate
+    func cameraPrintImage(_ image: UIImage?) {
+        
+        let imageData:Data? = image?.jpegData(compressionQuality: 0.8) as Data?
+           // (image ?? UIImage.init()).jpegData(compressionQuality: 0.8) as NSData?
+        
+        
+        
+        
+    }
+    
+    func cameraPrintVideo(_ videoUrl: NSURL?) {
+        
+    }
+    
 
 }
 
