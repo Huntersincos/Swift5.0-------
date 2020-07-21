@@ -15,9 +15,9 @@ import AssetsLibrary
    1 在相册中
    2 在相机中
 */
-class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,JRCameraHelperDelegate{
-
-    let array = ["相册","相机"]
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,JRCameraHelperDelegate,AudioPlayHelperDelegate{
+   
+    let array = ["相册","相机","麦克风"]
     @IBOutlet weak var dataTabView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,8 +29,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
        
     }
      
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return array.count
+       func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+          return array.count
        }
        
        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -48,12 +48,15 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             let  albumVie =  JRAlbumViewController.init()
             albumVie.hidesBottomBarWhenPushed = true;
             navigationController?.pushViewController(albumVie, animated: true)
-        }else{
+        }else if indexPath.row == 1  {
             
             // 相机采集相册和相机
             JRCameraHelper.sharedInstance.delegate = self
             JRCameraHelper.sharedInstance.showCameraViewControllerCameraType(.CameraTypeBoth, onViewController: self)
         
+            
+        }else if(indexPath.row == 2){
+            AudioPlayHelper.shareInstance.delegate = self;
             
         }
     }
@@ -61,6 +64,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AudioPlayHelper.shareInstance.stopAudio()
     }
     
     
@@ -112,17 +120,41 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     //JRCameraHelperdelegate
     func cameraPrintImage(_ image: UIImage?) {
         
-        let imageData:Data? = image?.jpegData(compressionQuality: 0.8) as Data?
+        let imageData = image?.jpegData(compressionQuality: 0.8) as NSData?
            // (image ?? UIImage.init()).jpegData(compressionQuality: 0.8) as NSData?
-        
-        
-        
-        
+        let  fileRelativePath = JRFileUtil.createFilePathWithFileName(JRFileUtil .getFileNameWithType("png") as NSString, "image", "15711111111")
+       
+        // 发送图片
+        if imageData?.write(to: URL.init(fileURLWithPath: JRFileUtil .getAbsolutePathWithFileRelativePath(fileRelativePath)), atomically: true) ?? false {
+            print("发送图片成功")
+        }
+         
+    }
+     
+    func cameraPrintVideo(_ videoUrl: NSURL?) {
+        JRFileUtil.convertVideoFormat(videoUrl?.path ?? "", peerUserName: "15711111111") { (code:String, fileRelativePath:String) in
+            
+            DispatchQueue.main.async {
+                // 发送视频
+                if code == "0"{
+                    print("视频压缩成功")
+                }
+            }
+            
+        }
     }
     
-    func cameraPrintVideo(_ videoUrl: NSURL?) {
-        
-    }
+      func audioPlayerDidBeginPlay(_ audioPlay: AVAudioPlayer) {
+           
+       }
+       
+       func audioPlayerDidStopPlay(_ audioPlay: AVAudioPlayer) {
+           
+       }
+       
+       func audioPlayerDidPausePlay(_ audioPlay: AVAudioPlayer) {
+           
+       }
     
 
 }
