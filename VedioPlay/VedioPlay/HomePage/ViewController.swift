@@ -65,9 +65,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
-    
+//    MARK:viewWillDisappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+//      TODO:试图消失时,阻止视频播放
         AudioPlayHelper.shareInstance.stopAudio()
     }
     

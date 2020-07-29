@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 /**
  获取音频
+ 
  */
 @objc protocol  AudioPlayHelperDelegate{
   
@@ -23,6 +24,8 @@ import AVFoundation
     func audioPlayerDidPausePlay(_ audioPlay:AVAudioPlayer)
 }
 
+
+
 class AudioPlayHelper: NSObject,AVAudioPlayerDelegate{
     fileprivate  static var  instacne = AudioPlayHelper()
     weak var delegate:AudioPlayHelperDelegate?
@@ -35,6 +38,8 @@ class AudioPlayHelper: NSObject,AVAudioPlayerDelegate{
         }
     }
     
+    
+    /// 阻止音频播放
     func stopAudio() {
         self.filePath = "";
         if player != nil {
@@ -46,6 +51,7 @@ class AudioPlayHelper: NSObject,AVAudioPlayerDelegate{
         UIDevice.current.isProximityMonitoringEnabled = false
     }
     
+    /// 
     func pauseAudio() {
         if player != nil {
             player?.pause()
