@@ -54,9 +54,39 @@ class VoiceRecordProgressView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.cornerRadius = 5;
-        voiceimage = UIImageView.init(frame: <#T##CGRect#>)
+        self.layer.cornerRadius = 13;
+        voiceimage = UIImageView.init(frame: CGRect(x: 60, y: 24, width: 40, height: 63))
+        self.addSubview(voiceimage ?? UIView.init())
         
+        cancelImage = UIImageView.init(frame: CGRect(x: 60, y: 43, width: 40, height: 63))
+        cancelImage?.image = UIImage.init(named: "ic-audio-delete")
+        self.addSubview(cancelImage ?? UIView.init())
+        cancelImage?.isHidden = true
+        
+        timeLabel = UILabel.init(frame: CGRect(x: 0, y: 109, width: 160, height: 22))
+        timeLabel?.textColor = UIColor.white
+        timeLabel?.font = UIFont.systemFont(ofSize: 16)
+        timeLabel?.textAlignment = .center
+        timeLabel?.backgroundColor = UIColor.clear
+        self.addSubview(timeLabel ?? UIView.init())
+        
+        label = UILabel.init(frame: CGRect(x: 0, y: 135, width: 160, height: 22))
+        label?.text = "上滑取消"
+        label?.textColor = UIColor.white
+        label?.font = UIFont.systemFont(ofSize: 12)
+        label?.textAlignment = .center
+        label?.backgroundColor = .clear
+        self.addSubview(label ?? UIView.init())
+        
+        progressLeftImage = UIImageView.init(frame: CGRect(x: 15, y: 25, width: 40, height: 63))
+        progressLeftImage?.animationDuration = 1.0
+        progressLeftImage?.animationRepeatCount = 0
+        self.addSubview(progressLeftImage ?? UIView.init())
+        
+        progressRightImage = UIImageView.init(frame: CGRect(x: 105, y: 25, width: 40, height: 63))
+        progressRightImage?.animationDuration = 1.0
+        progressRightImage?.animationRepeatCount = 0
+        self.addSubview(progressRightImage ?? UIView.init())
     }
     
     
@@ -126,12 +156,72 @@ class VoiceRecordProgressView: UIView {
         voiceimage?.isHidden  = false
         progressLeftImage?.isHidden = false
         progressRightImage?.isHidden = false
-        
-        
+        // 延迟2秒
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.hide()
+        }
         
         
     }
     
+    
+    /// 录音时间太长
+    func recordTimeLong(){
+      backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+      stopTimer()
+      timeLabel?.isHidden = false
+      timeLabel?.text  = "说话时间太长"
+      cancelImage?.isHidden = true
+     voiceimage?.isHidden  = false
+     progressLeftImage?.isHidden = false
+     progressRightImage?.isHidden = false
+     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        self.hide()
+     }
+      
+   }
+    
+    
+    /// 设置音量大小
+    /// - Parameter level: 音量大小
+    func setStrength(_ level:Int){
+        var voimceLevel:Int  = level
+        if level > 3 {
+            voimceLevel = 3
+        }
+        let fileLeftName = "ic-audio-animation-left-\(voimceLevel)"
+        let fileRightName = "ic-audio-animation-right-\(voimceLevel)"
+        progressLeftImage?.image = UIImage.init(named: fileLeftName)
+        progressRightImage?.image = UIImage.init(named: fileRightName)
+        
+    }
+    
+    func startTimer()  {
+        timer = Timer.init(timeInterval: 1.0, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateTime( _ timer:Timer) {
+        let deltaTime:NSInteger = NSInteger(timer.fireDate.timeIntervalSince((firstFireDate ?? NSDate()) as Date) + 1)
+        var time = ""
+        if deltaTime < 10 {
+            time = "0:0\(deltaTime)"
+
+        }else if(deltaTime < 60){
+            time = "0:\(deltaTime)"
+        }else{
+            let minute = deltaTime/60
+            let second = deltaTime - minute * 60
+            if second < 10 {
+                time =  "\(minute):0\(second)"
+            }else{
+                time = "\(minute):\(second)"
+            }
+            
+        }
+        
+        timeLabel?.text = time
+    }
+
     func stopTimer(){
         if self.timer != nil {
             if self.timer?.isValid ?? false {
@@ -139,6 +229,20 @@ class VoiceRecordProgressView: UIView {
                 self.timer = nil
             }
         }
+        
+    }
+    
+    func setVoiceRecord(){
+        backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+        voiceimage?.image = UIImage.init(named: "ic-audio-record")
+        //backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+        progressLeftImage?.animationImages = [(UIImage.init(named: "ic-audio-animation-left-0") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-left-1") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-left-2") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-left-3") ?? UIImage.init())]
+        progressLeftImage?.image = UIImage.init(named: "ic-audio-animation-left-3")
+        
+        progressRightImage?.animationImages = [(UIImage.init(named: "ic-audio-animation-right-0") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-right-1") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-right-2") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-right-3") ?? UIImage.init())]
+        progressRightImage?.image = UIImage.init(named: "ic-audio-animation-right-3")
+        
+        
         
     }
     

@@ -17,8 +17,9 @@ import AssetsLibrary
 */
 class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,JRCameraHelperDelegate,AudioPlayHelperDelegate{
    
-    let array = ["相册","相机","麦克风"]
+    let array = ["相册","相机","麦克风","定位"]
     @IBOutlet weak var dataTabView: UITableView!
+    var recordProgressView:VoiceRecordProgressView!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -26,6 +27,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         title = "采集"
         self.tabBarItem.title = "采集"
        // saveMediaToCameraRoll()
+        recordProgressView = VoiceRecordProgressView.init(frame: CGRect(x: (UIScreen.main.bounds.width - 160)/2, y: (UIScreen.main.bounds.height - 160)/2, width: 160, height: 160))
+        self.view .addSubview(recordProgressView)
+        recordProgressView.isHidden = true
+        
        
     }
      
@@ -56,7 +61,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
             
         }else if(indexPath.row == 2){
-            AudioPlayHelper.shareInstance.delegate = self;
+            //AudioPlayHelper.shareInstance.delegate = self;
+            recordProgressView.setVoiceRecord()
+            recordProgressView.show()
+            
+        }else if(indexPath.row == 3){
             
         }
     }
