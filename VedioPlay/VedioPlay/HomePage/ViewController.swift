@@ -15,7 +15,9 @@ import AssetsLibrary
    1 在相册中
    2 在相机中
 */
-class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,JRCameraHelperDelegate,AudioPlayHelperDelegate{
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,JRCameraHelperDelegate,AudioPlayHelperDelegate,DisplayLocationViewControllerDelegate{
+
+    
    
     let array = ["相册","相机","麦克风","定位"]
     @IBOutlet weak var dataTabView: UITableView!
@@ -66,7 +68,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             recordProgressView.show()
             
         }else if(indexPath.row == 3){
-            
+            let  locationVC = DisplayLocationViewController.init()
+            locationVC.delegate = self
+            locationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(locationVC, animated: true)
         }
     }
     
@@ -166,6 +171,15 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
            
        }
     
+    
+    /// JRDisplayLocationViewControllerDelegate
+    
+    
+    func didFinishLocationCompled(_ latitude: Double, _ longitude: Double, _ radius: Double, geoLocation: String) {
+        
+         print(latitude,longitude)
+        
+    }
 
 }
 
