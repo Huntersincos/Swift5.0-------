@@ -273,10 +273,132 @@ class JRFileUtil: NSObject {
         
         }
         
+    
+    /// CIImage: 关联后输出图像
+    /// - Parameter qrString: 二维码链接
+    
+    class func createQRForString(_ qrString:String) -> CIImage{
+        
+        let stringData = qrString.data(using: .utf8)
+        //CIFilter:滤镜 过滤操作
+        let qrFilter = CIFilter(name: "CIQRCodeGenerator")
+        qrFilter?.setValue(stringData, forKey: "")
+        // L M Q H 修正等级，应该跟采样有关
+        qrFilter?.setValue("M", forKey: "inputCorrectionLevel")
+        
+        return qrFilter?.outputImage ?? CIImage.init()
+        
+    }
+    
+    
+    /// CIImage ======转化成 UIImage
+    /// - Parameters:
+    ///   - ciImage:
+    ///   - imageWithSize:图片大小
+    class func createNonInterpolatedUIImageFormCIImage(_ ciImage:CIImage , imageWithSize:CGFloat ) -> UIImage{
+        
+        do {
+            let extent = try ciImage.extent
+                   // oc MIN
+                   let scale = min(imageWithSize/extent.width,imageWithSize/extent.height)
+                   let width:size_t = size_t(extent.width*scale)
+                   let height:size_t = size_t(extent.height*scale)
+                   
+                   // 图片灰色颜色空间
+                   let cs = CGColorSpaceCreateDeviceGray()
+                   // CGBitmapContextCreate 代替  CGContext.init
+                   
+                   /// data                                    指向要渲染的绘制内存的地址。这个内存块的大小至少是（bytesPerRow*height）个字节。使用时可填NULL或unsigned char类型的指针。
+                  /// width                                  bitmap的宽度,单位为像素
+
+                  /// height                                bitmap的高度,单位为像素
+
+                 ///  bitsPerComponent        内存中像素的每个组件的位数.例如，对于32位像素格式和RGB 颜色空间，你应该将这个值设为8。
+
+                 ///  bytesPerRow                  bitmap的每一行在内存所占的比特数，一个像素一个byte。
+
+                  /// colorspace                      bitmap上下文使用的颜色空间。
+
+                  /// bitmapInfo                       指定bitmap是否包含alpha通道，像素中alpha通道的相对位置，像素组件是整形还是浮点型等信息的字符串。
+                   
+                   let bitmapRef = CGContext.init(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: cs, bitmapInfo: CGBitmapInfo.alphaInfoMask.rawValue)
+                   // CIContext 画布类可被利用处理Quartz 2D 或者 OpenGL。可以用它来关联CoreImage类。如滤镜、颜色等渲染处理。
+                   let context = CIContext.init()
+                   // CGImageRef : 裁剪照片
+                   let bitmapImage = context.createCGImage(ciImage, from: extent)
+                   //CGContextSetInterpolationQuality ====  bitmapRef.interpolationQuality
+                   if bitmapRef != nil {
+                     bitmapRef?.interpolationQuality = CGInterpolationQuality.none
+                         // CGContextScaleCTM == 坐标系X,Y缩放 ==== scaleBy 核心会话
+                      bitmapRef?.scaleBy(x: scale, y: scale)
+                      //CGContextDrawImage === draw in 绘图
+                      if bitmapImage != nil{
+                          bitmapRef?.draw(bitmapImage!, in: extent)
+                      }
+                     // CGBitmapContextCreateImage === CGContext.makeImage
+                       let  scaledImage = bitmapRef?.makeImage()
+                        if scaledImage != nil {
+                             let imageCG = UIImage.init(cgImage: scaledImage!)
+                             return imageCG
+                        }
+                }
+            
+        }catch{
+            
+        }
+    
+        return UIImage.init()
+    }
+    
+    
+    /// 图片渲染
+    /// - Parameters:
+    ///   - image: image description
+    ///   - red: <#red description#>
+    ///   - green: <#green description#>
+    ///   - blue: <#blue description#>
+   class func imageBlackToTransparent(_ image:UIImage,withRed red:CGFloat,withGreen green:CGFloat,withBlue blue:CGFloat) -> UIImage {
+        
+        let imageWidth = image.size.width
+        let imageHeight = image.size.height
+        let bytesPerRow = imageWidth * 4
+        let rgbImageBuf = malloc(Int(bytesPerRow * imageHeight))
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        // byteOrder32Littl
+        let bufContext = CGContext.init(data: rgbImageBuf, width: Int(imageWidth), height: Int(imageHeight), bitsPerComponent: 8, bytesPerRow: Int(bytesPerRow), space: colorSpace, bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue | CGBitmapInfo.alphaInfoMask.rawValue)
+        if image.cgImage != nil {
+            bufContext?.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight))
+            let pexelNum = imageWidth * imageHeight
+            let pCurPtr = rgbImageBuf
+            var  i = 0;
+            while i < Int(pexelNum) {
+                i += 1
+                //Binary operator '+=' cannot be applied to operands of type 'UnsafeMutableRawPointer?' a
+                // swif 如何指针移动  advanced  Result of call to 'advanced(by:)' is unused
+              let bufferPointer = pCurPtr?.advanced(by: i)
+                print(bufferPointer ?? "")
+//                if (bufferPointer.hashValue & 0xFFFFFF00) < 0x99999900 {
+//                    var ptr = bufferPointer
+//                   // ptr. = red
+//                }
+                
+                
+            }
+            
+           // let dataProider = CGDataProvider.init(dataInfo: nil, data: rgbImageBuf!, size: Int(bytesPerRow * imageHeight), releaseData: <#T##CGDataProviderReleaseDataCallback##CGDataProviderReleaseDataCallback##(UnsafeMutableRawPointer?, UnsafeRawPointer, Int) -> Void#>)
+//            for i in 0...pixelNum {
+//
+//            }
+        }
+        
+        
+    return UIImage.init()
+        
+    }
+    
+    //return UIImage.init()
         
     //}
-    
-    
     
 
 }

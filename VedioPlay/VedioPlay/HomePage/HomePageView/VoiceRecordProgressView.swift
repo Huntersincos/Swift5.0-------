@@ -13,9 +13,9 @@ import UIKit
 //#define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1] oc写法
 
 // swift 不支持宏定义语法的
-func RGBCOLOR(r:CGFloat,_ g:CGFloat,_ b:CGFloat) -> UIColor
+func RGBCOLOR(_ r:CGFloat,_ g:CGFloat,_ b:CGFloat,_ alapha:CGFloat) -> UIColor
 {
-    return UIColor(red: (r)/255.0, green: (g)/255.0, blue: (b)/255.0, alpha: 1.0)
+    return UIColor(red: (r)/255.0, green: (g)/255.0, blue: (b)/255.0, alpha: alapha)
 }
 
 
@@ -92,7 +92,7 @@ class VoiceRecordProgressView: UIView {
     
     /// 显示录音
     func show() {
-        backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+        backgroundColor = RGBCOLOR(73.0, 103, 122,1.0)
         firstFireDate = NSDate()
         timeLabel?.text = "0.00"
         timeLabel?.isHidden = false
@@ -118,7 +118,7 @@ class VoiceRecordProgressView: UIView {
     
     /// 将要隐藏录音
     func willHide(){
-        backgroundColor = RGBCOLOR(r: 255.0, 59.0, 48.0)
+        backgroundColor = RGBCOLOR(255.0, 59.0, 48.0,1.0)
         timeLabel?.isHidden = true
         label?.text = "松开手指取消发送"
         label?.isHidden = false
@@ -131,7 +131,7 @@ class VoiceRecordProgressView: UIView {
     
     /// 已经录音
     func didShow(){
-        backgroundColor  = RGBCOLOR(r: 73.0, 103, 122)
+        backgroundColor  = RGBCOLOR(73.0, 103, 122,1.0)
         timeLabel?.isHidden = false
         label?.isHidden = false
         label?.text = "上滑取消"
@@ -147,7 +147,7 @@ class VoiceRecordProgressView: UIView {
     /// 录音时间太短
     func recordTimeSmall(){
         
-        backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+        backgroundColor = RGBCOLOR(73.0, 103, 122,1.0)
         stopTimer()
         timeLabel?.isHidden = false
         timeLabel?.text  = "说话时间太长"
@@ -167,7 +167,7 @@ class VoiceRecordProgressView: UIView {
     
     /// 录音时间太长
     func recordTimeLong(){
-      backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+        backgroundColor = RGBCOLOR(73.0, 103, 122,1.0)
       stopTimer()
       timeLabel?.isHidden = false
       timeLabel?.text  = "说话时间太长"
@@ -233,7 +233,7 @@ class VoiceRecordProgressView: UIView {
     }
     
     func setVoiceRecord(){
-        backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
+        backgroundColor = RGBCOLOR(73.0, 103, 122,1.0)
         voiceimage?.image = UIImage.init(named: "ic-audio-record")
         //backgroundColor = RGBCOLOR(r: 73.0, 103, 122)
         progressLeftImage?.animationImages = [(UIImage.init(named: "ic-audio-animation-left-0") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-left-1") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-left-2") ?? UIImage.init()),(UIImage.init(named: "ic-audio-animation-left-3") ?? UIImage.init())]

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */; };
 		6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E699BAB2499F3FF0065115C /* AJGradientView.swift */; };
 		6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = 6E882B8B24A84AF80001710C /* viedio.MP4 */; };
 		6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */; };
@@ -20,6 +21,9 @@
 		6E97C95C24D3FAE500D4CFB1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E97C95B24D3FAE400D4CFB1 /* MapKit.framework */; };
 		6E97C95E24D3FE7C00D4CFB1 /* QWAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E97C95D24D3FE7C00D4CFB1 /* QWAnnotation.swift */; };
 		6E986C8224C8264200482F35 /* VoiceRecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E986C8124C8264100482F35 /* VoiceRecordProgressView.swift */; };
+		6E9BB5E224E38E950040FF15 /* player_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E024E38E950040FF15 /* player_pause.png */; };
+		6E9BB5E324E38E950040FF15 /* player_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E124E38E950040FF15 /* player_play.png */; };
+		6E9BB5E524E39AC10040FF15 /* MyAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */; };
 		6EA8545924D8127F00C83530 /* backBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA8545824D8127D00C83530 /* backBtn@2x.png */; };
 		6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */; };
 		6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */; };
@@ -51,6 +55,7 @@
 		6EDDBD2B24D2A1DF0087AAA7 /* ic-audio-animation-right-3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EDDBD2A24D2A1DF0087AAA7 /* ic-audio-animation-right-3@2x.png */; };
 		6EDDBD2D24D2A4370087AAA7 /* ic-audio-delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EDDBD2C24D2A4370087AAA7 /* ic-audio-delete@2x.png */; };
 		6EDDBD2F24D2AC7F0087AAA7 /* ic-audio-record@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EDDBD2E24D2AC7F0087AAA7 /* ic-audio-record@2x.png */; };
+		6EE5BA4124E24B7C0021807D /* back_white_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE5BA4024E24B7C0021807D /* back_white_small.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVVedioPlayView.swift; sourceTree = "<group>"; };
 		6E699BAB2499F3FF0065115C /* AJGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJGradientView.swift; sourceTree = "<group>"; };
 		6E882B8B24A84AF80001710C /* viedio.MP4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = viedio.MP4; sourceTree = "<group>"; };
 		6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRCameraHelper.swift; sourceTree = "<group>"; };
@@ -84,6 +90,9 @@
 		6E97C95B24D3FAE400D4CFB1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		6E97C95D24D3FE7C00D4CFB1 /* QWAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QWAnnotation.swift; sourceTree = "<group>"; };
 		6E986C8124C8264100482F35 /* VoiceRecordProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecordProgressView.swift; sourceTree = "<group>"; };
+		6E9BB5E024E38E950040FF15 /* player_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_pause.png; sourceTree = "<group>"; };
+		6E9BB5E124E38E950040FF15 /* player_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_play.png; sourceTree = "<group>"; };
+		6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAVPlayerItem.swift; sourceTree = "<group>"; };
 		6EA8545824D8127D00C83530 /* backBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backBtn@2x.png"; sourceTree = "<group>"; };
 		6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRAlbumViewController.swift; sourceTree = "<group>"; };
 		6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JRAlbumViewController.xib; sourceTree = "<group>"; };
@@ -121,6 +130,7 @@
 		6EDDBD2A24D2A1DF0087AAA7 /* ic-audio-animation-right-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-audio-animation-right-3@2x.png"; sourceTree = "<group>"; };
 		6EDDBD2C24D2A4370087AAA7 /* ic-audio-delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-audio-delete@2x.png"; sourceTree = "<group>"; };
 		6EDDBD2E24D2AC7F0087AAA7 /* ic-audio-record@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-audio-record@2x.png"; sourceTree = "<group>"; };
+		6EE5BA4024E24B7C0021807D /* back_white_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_white_small.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +160,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E56076624E0EDDC00DA43FF /* VedioPlayView */ = {
+			isa = PBXGroup;
+			children = (
+				6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */,
+				6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */,
+			);
+			path = VedioPlayView;
+			sourceTree = "<group>";
+		};
 		6E8D79AE24AF27F000974FFC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +205,7 @@
 		6EB5D4052498A23B008DA35A /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				6EE5BA4024E24B7C0021807D /* back_white_small.png */,
 				6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */,
 				6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */,
 				6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */,
@@ -203,6 +223,8 @@
 				6E97C95924D3F97C00D4CFB1 /* msg-location-current@2x.png */,
 				6EA8545824D8127D00C83530 /* backBtn@2x.png */,
 				6E882B8B24A84AF80001710C /* viedio.MP4 */,
+				6E9BB5E024E38E950040FF15 /* player_pause.png */,
+				6E9BB5E124E38E950040FF15 /* player_play.png */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -267,6 +289,7 @@
 		6EB79A2E249374A100B56296 /* Vedio */ = {
 			isa = PBXGroup;
 			children = (
+				6E56076624E0EDDC00DA43FF /* VedioPlayView */,
 				6EB79A30249374DF00B56296 /* MyVedioViewController.swift */,
 			);
 			path = Vedio;
@@ -395,11 +418,13 @@
 				6EDDBD2924D2A1D70087AAA7 /* ic-audio-animation-right-2@2x.png in Resources */,
 				6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */,
 				6EDDBD2B24D2A1DF0087AAA7 /* ic-audio-animation-right-3@2x.png in Resources */,
+				6E9BB5E224E38E950040FF15 /* player_pause.png in Resources */,
 				6E97C95A24D3F97C00D4CFB1 /* msg-location-current@2x.png in Resources */,
 				6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */,
 				6E97C95624D3F38600D4CFB1 /* DisplayLocationViewController.xib in Resources */,
 				6EDDBD2724D2A1CE0087AAA7 /* ic-audio-animation-right-1@2x.png in Resources */,
 				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
+				6EE5BA4124E24B7C0021807D /* back_white_small.png in Resources */,
 				6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */,
 				6E97C95824D3F89600D4CFB1 /* msg-location-place@2x.png in Resources */,
 				6EDDBD2524D2A1C40087AAA7 /* ic-audio-animation-right-0@2x.png in Resources */,
@@ -412,6 +437,7 @@
 				6EDDBD2324D2A1BA0087AAA7 /* ic-audio-animation-left-3@2x.png in Resources */,
 				6EDDBD2D24D2A4370087AAA7 /* ic-audio-delete@2x.png in Resources */,
 				6E908D2D24A09CF8003E9404 /* AssetsPickerVideo@2x.png in Resources */,
+				6E9BB5E324E38E950040FF15 /* player_play.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +466,7 @@
 				6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */,
 				6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */,
 				6EB5D4002498691A008DA35A /* JPhotoListView.swift in Sources */,
+				6E9BB5E524E39AC10040FF15 /* MyAVPlayerItem.swift in Sources */,
 				6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */,
 				6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */,
 				6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */,
@@ -448,6 +475,7 @@
 				6EB5D40224986E37008DA35A /* AJPhotoListCollectionViewCell.swift in Sources */,
 				6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */,
 				6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */,
+				6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */,
 				6EC3A4D324C43F5800B7FD3D /* AudioPlayHelper.swift in Sources */,
 				6EB5D40424989E5A008DA35A /* AJPhotoListCellTapView.swift in Sources */,
 				6E986C8224C8264200482F35 /* VoiceRecordProgressView.swift in Sources */,

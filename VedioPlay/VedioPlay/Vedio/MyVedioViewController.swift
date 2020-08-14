@@ -15,8 +15,9 @@ class MyVedioViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        view.backgroundColor = .red
-        title = "视频"
+        //view.backgroundColor = .red
+        title = "视频播放"
+        
         
     }
 
