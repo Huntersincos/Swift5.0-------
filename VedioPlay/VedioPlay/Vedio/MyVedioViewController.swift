@@ -11,14 +11,35 @@ import UIKit
 
 class MyVedioViewController: UIViewController {
    
+    var playerView:AVVedioPlayView?
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         //view.backgroundColor = .red
-        title = "视频播放"
+        title = "本地视频播放"
         
+        guard let filePath = Bundle.main.path(forResource: "v02004060000bq0sotqmac2oa0c1pftg", ofType: "mp4") else { return  }
+        let fileURL:URL = URL.init(fileURLWithPath: filePath)
+        self.playerView = AVVedioPlayView.init(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        self.playerView?.playWith(fileURL)
+        self.view.addSubview(self.playerView ?? UIView.init())
         
+    }
+    
+    override var prefersStatusBarHidden: Bool{
+        
+        return true
+    }
+    
+    override func viewWillLayoutSubviews() {
+        playerView?.frame = self.view.bounds
+    }
+    
+    //Overriding non-@objc declarations from extensions is not supported 在extends @objc
+    override func base_SupportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    
+         return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.landscapeLeft.rawValue | UIInterfaceOrientationMask.landscapeRight.rawValue | UIInterfaceOrientationMask.portrait.rawValue)
     }
 
     /*

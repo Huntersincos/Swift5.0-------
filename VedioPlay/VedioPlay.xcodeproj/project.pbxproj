@@ -44,6 +44,7 @@
 		6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A30249374DF00B56296 /* MyVedioViewController.swift */; };
 		6EB79A332493757D00B56296 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A322493757D00B56296 /* ViewController.swift */; };
 		6EB79A352493768700B56296 /* BaseNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB79A342493768600B56296 /* BaseNavViewController.swift */; };
+		6EBD998F24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6EBD998E24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 */; };
 		6EC3A4D324C43F5800B7FD3D /* AudioPlayHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC3A4D224C43F5800B7FD3D /* AudioPlayHelper.swift */; };
 		6EDDBD1D24D2A1990087AAA7 /* ic-audio-animation-left-0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EDDBD1C24D2A1990087AAA7 /* ic-audio-animation-left-0@2x.png */; };
 		6EDDBD1F24D2A1A50087AAA7 /* ic-audio-animation-left-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EDDBD1E24D2A1A40087AAA7 /* ic-audio-animation-left-1@2x.png */; };
@@ -119,6 +120,7 @@
 		6EB79A30249374DF00B56296 /* MyVedioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyVedioViewController.swift; sourceTree = "<group>"; };
 		6EB79A322493757D00B56296 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		6EB79A342493768600B56296 /* BaseNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavViewController.swift; sourceTree = "<group>"; };
+		6EBD998E24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = v02004060000bq0sotqmac2oa0c1pftg.mp4; sourceTree = "<group>"; };
 		6EC3A4D224C43F5800B7FD3D /* AudioPlayHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayHelper.swift; sourceTree = "<group>"; };
 		6EDDBD1C24D2A1990087AAA7 /* ic-audio-animation-left-0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-audio-animation-left-0@2x.png"; sourceTree = "<group>"; };
 		6EDDBD1E24D2A1A40087AAA7 /* ic-audio-animation-left-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-audio-animation-left-1@2x.png"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				6E97C95924D3F97C00D4CFB1 /* msg-location-current@2x.png */,
 				6EA8545824D8127D00C83530 /* backBtn@2x.png */,
 				6E882B8B24A84AF80001710C /* viedio.MP4 */,
+				6EBD998E24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 */,
 				6E9BB5E024E38E950040FF15 /* player_pause.png */,
 				6E9BB5E124E38E950040FF15 /* player_play.png */,
 			);
@@ -432,6 +435,7 @@
 				6EDDBD1D24D2A1990087AAA7 /* ic-audio-animation-left-0@2x.png in Resources */,
 				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
+				6EBD998F24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 in Resources */,
 				6EB5D4092498A272008DA35A /* ic_pic_choose@3x.png in Resources */,
 				6EDDBD2F24D2AC7F0087AAA7 /* ic-audio-record@2x.png in Resources */,
 				6EDDBD2324D2A1BA0087AAA7 /* ic-audio-animation-left-3@2x.png in Resources */,

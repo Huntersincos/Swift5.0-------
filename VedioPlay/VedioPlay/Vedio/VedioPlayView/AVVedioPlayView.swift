@@ -14,29 +14,51 @@ import MediaPlayer
 // 1 添加计算属性 // 2 实例方法 类型方法 3 提供新的便利构造器 4 定义下标 5 定义和使用新的嵌套类型  6 协议
 // 扩展可以向类添加新的便利构造器，但是它们不能向类添加新的指定构造器或析构器。指定构造器或析构器必须始终由原始类实现提供。
 
+protocol BaseViewControllerProtocol {
+    func base_SupportedInterfaceOrientations() -> UIInterfaceOrientationMask
+}
 
-extension UIViewController {
+
+extension UIViewController:BaseViewControllerProtocol {
+    
+    
     // 计算属性
 //    var km :Double{
 //        return 100.0
 //    }
-    // 构造器的个
-    func vc_interfaceOrientation(_ orientation:UIInterfaceOrientation) {
+    // 构造器
+    func vc_interfaceOrientation(_ orientation:UIInterfaceOrientation, _ isForceLandscape:Bool, _ isForcePortrait:Bool) {
         // oc SEL === swfit Selector
-        let  selector = NSSelectorFromString("setOrientation:")
-        // 'NSInvocation' is unavailable in Swift: NSInvocation and related APIs not available
-        //  代替方案 https://stackoverflow.com/questions/24158427/alternative-to-performselector-in-swift/43714950#43714950
-       //perform(selector, with: <#T##Any?#>, afterDelay: <#T##TimeInterval#>, inModes: <#T##[RunLoop.Mode]#>)
+//        let  selector = NSSelectorFromString("orientation")
+//        // 'NSInvocation' is unavailable in S@objc @objc @objc @objc wift: NSInvocation and related APIs not available
+//        //  代替方案 https://stackoverflow.com/questions/24158427/alternative-to-performselector-in-swift/43714950#43714950
+//       //perform(selector, with: <#T##Any?#>, afterDelay: <#T##TimeInterval#>, inModes: <#T##[RunLoop.Mode]#>)
+//
+//        let invocation:NSObject = unsafeBitCast(method_getImplementation(class_getClassMethod(NSClassFromString("NSInvocation"), NSSelectorFromString("invocationWithMethodSignature:"))!),to:(@convention(c)(AnyClass?,Selector,Any?)->Any).self)(NSClassFromString("NSInvocation"),NSSelectorFromString("invocationWithMethodSignature:"),unsafeBitCast(method(for: NSSelectorFromString("methodSignatureForSelector:"))!,to:(@convention(c)(Any?,Selector,Selector)->Any).self)(self,NSSelectorFromString("methodSignatureForSelector:"),selector)) as! NSObject
+//
+//        unsafeBitCast(class_getMethodImplementation(NSClassFromString("NSInvocation"), NSSelectorFromString("setSelector:")),to:(@convention(c)(Any,Selector,Selector)->Void).self)(invocation,NSSelectorFromString("setSelector:"),selector)
+//         var localName = orientation
+//
+//        withUnsafePointer(to: &localName) { unsafeBitCast(class_getMethodImplementation(NSClassFromString("NSInvocation"), NSSelectorFromString("setArgument:atIndex:")),to:(@convention(c)(Any,Selector,OpaquePointer,NSInteger)->Void).self)(invocation,NSSelectorFromString("setArgument:atIndex:"), OpaquePointer($0),2) }
+//        invocation.perform(NSSelectorFromString("invokeWithTarget:"), with: self)
         
-        let invocation:NSObject = unsafeBitCast(method_getImplementation(class_getClassMethod(NSClassFromString("NSInvocation"), NSSelectorFromString("invocationWithMethodSignature:"))!),to:(@convention(c)(AnyClass?,Selector,Any?)->Any).self)(NSClassFromString("NSInvocation"),NSSelectorFromString("invocationWithMethodSignature:"),unsafeBitCast(method(for: NSSelectorFromString("methodSignatureForSelector:"))!,to:(@convention(c)(Any?,Selector,Selector)->Any).self)(self,NSSelectorFromString("methodSignatureForSelector:"),selector)) as! NSObject
+      let appdelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+      appdelegate.isForceLandscape = isForceLandscape
+      appdelegate.isForcePortrait = isForcePortrait
+      _ = appdelegate.application(UIApplication.shared, supportedInterfaceOrientationsFor: view.window)
+     // let oriention = UIInterfaceOrientation.landscapeRight // 设置屏幕为横屏
+      UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+      UIViewController.attemptRotationToDeviceOrientation()
         
-        unsafeBitCast(class_getMethodImplementation(NSClassFromString("NSInvocation"), NSSelectorFromString("setSelector:")),to:(@convention(c)(Any,Selector,Selector)->Void).self)(invocation,NSSelectorFromString("setSelector:"),selector)
-         var localName = orientation
         
-        withUnsafePointer(to: &localName) { unsafeBitCast(class_getMethodImplementation(NSClassFromString("NSInvocation"), NSSelectorFromString("setArgument:atIndex:")),to:(@convention(c)(Any,Selector,OpaquePointer,NSInteger)->Void).self)(invocation,NSSelectorFromString("setArgument:atIndex:"), OpaquePointer($0),2) }
-        invocation.perform(NSSelectorFromString("invokeWithTarget:"), with: self)
         
     }
+    
+   @objc func base_SupportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        
+        return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.landscapeLeft.rawValue | UIInterfaceOrientationMask.landscapeRight.rawValue | UIInterfaceOrientationMask.portrait.rawValue)
+    }
+     
     
     
     
@@ -110,8 +132,8 @@ class AVVedioPlayView: UIView {
     var totoalDurtime:Float?
     var direction:DirectionDevice?
     var startPoint:CGPoint?
-    var startVB:CGFloat?
-    var startVideoRate:CGFloat?
+    var startVB:Float?
+    var startVideoRate:Float?
     var volumeView:MPVolumeView?
     
     /// 音量控制
@@ -119,6 +141,8 @@ class AVVedioPlayView: UIView {
     
     /// 亮度控制
     var brightnessSlider:UISlider?
+    
+    var progressTap:UITapGestureRecognizer?
     
     
     override init(frame: CGRect) {
@@ -169,6 +193,7 @@ class AVVedioPlayView: UIView {
         backBtn.setTitle("返回", for: .normal)
         backBtn.setTitleColor(.white, for: .normal)
         backBtn.setImage(UIImage.init(named: "back_white_small"), for: .normal)
+       // backBtn.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         topView?.addSubview(backBtn)
         
        let tureBackBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
@@ -188,8 +213,9 @@ class AVVedioPlayView: UIView {
         fullBtn?.setTitleColor(.white, for: .normal)
         fullBtn?.setTitleColor(.white, for: .selected)
         topView?.addSubview(fullBtn ?? UIView.init())
+        fullBtn?.addTarget(self, action: #selector(fullBtnClick), for: .touchUpInside)
         
-        let tureFullBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
+        let tureFullBtn = UIButton.init(frame: CGRect(x: (topView?.bounds.size.width ?? 0) - 60, y:0,width: 60, height: 44))
         topView?.addSubview(tureFullBtn)
         tureFullBtn.addTarget(self, action: #selector(fullBtnClick), for: .touchUpInside)
         
@@ -214,20 +240,27 @@ class AVVedioPlayView: UIView {
         toolView?.addSubview(currentTimeLable ?? UIView.init())
         
         // 播放进度条
-        progressSlider  = UISlider.init(frame: CGRect(x: currentTimeLable?.frame.maxX ?? 0, y: 12.5, width: frame.size.width - (currentTimeLable?.frame.maxX ?? 0), height: 15))
+        progressSlider  = UISlider.init(frame: CGRect(x: currentTimeLable?.frame.maxX ?? 0, y: 12.5, width: frame.size.width - (currentTimeLable?.frame.maxX ?? 0) - 40, height: 15))
         progressSlider?.maximumValue = 1.0
         progressSlider?.minimumValue = 0.0
+        // 1 实现拖动---停止拖动 --在播放
         progressSlider?.addTarget(self, action: #selector(touchDown), for: .touchDown)
         progressSlider?.addTarget(self, action: #selector(touchChange), for: .valueChanged)
         progressSlider?.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         progressSlider?.addTarget(self, action: #selector(touchUp), for: .touchUpOutside)
         progressSlider?.addTarget(self, action: #selector(touchUp), for: .touchCancel)
+        // 点击进度播放 默认不支持点击事件
+        progressTap = UITapGestureRecognizer.init(target: self, action: #selector(clickProgressPlay))
+        progressSlider?.addGestureRecognizer(progressTap ?? UITapGestureRecognizer.init())
+        
         progressSlider?.setThumbImage(UIImage.getRoundImageWithColor(UIColor.white, CGSize(width: 15, height: 15)), for: .normal)
         progressSlider?.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
         toolView?.addSubview(progressSlider ?? UIView.init())
         
+      
+        
        
-       totalTimeLable = UILabel.init(frame: CGRect(x: currentTimeLable?.frame.maxX ?? 0, y: 10, width: 40, height: 20))
+       totalTimeLable = UILabel.init(frame: CGRect(x: progressSlider?.frame.maxX ?? 0, y: 10, width: 40, height: 20))
        totalTimeLable?.text = "00:00"
        totalTimeLable?.textColor = UIColor.white;
        totalTimeLable?.font = UIFont.systemFont(ofSize: 8)
@@ -245,6 +278,8 @@ class AVVedioPlayView: UIView {
        NotificationCenter.default.addObserver(self, selector: #selector(movieInterruption), name: AVAudioSession.interruptionNotification, object: nil)
         
     }
+    
+   
     
     func playWith(_ url:URL) {
         
@@ -288,15 +323,24 @@ class AVVedioPlayView: UIView {
     
     
     func setPlayer(_ myPlayView:AVPlayer)  {
-        
+        //Could not cast value of type 'CALayer' (0x1046e4d60) to 'AVPlayerLayer' (0x1021c8d68). 强制一般不需要 需要重写 verride class var layerClass: AnyClass
         let playerLayer:AVPlayerLayer = self.layer as! AVPlayerLayer
         playerLayer.player = myPlayView
+//        let avPlayer =  AVPlayerLayer.init(player: myPlayView)
+//        avPlayer.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
+//        self.layer.addSublayer(avPlayer)
         
     }
     
-    class func layerClass() -> AnyClass{
+    
+    override class var layerClass: AnyClass{
+        
         return AVPlayerLayer.self
     }
+    
+//    class func layerClass() -> AnyClass{
+//        return AVPlayerLayer.self
+//    }
     
     @objc func brightnessChanged(_ slider:UISlider)  {
         UIScreen.main.brightness = CGFloat(slider.value)
@@ -304,7 +348,12 @@ class AVVedioPlayView: UIView {
     
     @objc func goBack(){
         if fullBtn?.isSelected ?? false {
-            fullBtnClick()
+            //fullBtnClick()
+         
+            if self.viewViewController().isKind(of: UIViewController.self) {
+                  let currentVC:UIViewController = self.viewViewController() as! UIViewController
+                   currentVC.vc_interfaceOrientation(UIInterfaceOrientation.portrait,false,true)
+             }
         }else{
             if self.viewViewController().isKind(of: UIViewController.self) {
                 let currentVC:UIViewController = self.viewViewController() as! UIViewController
@@ -322,14 +371,17 @@ class AVVedioPlayView: UIView {
     @objc func fullBtnClick(){
         
         var orientation = UIInterfaceOrientation.portrait;
-    
+        var isForceLandscape = false
+        var isForcePortrait = true
         if fullBtn?.isSelected == false {
             orientation = UIInterfaceOrientation.landscapeRight
+            isForceLandscape = true
+            isForcePortrait = false
         }
         
         if self.viewViewController().isKind(of: UIViewController.self) {
            let currentVC:UIViewController = self.viewViewController() as! UIViewController
-            currentVC.vc_interfaceOrientation(orientation)
+            currentVC.vc_interfaceOrientation(orientation,isForceLandscape,isForcePortrait)
         }
         
     }
@@ -344,6 +396,7 @@ class AVVedioPlayView: UIView {
     
     
     @objc func touchDown(_ touchDownSlier:UISlider){
+        progressTap?.isEnabled = false
         pause()
         
     }
@@ -361,7 +414,7 @@ class AVVedioPlayView: UIView {
     
     
     @objc func touchUp(_ touchUpSlier:UISlider){
-        
+        progressTap?.isEnabled = true
         play()
     }
     
@@ -376,9 +429,32 @@ class AVVedioPlayView: UIView {
        
     }
     
+    @objc func clickProgressPlay(_ gestureRecognizer:(UIGestureRecognizer)){
+        
+        let touchPonint = gestureRecognizer.location(in: progressSlider)
+        //The compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions 编译器无法推断类型 会报错
+        //let value = (progressSlider?.maximumValue - progressSlider?.minimumValue) * (touchPonint.x / progressSlider?.frame.size.height)
+        
+        let subMum = Float(progressSlider?.maximumValue ?? 0) - (progressSlider?.minimumValue ?? 0)
+        let totalX:Float = Float(touchPonint.x / (progressSlider?.frame.size.width ?? 1));
+        let value = subMum * totalX
+        
+        progressSlider?.setValue(value, animated: true)
+        
+        if (self.playView != nil) {
+           let dur = playView?.currentItem?.duration
+           let current = progressSlider?.value
+           currentTimeLable?.text = getTime(NSInteger((current ?? 0) * (totoalDurtime ?? 0)))
+           playView?.seek(to: CMTimeMultiplyByFloat64(dur ?? CMTime.init(), multiplier: Float64(current ?? 0)))
+        }
+        
+    }
+    
+    
+    
     @objc func applicationWillResignActive(_ notification:Notification){
         
-        
+        pause()
     }
     
     
@@ -389,7 +465,21 @@ class AVVedioPlayView: UIView {
     
     @objc func movieInterruption(_ notification:Notification){
            
-           
+        guard let userInfo = notification.userInfo,
+            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let interuptionType = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+                return
+        }
+        if interuptionType == .began {
+            pause()
+        }
+        guard let reaso =  userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+        //AVAudioSessionInterruptionOptionShouldResume
+        let  interruptionOption = AVAudioSession.InterruptionOptions(rawValue: reaso)
+        if interruptionOption == .shouldResume {
+            play()
+        }
+    
     }
     
     
@@ -432,8 +522,158 @@ class AVVedioPlayView: UIView {
         
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.frame = UIScreen.main.bounds
+        fullBtn?.isSelected = UIScreen.main.bounds.width/UIScreen.main.bounds.height > 1
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        let touch:UITouch = (touches as NSSet ).anyObject() as! UITouch
+        let point = touch.location(in: self)
+        self.direction =  .DirectionNone
+        self.startPoint = point
+        if self.startPoint?.x ?? 0 <= self.bounds.size.width/2.0 {
+            self.startVB = Float(UIScreen.main.brightness)
+        }else{
+            self.startVB = self.volumeViewSlider?.value ?? 0.0
+            
+        }
+        let ctime = self.playView?.currentTime()
+        //Binary operator '/' cannot be applied to operands of type 'CMTimeValue?' (aka 'Optional<Int64>') and 'CMTimeScale?' (aka 'Optional<Int32>')
+        // timescale 表示1秒被分成多少份 建议使用 timscale为600
+        
+       // CMTimeMakeWithSeconds(1,3)
+        let value:Int64 = Int64(ctime?.value ?? 0)
+        let timescale:Int64 =  Int64(ctime?.timescale ?? 1)
+        //let totlaTime = Int32(totoalDurtime ?? 1) 这个转化可能有问题
+        self.startVideoRate = Float(value / timescale) / (totoalDurtime ?? 1.0)
+        
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        let touch:UITouch = (touches as NSSet ).anyObject() as! UITouch
+        let point = touch.location(in: self)
+        let panPoint =  CGPoint.init(x: point.x - (self.startPoint?.x ?? 0.0), y: point.y - (self.startPoint?.y ?? 0.0))
+        if self.direction == .DirectionNone {
+            if abs(panPoint.x) >= 30 {
+                pause()
+                self.direction = .DirectionScrollHrizontal
+            }else if abs(panPoint.y) >= 30{
+                self.direction = .DirectionScrollVertical
+            }
+            
+        }else{
+            return
+        }
+        
+        if self.direction == .DirectionScrollHrizontal  {
+            let scale = Int(self.totoalDurtime ?? 0) > 180 ? 180/(self.totoalDurtime ?? 1.0) : 1.0
+            var rate = (self.startVideoRate ?? 0.0) + Float(panPoint.x/self.bounds.size.width) * scale
+            if rate > 1 {
+                rate = 1
+            }else if rate < 0{
+                rate = 0
+            }
+            self.progressSlider?.value = rate
+            guard let dur_Time = self.playView?.currentItem?.duration else { return  }
+            self.currentTimeLable?.text = getTime(NSInteger(rate * (self.totoalDurtime ?? 0.0)))
+            self.playView?.seek(to: CMTimeMultiplyByFloat64(dur_Time,multiplier: Float64(rate)))
+            
+        }else if self.direction == .DirectionScrollVertical{
+            var value = (self.startVB ?? 0) - Float(panPoint.y/self.bounds.size.height)
+            if value > 1 {
+                value = 1
+            }else if value < 0{
+                value = 0
+            }
+            if self.startPoint?.x ?? 0 <= self.frame.size.width/2.0 {
+                self.brightnessSlider?.isHidden = false
+                self.brightnessSlider?.value = value
+                UIScreen.main.brightness = CGFloat(value)
+            }else{
+                self.volumeView?.isHidden = false
+                self.volumeViewSlider?.value = value
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        if self.direction == .DirectionScrollHrizontal {
+            play()
+        }else if self.direction == .DirectionScrollVertical{
+            self.volumeView?.isHidden = true
+            self.brightnessSlider?.isHidden = true
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+      if self.direction == .DirectionScrollHrizontal {
+           play()
+       }else if self.direction == .DirectionScrollVertical{
+           self.volumeView?.isHidden = true
+           self.brightnessSlider?.isHidden = true
+       }
+        
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+       let item = object as! AVPlayerItem
+       if keyPath == "status"{
+          if item.status == .readyToPlay{
+            let  currentTime = CMTimeGetSeconds(item.currentTime())
+            self.totoalDurtime = Float(CMTimeGetSeconds(item.duration))
+            let pro = Float(currentTime)/(self.totoalDurtime ?? 1.0)
+            if pro <= 1.0 && pro >= 0.0 {
+                self.progressSlider?.value = pro
+                self.currentTimeLable?.text = getTime(NSInteger(currentTime))
+                self.totalTimeLable?.text = getTime(NSInteger(self.totoalDurtime ?? 0.0))
+                
+            }
+            self.setPlayer(self.playView ?? AVPlayer.init())
+            self.playView?.play()
+            
+          }else if item.status == .failed{
+             print("AVPlayerStatusFailed")
+            
+          }else{
+             print("AVPlayerStatusUnknown")
+           }
+           
+       }else if keyPath == "loadedTimeRanges"{
+         let loadedTimeRanges = self.playView?.currentItem?.loadedTimeRanges
+         let range = loadedTimeRanges?[0].timeRangeValue
+         let start = CMTimeGetSeconds(range?.start ?? CMTime.init())
+         let duration = CMTimeGetSeconds(range?.duration ?? CMTime.init())
+         let timeInterval = start + duration
+         let pro = Float(timeInterval)/(self.totoalDurtime ?? 1.0)
+         if (pro >= 0.0 && pro <= 1.0) {
+            print("缓冲进度\(pro)")
+         }
+        
+        
+       }
+        
+  }
+    
     required init?(coder: NSCoder) {
            fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        playView?.removeTimeObserver(playTimeObserver ?? "")
+        playView?.currentItem?.removeObserver(self, forKeyPath: "status")
+        playView?.currentItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
+        NotificationCenter.default.removeObserver(self)
     }
 
 

@@ -19,7 +19,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     
    
-    let array = ["相册","相机","麦克风","定位"]
+    let array = ["相册","相机","麦克风","定位","本地视频播放"]
     @IBOutlet weak var dataTabView: UITableView!
     var recordProgressView:VoiceRecordProgressView!
     override func viewDidLoad() {
@@ -72,6 +72,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             locationVC.delegate = self
             locationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(locationVC, animated: true)
+        }else if(indexPath.row == 4){
+            let vedioVC = MyVedioViewController.init()
+            vedioVC.modalPresentationStyle = .fullScreen
+            self.present(vedioVC, animated: true, completion: nil)
         }
     }
     
