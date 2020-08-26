@@ -118,6 +118,13 @@ class AVVedioPlayView: UIView {
     }
     */
     
+    //autoresizingMask
+    // 可变化的 fiexible/fiexible margin
+    // 1 flexibleLeftMargin 自动调整与父视图左边距,保持和右边距不变
+    // 2 flexibleRightMargin 自动调整与父视图右边距 保持与左视图保持不变
+    // 3 flexibleWidthMargin 自动调整宽度,保持左右不变
+    // 4 flexibleTopMargrin  自动调整view和父视图的上边距 和底部边距保持不变
+    // 5 flexibleBottomMargin 自动调整view和父视图的底部边距 和上边距保持不管
     var topView:UIView?
     var toolView:UIView?
     var playView:AVPlayer?
@@ -148,6 +155,10 @@ class AVVedioPlayView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
+        
+        // 解决真机没法播放问题 耳机和模拟器可以播放
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord)
+        
         let tapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(tapClick))
         self.addGestureRecognizer(tapGestureRecognizer)
         
@@ -223,14 +234,22 @@ class AVVedioPlayView: UIView {
         // 底部视图
         toolView = UIView.init(frame: CGRect(x: 0, y: frame.size.height - 40, width: frame.size.width, height: 40))
         toolView?.backgroundColor = RGBCOLOR(50, 50, 50, 0.5)
+        toolView?.autoresizingMask = UIView.AutoresizingMask(rawValue: UIView.AutoresizingMask.flexibleWidth.rawValue | UIView.AutoresizingMask.flexibleTopMargin.rawValue)
         self.addSubview(toolView ?? UIView.init())
         
         playBtn = UIButton.init(frame: CGRect(x: 5, y: 10, width: 20, height: 20))
         playBtn?.isSelected = true
         playBtn?.setImage(UIImage.init(named: "player_play"), for: .normal)
         playBtn?.setImage(UIImage.init(named: "player_pause"), for: .selected)
+        
         toolView?.addSubview(playBtn ?? UIView.init())
         playBtn?.addTarget(self, action: #selector(playBtnClick), for: .touchUpInside)
+        
+        
+        let bigPlayBtn = UIButton.init(frame: CGRect(x: 0, y:0,width: 120, height: 40))
+        toolView?.addSubview(bigPlayBtn)
+        bigPlayBtn.addTarget(self, action: #selector(playBtnClick), for: .touchUpInside)
+        
         // CGRectGetMaxX == cgrect.maxx
         currentTimeLable = UILabel.init(frame: CGRect(x: (playBtn?.frame ?? CGRect(x: 0, y: 0, width: 0, height: 0)).maxX, y: 10, width: 40, height: 20))
         currentTimeLable?.text = "00:00"
@@ -239,6 +258,7 @@ class AVVedioPlayView: UIView {
         currentTimeLable?.textAlignment = .center
         toolView?.addSubview(currentTimeLable ?? UIView.init())
         
+       
         // 播放进度条
         progressSlider  = UISlider.init(frame: CGRect(x: currentTimeLable?.frame.maxX ?? 0, y: 12.5, width: frame.size.width - (currentTimeLable?.frame.maxX ?? 0) - 40, height: 15))
         progressSlider?.maximumValue = 1.0
@@ -265,7 +285,7 @@ class AVVedioPlayView: UIView {
        totalTimeLable?.textColor = UIColor.white;
        totalTimeLable?.font = UIFont.systemFont(ofSize: 8)
        totalTimeLable?.textAlignment = .center
-       totalTimeLable?.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
+       totalTimeLable?.autoresizingMask = UIView.AutoresizingMask(rawValue: UIView.AutoresizingMask.flexibleWidth.rawValue | UIView.AutoresizingMask.flexibleLeftMargin.rawValue)
        toolView?.addSubview(totalTimeLable ?? UIView.init())
         
         // 退到后台

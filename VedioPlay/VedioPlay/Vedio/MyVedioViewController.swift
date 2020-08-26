@@ -21,7 +21,7 @@ class MyVedioViewController: UIViewController {
         
         guard let filePath = Bundle.main.path(forResource: "v02004060000bq0sotqmac2oa0c1pftg", ofType: "mp4") else { return  }
         let fileURL:URL = URL.init(fileURLWithPath: filePath)
-        self.playerView = AVVedioPlayView.init(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        self.playerView = AVVedioPlayView.init(frame:self.view.bounds)
         self.playerView?.playWith(fileURL)
         self.view.addSubview(self.playerView ?? UIView.init())
         
