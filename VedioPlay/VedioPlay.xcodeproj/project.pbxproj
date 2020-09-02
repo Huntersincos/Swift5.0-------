@@ -15,10 +15,18 @@
 		6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = 6E882B8B24A84AF80001710C /* viedio.MP4 */; };
 		6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */; };
 		6E8D79B024AF27F000974FFC /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E8D79AF24AF27F000974FFC /* CoreServices.framework */; };
+		6E8F061224FE24C400ADDEF7 /* SDWebImageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8F061124FE24C400ADDEF7 /* SDWebImageDecoder.swift */; };
 		6E8F87C424B6F6DC00C85D12 /* JRFileUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8F87C324B6F6DC00C85D12 /* JRFileUtil.swift */; };
 		6E90184E24F35CB400A8D6CA /* VedioPalyURLConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E90184D24F35CB400A8D6CA /* VedioPalyURLConnection.swift */; };
 		6E90185024F361C000A8D6CA /* VedioRequsetTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E90184F24F361C000A8D6CA /* VedioRequsetTask.swift */; };
 		6E908D2D24A09CF8003E9404 /* AssetsPickerVideo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */; };
+		6E92753624F7755D009F5D63 /* AutoPurgeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E92753524F7755D009F5D63 /* AutoPurgeCache.swift */; };
+		6E92755B24F7B6C8009F5D63 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92754F24F7B6C8009F5D63 /* FMDatabase.m */; };
+		6E92755C24F7B6C8009F5D63 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92755124F7B6C8009F5D63 /* FMDatabaseAdditions.m */; };
+		6E92755D24F7B6C8009F5D63 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92755324F7B6C8009F5D63 /* FMDatabasePool.m */; };
+		6E92755E24F7B6C8009F5D63 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92755524F7B6C8009F5D63 /* FMDatabaseQueue.m */; };
+		6E92755F24F7B6C8009F5D63 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92755824F7B6C8009F5D63 /* FMResultSet.m */; };
+		6E92756024F7B6C8009F5D63 /* FMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92755A24F7B6C8009F5D63 /* FMUtil.m */; };
 		6E97C95524D3F38600D4CFB1 /* DisplayLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E97C95324D3F38600D4CFB1 /* DisplayLocationViewController.swift */; };
 		6E97C95624D3F38600D4CFB1 /* DisplayLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E97C95424D3F38600D4CFB1 /* DisplayLocationViewController.xib */; };
 		6E97C95824D3F89600D4CFB1 /* msg-location-place@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E97C95724D3F89500D4CFB1 /* msg-location-place@2x.png */; };
@@ -30,6 +38,7 @@
 		6E9BB5E324E38E950040FF15 /* player_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E124E38E950040FF15 /* player_play.png */; };
 		6E9BB5E524E39AC10040FF15 /* MyAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */; };
 		6EA8545924D8127F00C83530 /* backBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA8545824D8127D00C83530 /* backBtn@2x.png */; };
+		6EAA5B4024FCFE0900B8FBF9 /* SDWebImageCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAA5B3F24FCFE0900B8FBF9 /* SDWebImageCompat.swift */; };
 		6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */; };
 		6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */; };
 		6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F524973A73008DA35A /* JPhotoManger.swift */; };
@@ -90,10 +99,26 @@
 		6E882B8B24A84AF80001710C /* viedio.MP4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = viedio.MP4; sourceTree = "<group>"; };
 		6E8D79AC24AF1B2200974FFC /* JRCameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRCameraHelper.swift; sourceTree = "<group>"; };
 		6E8D79AF24AF27F000974FFC /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		6E8F061124FE24C400ADDEF7 /* SDWebImageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageDecoder.swift; sourceTree = "<group>"; };
 		6E8F87C324B6F6DC00C85D12 /* JRFileUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRFileUtil.swift; sourceTree = "<group>"; };
 		6E90184D24F35CB400A8D6CA /* VedioPalyURLConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VedioPalyURLConnection.swift; sourceTree = "<group>"; };
 		6E90184F24F361C000A8D6CA /* VedioRequsetTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VedioRequsetTask.swift; sourceTree = "<group>"; };
 		6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AssetsPickerVideo@2x.png"; sourceTree = "<group>"; };
+		6E92753524F7755D009F5D63 /* AutoPurgeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoPurgeCache.swift; sourceTree = "<group>"; };
+		6E92754B24F7B36D009F5D63 /* VedioPlayHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VedioPlayHeader.h; sourceTree = "<group>"; };
+		6E92754E24F7B6C8009F5D63 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		6E92754F24F7B6C8009F5D63 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		6E92755024F7B6C8009F5D63 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		6E92755124F7B6C8009F5D63 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		6E92755224F7B6C8009F5D63 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		6E92755324F7B6C8009F5D63 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		6E92755424F7B6C8009F5D63 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		6E92755524F7B6C8009F5D63 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		6E92755624F7B6C8009F5D63 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		6E92755724F7B6C8009F5D63 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		6E92755824F7B6C8009F5D63 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		6E92755924F7B6C8009F5D63 /* FMUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMUtil.h; sourceTree = "<group>"; };
+		6E92755A24F7B6C8009F5D63 /* FMUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMUtil.m; sourceTree = "<group>"; };
 		6E97C95324D3F38600D4CFB1 /* DisplayLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayLocationViewController.swift; sourceTree = "<group>"; };
 		6E97C95424D3F38600D4CFB1 /* DisplayLocationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DisplayLocationViewController.xib; sourceTree = "<group>"; };
 		6E97C95724D3F89500D4CFB1 /* msg-location-place@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg-location-place@2x.png"; sourceTree = "<group>"; };
@@ -105,6 +130,7 @@
 		6E9BB5E124E38E950040FF15 /* player_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_play.png; sourceTree = "<group>"; };
 		6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAVPlayerItem.swift; sourceTree = "<group>"; };
 		6EA8545824D8127D00C83530 /* backBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backBtn@2x.png"; sourceTree = "<group>"; };
+		6EAA5B3F24FCFE0900B8FBF9 /* SDWebImageCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageCompat.swift; sourceTree = "<group>"; };
 		6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRAlbumViewController.swift; sourceTree = "<group>"; };
 		6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JRAlbumViewController.xib; sourceTree = "<group>"; };
 		6EB5D3F524973A73008DA35A /* JPhotoManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JPhotoManger.swift; sourceTree = "<group>"; };
@@ -177,7 +203,10 @@
 			children = (
 				6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */,
 				6E16788724F3C25600DD6863 /* SDWebImageManager.swift */,
+				6E92753524F7755D009F5D63 /* AutoPurgeCache.swift */,
 				6E16788B24F4E62C00DD6863 /* SDImageCache.swift */,
+				6EAA5B3F24FCFE0900B8FBF9 /* SDWebImageCompat.swift */,
+				6E8F061124FE24C400ADDEF7 /* SDWebImageDecoder.swift */,
 			);
 			path = CoreImage;
 			sourceTree = "<group>";
@@ -210,6 +239,26 @@
 			path = VedioPlayModel;
 			sourceTree = "<group>";
 		};
+		6E92754D24F7B6C8009F5D63 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				6E92754E24F7B6C8009F5D63 /* FMDatabase.h */,
+				6E92754F24F7B6C8009F5D63 /* FMDatabase.m */,
+				6E92755024F7B6C8009F5D63 /* FMDatabaseAdditions.h */,
+				6E92755124F7B6C8009F5D63 /* FMDatabaseAdditions.m */,
+				6E92755224F7B6C8009F5D63 /* FMDatabasePool.h */,
+				6E92755324F7B6C8009F5D63 /* FMDatabasePool.m */,
+				6E92755424F7B6C8009F5D63 /* FMDatabaseQueue.h */,
+				6E92755524F7B6C8009F5D63 /* FMDatabaseQueue.m */,
+				6E92755624F7B6C8009F5D63 /* FMDB.h */,
+				6E92755724F7B6C8009F5D63 /* FMResultSet.h */,
+				6E92755824F7B6C8009F5D63 /* FMResultSet.m */,
+				6E92755924F7B6C8009F5D63 /* FMUtil.h */,
+				6E92755A24F7B6C8009F5D63 /* FMUtil.m */,
+			);
+			path = fmdb;
+			sourceTree = "<group>";
+		};
 		6EB5D3F324973A50008DA35A /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +286,7 @@
 		6EB5D4052498A23B008DA35A /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				6E92754D24F7B6C8009F5D63 /* fmdb */,
 				6EE5BA4024E24B7C0021807D /* back_white_small.png */,
 				6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */,
 				6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */,
@@ -293,6 +343,7 @@
 				6EB799FD2493696900B56296 /* SceneDelegate.swift */,
 				6EB79A2C2493700200B56296 /* MyTabBarViewController.swift */,
 				6EB79A342493768600B56296 /* BaseNavViewController.swift */,
+				6E92754B24F7B36D009F5D63 /* VedioPlayHeader.h */,
 				6EB79A012493696900B56296 /* Main.storyboard */,
 				6EB79A042493697000B56296 /* Assets.xcassets */,
 				6EB79A062493697000B56296 /* LaunchScreen.storyboard */,
@@ -501,21 +552,30 @@
 				6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */,
 				6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */,
 				6EB5D4002498691A008DA35A /* JPhotoListView.swift in Sources */,
+				6E92755D24F7B6C8009F5D63 /* FMDatabasePool.m in Sources */,
+				6E92755E24F7B6C8009F5D63 /* FMDatabaseQueue.m in Sources */,
 				6E9BB5E524E39AC10040FF15 /* MyAVPlayerItem.swift in Sources */,
 				6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */,
+				6E8F061224FE24C400ADDEF7 /* SDWebImageDecoder.swift in Sources */,
 				6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */,
 				6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */,
+				6EAA5B4024FCFE0900B8FBF9 /* SDWebImageCompat.swift in Sources */,
 				6EB799FC2493696900B56296 /* AppDelegate.swift in Sources */,
+				6E92755F24F7B6C8009F5D63 /* FMResultSet.m in Sources */,
 				6E97C95E24D3FE7C00D4CFB1 /* QWAnnotation.swift in Sources */,
 				6EB5D40224986E37008DA35A /* AJPhotoListCollectionViewCell.swift in Sources */,
 				6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */,
+				6E92755B24F7B6C8009F5D63 /* FMDatabase.m in Sources */,
 				6E16788624F3C1F400DD6863 /* SwiftLoadImageModel.swift in Sources */,
 				6E16788824F3C25600DD6863 /* SDWebImageManager.swift in Sources */,
 				6E90184E24F35CB400A8D6CA /* VedioPalyURLConnection.swift in Sources */,
 				6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */,
+				6E92756024F7B6C8009F5D63 /* FMUtil.m in Sources */,
 				6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */,
 				6EC3A4D324C43F5800B7FD3D /* AudioPlayHelper.swift in Sources */,
+				6E92755C24F7B6C8009F5D63 /* FMDatabaseAdditions.m in Sources */,
 				6EB5D40424989E5A008DA35A /* AJPhotoListCellTapView.swift in Sources */,
+				6E92753624F7755D009F5D63 /* AutoPurgeCache.swift in Sources */,
 				6E986C8224C8264200482F35 /* VoiceRecordProgressView.swift in Sources */,
 				6E90185024F361C000A8D6CA /* VedioRequsetTask.swift in Sources */,
 				6E97C95524D3F38600D4CFB1 /* DisplayLocationViewController.swift in Sources */,
@@ -706,6 +766,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay111;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = VedioPlay/VedioPlayHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -727,6 +788,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay111;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = VedioPlay/VedioPlayHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

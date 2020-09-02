@@ -12,10 +12,10 @@ import AVFoundation
 public var vidioFileName = "viedioPath.mp4"
 
 @objc protocol VedioRequsetTaskDlegate{
-    @objc optional func task(viedio task:VedioRequsetTask,didReceiveVideoLength ideoLength:Int, mimeType:String)
+    @objc optional func task(viedio task:VedioRequsetTask,didReceiveVideoLength ideoLength:Int64, mimeType:String)
     @objc optional func didReceiveVideoDataTask(_ task:VedioRequsetTask)
     @objc optional  func didFinshedViedioDataTast(_ task:VedioRequsetTask)
-    @objc optional func didFailureloadingTask(_ task:VedioRequsetTask, _ failError:(NSError))
+    @objc optional func didFailureloadingTask(_ task:VedioRequsetTask, _ failError:Int)
     
 
 }
@@ -41,13 +41,10 @@ extension VedioRequsetTask{
 
 class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,AVAssetResourceLoaderDelegate {
     
-   
-
-
     // swift定义只读属性
     private(set) var path_url:URL?
     private(set) var offset_ReadOnly:Int?
-    private(set) var videoLength_ReadOnly:Int?
+    private(set) var videoLength_ReadOnly:Int64?
     private(set) var  downLoadingOffset_ReadOnly:Int?
     private(set) var  mimeType_ReadOnly:String?
     var isFinishLoad:Bool?
@@ -58,7 +55,7 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
    // var mineType:String?
     var sessionRequest:URLSession?
     var downViedoTask:URLSessionDownloadTask?
-    var taskArray:NSMutableArray?
+    var taskArray = [URLSession]()
    // var downLoadingOffset:Int?
     var onceAgain:Bool?
     var fileHandle:FileHandle?
@@ -66,7 +63,7 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
     
     override init() {
         super.init()
-        taskArray = NSMutableArray.init()
+        //taskArray = NSMutableArray.init()
         tempPath = JRFileUtil.getDocumentPath() + "/\(vidioFileName)"
         if  FileManager.default.fileExists(atPath: tempPath ?? "") {
             try?FileManager.default.removeItem(atPath: tempPath ?? "")
@@ -81,13 +78,13 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
         self.path_url = url
         self.offset_ReadOnly = offset
         
-        if self.taskArray != nil {
+        //if self.taskArray != nil {
             ////如果建立第二次请求，先移除原来文件，再创建新的
-            if self.taskArray?.count ?? 0 > 1 {
+            if self.taskArray.count > 1 {
                 try?FileManager.default.removeItem(atPath: tempPath ?? "")
                 FileManager.default.createFile(atPath: tempPath ?? "", contents: nil, attributes: nil)
             }
-        }
+       // }
         
         self.downLoadingOffset_ReadOnly = 0
         
@@ -148,6 +145,35 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
         
     }
     
+    //网络中断：-1005
+    //无网络连接：-1009
+    //请求超时：-1001
+    //服务器内部错误：-1004
+    //找不到服务器：-1003
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        
+        //Forced cast from 'Error?' to 'NSError' only unwraps and bridges; did you mean to use '!' with 'as'?
+        let errorCode =  error! as NSError
+        if errorCode.code == -1001 && (self.onceAgain == false )  {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.onceAgain = true
+                let actualURLComponents = NSURLComponents.init(url: self.url, resolvingAgainstBaseURL: false)
+                actualURLComponents?.scheme = "http"
+                let sessiomConfiguration  = URLSessionConfiguration.default
+                sessiomConfiguration.timeoutIntervalForRequest  = 20
+                sessiomConfiguration.requestCachePolicy = .reloadIgnoringLocalCacheData
+                sessiomConfiguration.httpAdditionalHeaders = ["Range":"bytes=\(self.downLoadingOffset_ReadOnly ?? 0)-\((self.videoLength_ReadOnly ?? 1) - 1)"]
+                self.downViedoTask?.cancel()
+                self.downViedoTask = self.sessionRequest?.downloadTask(with: actualURLComponents?.url ?? self.url)
+                self.downViedoTask?.resume()
+
+            }
+        }
+        
+        self.delegate?.didFailureloadingTask?(self, errorCode.code)
+        
+        
+    }
     
 
     
@@ -160,9 +186,24 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
            
         // 回调的时候 不会调用这个方法 downloadTask(with: actualURLComponents?.url ?? url, completionHandler: { (temURL, response, error) in})
+        self.fileHandle?.seekToEndOfFile()
+        self.fileHandle?.write(location.dataRepresentation)
+        // ! downLoadingOffset_ReadOnly! += location.dataRepresentation.count
+        downLoadingOffset_ReadOnly = location.dataRepresentation.count + (downLoadingOffset_ReadOnly ?? 0)
+        self.delegate?.didReceiveVideoDataTask?(self)
         
-    }
+        if self.taskArray.count < 2 {
+            let movePath = JRFileUtil.getDocumentPath() + "/saveVedio.mp4"
+            if ((try? FileManager.default.copyItem(atPath: self.tempPath ?? "", toPath: movePath)) != nil){
+                print("copy成功")
+            }else{
+                print("copy失败")
+            }
+        }
+        self.delegate?.didFinshedViedioDataTast?(self)
+        
     
+    }
     
     ///  恢复暂停播放
     /// - Parameters:
@@ -177,18 +218,56 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
     }
     
     
-    /// <#Description#>
+    /// 现在进度
     /// - Parameters:
     ///   - session: <#session description#>
     ///   - downloadTask: <#downloadTask description#>
-    ///   - bytesWritten: <#bytesWritten description#>
-    ///   - totalBytesWritten: <#totalBytesWritten description#>
-    ///   - totalBytesExpectedToWrite: <#totalBytesExpectedToWrite description#>
+    ///   - bytesWritten: 上次调用到现在接受的下载量
+    ///   - totalBytesWritten: 任务开始到j现在的下载量
+    ///   - totalBytesExpectedToWrite: 预期能接受文件字节总数 有content-leagth决定 如果没提供 则默认为NSURLSessionTransferSizeUnknown
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        // response
+        //currentRequest 正在执行的任务
+        //originalRequest 一般和currentRequest一样  除非发生重定向才会有所区别。 主要用于重定向操作,用来记录重定...
+        //do {
+           
+           let httpResponse:HTTPURLResponse =  downloadTask.response as! HTTPURLResponse
+           let responseDic = httpResponse.allHeaderFields
+           let content:String =  responseDic["Content-Range"] as! String
+           let array_substring = content.split(separator: "/")
+           // substring 转化成 string
+           var array:[String] = []
+           for item in array_substring {
+               array.append("\(item)")
+           }
+           if array.count != 0 {
+             let length = array[array.count - 1]
+             var videoLength:Int64 = 0;
+             if length.isEmpty {
+                videoLength = httpResponse.expectedContentLength
+             }else{
+                // 强转可能有问题
+                videoLength = Int64(length)!
+            }
+            
+            self.videoLength_ReadOnly = videoLength
+            self.mimeType_ReadOnly = "video/mp4"
+            self.delegate?.task?(viedio: self, didReceiveVideoLength: self.videoLength_ReadOnly ?? 0, mimeType: self.mimeType_ReadOnly ?? "")
+            self.taskArray.append(session)
+            self.fileHandle =  FileHandle.init(forWritingAtPath: tempPath ?? "")
+            
+           }
+          
+            
+//        } catch  {
+//
+//        }
+      
+        
         
     }
     
     
-   
-    
+
 }
+

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CommonCrypto
 
 
 /// 图片缓存:内存缓存和磁盘缓存
@@ -27,22 +28,23 @@ public enum SDImageCacheType:Int{
     
 }
 
-typealias SDWebImageQueryCompletedBlock = (_ image:UIImage,_ cacheType:SDImageCacheType) ->Void
+typealias SDWebImageQueryCompletedBlock = (_ image:UIImage?,_ cacheType:SDImageCacheType) ->Void
 typealias SDWebImageCheckCacheCompletionBlock = (_ isInCache:Bool) -> Void
 typealias SDWebImageCalculateSizeBlock = (_ fileCount:Int, _ totalSize:Int) ->Void
+typealias SDWebImageNoParamsBlock = () -> Void?
 // oc ====> @interface ==== @implementation Swift 实现
-extension NSCache{
-    
-    /// NSCache 1 线程安全 2 当内存缓存不足时,NSCache会自动释放 3 设置缓存缓存对象占用的内存大小,当超过会自动释放
-   @objc func recevieCacheWarning(){
-     NotificationCenter.default.addObserver(self, selector: #selector(removeAllObjects), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
-   }
-    // 无法调用
-    @objc func relase(){
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
-    }
-
-}
+//extension NSCache{
+//
+//    /// NSCache 1 线程安全 2 当内存缓存不足时,NSCache会自动释放 3 设置缓存缓存对象占用的内存大小,当超过会自动释放
+//   @objc func recevieCacheWarning(){
+//     NotificationCenter.default.addObserver(self, selector: #selector(removeAllObjects), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+//   }
+//    // 无法调用
+//    @objc func relase(){
+//        NotificationCenter.default.removeObserver(self, name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+//    }
+//
+//}
 
 // 1周
 private let kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7;
@@ -109,9 +111,15 @@ class SDImageCache: NSObject {
       将图像保存在缓存中的最大时间长度
     */
     var maxCacheSize:Int?
-    var memCache:NSCache<AnyObject, AnyObject>?
+    var memCache:AutoPurgeCache?
     var diskCachePath:String?
-    var customPaths:NSMutableArray?
+    
+    /// 不可变array
+    //var customPaths:[String]?
+    
+    /// 可变array
+    var customPaths = [String]()
+    
     //oc dispatch_queue_t === swift DispatchQueue 队列
     /// 这里不考虑os7以下的MRC
     var ioQueue:DispatchQueue?
@@ -159,8 +167,7 @@ class SDImageCache: NSObject {
        // DispatchQueue.init(label: "com.hackemist.SDWebImageCache", qos: .utility, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         maxCacheAge = kDefaultCacheMaxCacheAge
         
-        memCache = NSCache.init()
-        memCache?.recevieCacheWarning()
+        memCache = AutoPurgeCache.init()
         memCache?.name = fullNamespace
         
         if directory != nil{
@@ -175,12 +182,366 @@ class SDImageCache: NSObject {
             self.fileManager = FileManager.init()
         }
         
+//        #if TARGET_OS_IOS
+//        NotificationCenter.default.addObserver(self, selector: #selector(clearMemory), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+//        // 程序终止/终止
+//        NotificationCenter.default.addObserver(self, selector: #selector(cleanDisk), name: UIApplication.willTerminateNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(backgroundCleanDisk), name: UIApplication.didEnterBackgroundNotification, object: nil)
+//        #else
+        
+         NotificationCenter.default.addObserver(self, selector: #selector(clearMemory), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+         // 程序终止/终止
+         NotificationCenter.default.addObserver(self, selector: #selector(cleanDisk), name: UIApplication.willTerminateNotification, object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(backgroundCleanDisk), name: UIApplication.didEnterBackgroundNotification, object: nil)
+       // #endif
         
     }
+    
+    
+    /// 添加只读缓存路径以搜索由SimigaCache预缓存的图像  如果app和预加载图象捆绑在一起这个方法非常有用
+    /// - Parameter path: 只读缓存路径
+    func addReadOnlyCachePath(_ path:String){
+        
+        if  self.customPaths.contains(path) {
+            self.customPaths.append(path)
+        }
+        
+    }
+    
+    /// 获取特定秘钥的缓存路径 (需要缓存路径的根文件夹)
+    /// - Parameters:
+    ///   - key: <#key description#>
+    ///   - path: <#path description#>
+    func cachePathForKey(_ key:String,_ path:String) ->String
+    {
+        return "\(path)/" + cachedFileNameForKey(key)
+    }
+    
+    /// 获取某个秘钥的缓存路径
+    /// - Parameter key: <#key description#>
+    func defaultCachePathForKey(_ key:String) ->String
+    {
+        return cachePathForKey(key, self.diskCachePath ?? "")
+    }
+    
+    
+    /// 将图片存储内存中,或者在给定的键处选择磁盘缓存
+    /// - Parameters:
+    ///   - image: <#image description#>
+    ///   - recalculate: 是否使用imageData 或者使用uiimage构造数据
+    ///   - imageData: 服务端返回的图像数据  这个用于磁盘存储
+    ///   - key: 唯一key,通常是图片ur的absolute
+    ///   - toDisk: 值为ture:图片存储在磁盘中
+    func storeImage(_ image:UIImage?,recalculateFromImage recalculate:Bool,imageData:Data?,forKey key:String?,toDisk:Bool){
+        if image == nil && key == nil{
+           return
+        }
+        if self.shouldCacheImagesInMemory ?? false{
+            let cost = SDCacheCostForImage(image ?? UIImage.init())
+            // as
+            self.memCache?.setObject(image ?? UIImage.init(), forKey: key! as NSString, cost: cost)
+        }
+        
+        if toDisk{
+            ioQueue?.async {
+                if image != nil && (recalculate || imageData == nil){
+                    // 确认是png jpeg
+                    // png特征唯一,容易检测出
+                    // png图片文件包括8个字节的十进制:137 80 78 71 13 10 26 10
+                    // 如果imageData为空 也就是如果尝试直接保存UIImage或在下载时对图像进行了转换
+                    // 而且图像有一个alpha通道，会考虑它的png以避免失去透明度
+                   // #if TARGET_OS_IPHONE
+                    // iphone
+                    var data = imageData
+                    let alphaInfo = image?.cgImage?.alphaInfo
+                    var hasAlpha = !(alphaInfo == CGImageAlphaInfo.none || alphaInfo == CGImageAlphaInfo.noneSkipLast || alphaInfo ==  CGImageAlphaInfo.noneSkipFirst)
+                    //Binary operator '>=' cannot be applied to two 'Int?' operands
+                    // ?????
+                    if Int(imageData?.count ?? 0 ) >= Int(kPNGSignatureData?.count ?? 0){
+                        hasAlpha = ImageDataHasPNGPreffix(imageData ?? Data.init())
+                    }
+                    if hasAlpha {
+                        data = image?.pngData()
+                    }else{
+                        data = image?.jpegData(compressionQuality: 1.0)
+                    }
+                   // #else
+                       // mac
+                    //data = NSBitmapImageRep.
+                    
+                    self.storeImageDataToDisk(data, forKey: key ?? "")
+                   // #endif
+                }
+            }
+        }
+        
+        
+    }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - image: <#image description#>
+    ///   - key: <#key description#>
+    func storeImage(_ image:UIImage,forkey key:String){
+        storeImage(image, recalculateFromImage: true, imageData: nil, forKey: key, toDisk: true)
+    }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - image: <#image description#>
+    ///   - key: <#key description#>
+    ///   - toDisk: <#toDisk description#>
+    func storeImage(_ image:UIImage,forkey key:String, toDisk:Bool){
+        storeImage(image, recalculateFromImage: true, imageData: nil, forKey: key, toDisk: toDisk)
+    }
+    
+    
+    /// 将Image的Data 存储到指定密钥的磁盘缓存中
+    /// - Parameters:
+    ///   - imageData: <#imageData description#>
+    ///   - key: <#key description#>
+    func storeImageDataToDisk(_ imageData:Data?,forKey key:String){
+        
+        if imageData == nil{
+            return
+        }
+        if fileManager?.fileExists(atPath: diskCachePath ?? "") == false {
+            try?fileManager?.createDirectory(atPath: diskCachePath ?? "", withIntermediateDirectories: true, attributes: nil)
+        }
+        
+        // 获取图片秘钥缓存路径
+        let cachePathForKey = defaultCachePathForKey(key)
+        let fileURL = NSURL.init(fileURLWithPath: cachePathForKey)
+        fileManager?.createFile(atPath: cachePathForKey, contents: imageData, attributes: nil)
+        if self.shouldDisableiCloud ?? false {
+            //NSURLIsExcludedFromBackupKey 不需要iCloud备份
+            try?fileURL.setResourceValue(NSNumber.init(value: true), forKey: .isExcludedFromBackupKey)
+            
+        }
+        
+    }
+    
+    
+    /// 检查磁盘缓存中是否已存在image（不加载image）
+    /// - Parameter key: url
+    /// -- return  if true  存在图片秘钥key
+    func diskImageExistsWithKey(_ key:String) -> Bool {
+        
+        var exists = false
+        // 在ioQueue之外的另一个队列上访问filemanager是一个例外，但是我们使用的是共享实例
+        // 通过Appl对FileManager描述: 可以通过多个线程分享调用FileManager对象是安全的
+        exists = FileManager.default.fileExists(atPath: defaultCachePathForKey(key))
+        // 因为https://github.com/rs/SDWebImage/pull/976将扩展名添加到磁盘文件名
+        // 检查key带不带扩展文件名
+        if exists == false {
+            // stringByDeletingPathExtension 删除路径中最后一部分 ?????
+            let stringByDeleting:NSString =  defaultCachePathForKey(key) as NSString
+            exists =  FileManager.default.fileExists(atPath: stringByDeleting.deletingPathExtension)
+        }
+        
+        
+        return exists
+        
+        
+    }
+    
+    
+    /// 异步检查图片是否已经缓存到磁盘中
+    /// - Parameters:
+    ///   - key: <#key description#>
+    ///   - completionBlock: <#completionBlock description#>
+    func diskImageExistsWithKey(_ key:String, completion completionBlock: @escaping SDWebImageCheckCacheCompletionBlock){
+        //Escaping closure captures non-escaping parameter 'completionBlock'
+        //新版的Swift闭包做参数默认是@noescaping，不再是@escaping。如果函数里执行该闭包，要添加@escaping。
+        //escaping生命周期 1 escaping的生命周期长于函数  2 escaping引用仍被其他对象持有,不会在函数结束后释放 会引起循环引用
+        // noescaping :函数结束前被调用 生命周期在函数内 不会引起循环引用 开发中使用noescaping 有助于性能优化
+        ioQueue?.async {
+            var exists = self.fileManager?.fileExists(atPath: self.defaultCachePathForKey(key))
+            if exists == false{
+                let stringByDeleting:NSString =  self.defaultCachePathForKey(key) as NSString
+                exists =  self.fileManager?.fileExists(atPath: stringByDeleting.deletingPathExtension)
+            }
+            DispatchQueue.main.async {
+                completionBlock(exists ?? false)
+            }
+           
+        }
+    }
+    
+    
+    /// 同步内存缓存队列
+    /// - Parameter key: <#key description#> return 返回内存缓存的图片
+    func imageFromMemoryCacheForKey(_ key:String) ->UIImage?{
+        
+        return self.memCache?.object(forKey: key as NSString) as? UIImage
+    }
+    
+    
+    /// 检测内存内存缓存后在同步检测磁盘缓存
+    /// - Parameter key: <#key description#>
+    func imageFromDiskCacheForKey(_ key:String) ->UIImage{
+        var image = imageFromMemoryCacheForKey(key)
+        if image != nil {
+            return image ?? UIImage.init();
+        }
+        image = diskImageForKey(key)
+        if image != nil && self.shouldCacheImagesInMemory ?? false {
+            let  cost = SDCacheCostForImage(image ?? UIImage.init())
+            self.memCache?.setObject(image ?? UIImage.init(), forKey: key as NSString, cost: cost)
+        }
+        return image ?? UIImage.init()
+    }
+    
+    
+    //磁盘缓存获取图片
+    func  diskImageForKey(_ key:String) -> UIImage?{
+        let data = diskImageDataBySearchingAllPathsForKey(key)
+        if data != nil {
+            var image = UIImage.sd_imageWithData(data)
+            image = scaledImageForKey(key, image ?? UIImage.init())
+            if shouldDecompressImages ?? true {
+                image = SDWebImageDecoder.decodedImageWithImage(image)
+            }
+            return image
+        }
+        return nil
+    }
+    
+    private func scaledImageForKey(_ key:String,_ image:UIImage) -> UIImage{
+        return SDScaledImageForKey(key, image) ?? UIImage.init()
+    }
+    
+    func diskImageDataBySearchingAllPathsForKey(_ key:String) -> Data?{
+        let defaultPath = defaultCachePathForKey(key)
+        ///
+        let data = defaultPath.data(using: .utf8)
+        if data != nil {
+            return data
+        }
+        for path in self.customPaths {
+            let filePath = cachePathForKey(key, path)
+            var imageData = filePath.data(using: .utf8)
+            if (imageData != nil) {
+                return imageData
+            }
+            let ns_filePath = filePath as NSString
+            imageData = ns_filePath.deletingPathExtension.data(using: .utf8)
+            if imageData != nil {
+                return imageData
+            }
+        }
+        
+        return nil
+    }
+    
+    
+    /// 查询query磁盘缓存同步
+    /// - Parameters:
+    ///   - key: <#key description#>
+    ///   - doneBlock: <#doneBlock description#>
+    func queryDiskCacheForKey(key:String?, doneBlock:@escaping SDWebImageQueryCompletedBlock) -> Operation?{
+//        if (doneBlock == nil) {
+//            return nil
+//        }
+//
+        if key ==  nil {
+            doneBlock(nil,SDImageCacheType.SDImageCacheTypeNone)
+            return nil
+        }
+        
+        let image = imageFromMemoryCacheForKey(key ?? "")
+        if (image != nil) {
+            doneBlock(image,SDImageCacheType.SDImageCacheTypeMemory)
+            return nil
+        }
+        
+        let operation = Operation.init()
+        ioQueue?.async {
+            if operation.isCancelled{
+                return
+            }
+            //@autoreleasepool
+            let diskImage = self.diskImageForKey(key ?? "")
+            if diskImage != nil && self.shouldCacheImagesInMemory ?? false{
+                let cost = SDCacheCostForImage(diskImage ?? UIImage.init())
+                if key != nil {
+                     self.memCache?.setObject(diskImage ?? UIImage.init(), forKey: key! as NSString , cost: cost)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                doneBlock(diskImage,SDImageCacheType.SDImageCacheTypeDisk)
+            }
+        
+        }
+        
+        
+        return operation
+
+    }
+    
+    
+    /// 移除同步图片的磁盘和内存缓存
+    /// - Parameter key: <#key description#>
+    func removeImageForKey(_ key:String){
+        removeImageForKey(key) {
+            
+        }
+    }
+    
+    
+    /// 移除同步图片的磁盘和内存缓存
+    /// - Parameters:
+    ///   - key:
+    ///   - completion:执行块 可选
+    func removeImageForKey(_ key:String , withCompletion completion:SDWebImageNoParamsBlock){
+        
+    }
+    
+    
     
     func makeDiskCachePath(fullNamespace:String) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
         return paths[0] + "/\(fullNamespace)"
+    }
+    
+    @objc func clearMemory()  {
+        
+    }
+    
+    @objc func cleanDisk(){
+        
+    }
+    
+    @objc func backgroundCleanDisk(){
+           
+    }
+    
+    
+    /// private
+    /// - Parameter key:
+    private func cachedFileNameForKey(_ key:String) ->String{
+        // char -- [CCChar]
+        let str = key.cString(using: String.Encoding.utf8)
+        //CUnsignedInt -- CC_LONG
+        let strLen = CUnsignedInt(key.lengthOfBytes(using: String.Encoding.utf8))
+        let digestLen = Int(CC_MD5_DIGEST_LENGTH)
+        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
+        CC_MD5(str!, strLen, result)
+        let hash = NSMutableString()
+        for i in 0 ..< digestLen {
+            hash.appendFormat("%02x", result[i])
+        }
+        // 延迟释放
+        result.deinitialize(count: digestLen)
+        return String(format: hash as String)
+        
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
 }
