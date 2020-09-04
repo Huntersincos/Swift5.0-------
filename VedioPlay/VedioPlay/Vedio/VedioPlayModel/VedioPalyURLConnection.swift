@@ -11,8 +11,8 @@ import AVFoundation
 //为所有应用提供基础服务,此框架定义底层UTIs使用类型
 import MobileCoreServices
 @objc protocol VedioPalyTastkDownDelegate{
-    func didFinishLoadingWithTask(_ task:VedioPalyURLConnection)
-    func didFailLoadingWithTask(_ task:VedioPalyURLConnection ,errorCode:Int)
+    func didFinishLoadingWithTask(_ task:VedioRequsetTask)
+    func didFailLoadingWithTask(_ task:VedioRequsetTask ,errorCode:Int)
 }
 
 class VedioPalyURLConnection: URLSession,AVAssetResourceLoaderDelegate,VedioRequsetTaskDlegate {
@@ -49,12 +49,19 @@ class VedioPalyURLConnection: URLSession,AVAssetResourceLoaderDelegate,VedioRequ
     
     func processPendingRequests(){
         var requestsCompleted = [AVAssetResourceLoadingRequest]()
+        var index = 0
         for loadingRequest in pendingRequests {
             fillInContentInformation(loadingRequest.contentInformationRequest)
-            //let didRespondCompletely =
+            if loadingRequest.dataRequest != nil {
+                 let didRespondCompletely = respondWithDataForRequest(loadingRequest.dataRequest!)
+                if didRespondCompletely {
+                    requestsCompleted.append(loadingRequest)
+                    loadingRequest.finishLoading()
+                    pendingRequests.remove(at: index)
+                }
+            }
+           index += 1
         }
-        
-        
     }
     
     func respondWithDataForRequest(_ dataRequest:AVAssetResourceLoadingDataRequest) -> Bool{
@@ -79,6 +86,76 @@ class VedioPalyURLConnection: URLSession,AVAssetResourceLoaderDelegate,VedioRequ
         let endOffset:Int64 = startOffset + Int64(dataRequest.requestedLength)
         let didRespondFully = (offsetOnly + downLoadingOffset) >= endOffset
         return didRespondFully
+    }
+    
+    
+    /// AVAssetResourceLoaderDelegate
+    ///  当需要app协助(assistance)加载资源时候调用(invoked)
+    /// - Parameters:
+    ///   - resourceLoader: 正在发出请求的实例
+    ///   - loadingRequest: 加载的资源信息
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+        pendingRequests.append(loadingRequest)
+        dealWithLoadingRequest(loadingRequest)
+        return true
+    }
+    
+    func dealWithLoadingRequest(_ loadingRequest:AVAssetResourceLoadingRequest) {
+        let interceptedURL =  loadingRequest.request.url
+        //NSUIntegerMax
+        let range = NSRange.init(location: Int(loadingRequest.dataRequest?.currentOffset ?? 0), length: NSIntegerMax)
+        if self.task?.downLoadingOffset_ReadOnly ?? 0 > 0 {
+            processPendingRequests()
+        }
+        if self.task == nil {
+            self.task = VedioRequsetTask.init()
+            self.task?.delegate = self
+            if interceptedURL != nil {
+                self.task?.videoURL(interceptedURL!, 0)
+            }
+        }else{
+            
+          //  The compiler compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+//            if (self.task?.offset_ReadOnly + self.task?.downLoadingOffset_ReadOnly + 1024*300 < range.location){
+//
+//            }
+            
+        }
+        
+    }
+    
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
+          var index = 0
+         for pendloadingRequest in pendingRequests {
+            if pendloadingRequest == loadingRequest  {
+                pendingRequests.remove(at: index)
+            }
+            index += 1
+        }
+    }
+    
+    func getSchemeVideoURL(_ url:URL) -> URL?{
+        
+        var components = URLComponents.init(url: url, resolvingAgainstBaseURL: false)
+        components?.scheme = "streaming"
+        return components?.url
+
+    }
+    
+    func task(viedio task: VedioRequsetTask, didReceiveVideoLength ideoLength: Int64, mimeType: String) {
+        
+    }
+    
+    func didReceiveVideoDataTask(_ task: VedioRequsetTask) {
+        self.processPendingRequests()
+    }
+    
+    func didFinshedViedioDataTast(_ task: VedioRequsetTask) {
+        self.downDelegate?.didFinishLoadingWithTask(task)
+    }
+    
+    func didFailureloadingTask(_ task: VedioRequsetTask, _ failError: Int) {
+        self.downDelegate?.didFailLoadingWithTask(task, errorCode: failError)
     }
     
 }

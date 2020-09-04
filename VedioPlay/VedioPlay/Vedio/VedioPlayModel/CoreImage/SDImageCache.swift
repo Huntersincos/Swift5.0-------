@@ -95,12 +95,12 @@ class SDImageCache: NSObject {
     /**
       内存中保存的总像素数
     */
-    var maxMemoryCost:Int?
+    var _maxMemoryCost:Int?
     
     /**
      内存中缓存对象总数
     */
-    var maxMemoryCountLimit:Int?
+    var _maxMemoryCountLimit:Int?
     
     /**
          缓存大小,单位字节
@@ -486,8 +486,8 @@ class SDImageCache: NSObject {
     /// 移除同步图片的磁盘和内存缓存
     /// - Parameter key: <#key description#>
     func removeImageForKey(_ key:String){
-        removeImageForKey(key) {
-            
+        removeImageForKey(key) { () -> Void? in
+            return nil
         }
     }
     
@@ -496,10 +496,68 @@ class SDImageCache: NSObject {
     /// - Parameters:
     ///   - key:
     ///   - completion:执行块 可选
-    func removeImageForKey(_ key:String , withCompletion completion:SDWebImageNoParamsBlock){
+    func removeImageForKey(_ key:String , withCompletion completion:@escaping SDWebImageNoParamsBlock){
+        removeImageForKey(key, fromDisk: true) { () -> Void? in
+            return completion()
+        }
         
     }
     
+    
+    /// 移除图片内存缓存和磁盘缓存(可选的)
+    /// - Parameters:
+    ///   - key: <#key description#>
+    ///   - fromDisk: <#fromDisk description#>
+    func removeImageForKey(_ key:String,fromDisk:Bool){
+        removeImageForKey(key, fromDisk: fromDisk) { () -> Void? in
+            return nil
+        }
+    }
+    func removeImageForKey(_ key:String?,fromDisk:Bool, withCompletion  completion: @escaping SDWebImageNoParamsBlock){
+        if key == nil {
+            return
+        }
+        if shouldCacheImagesInMemory ?? true {
+            self.memCache?.removeObject(forKey: key! as NSString)
+        }
+        if fromDisk {
+            ioQueue?.async {
+                try?self.fileManager?.removeItem(atPath: self.defaultCachePathForKey(key ?? ""))
+               // if completion != nil{
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+               // }
+                
+            }
+        
+        }else{
+           // if completion != nil{
+                DispatchQueue.main.async {
+                    completion()
+                }
+            //}
+        }
+    }
+    
+    var maxMemoryCost:Int{
+        set{
+            _maxMemoryCost = newValue
+        }
+        get{
+            /// totalCostLimit 内存大小 全局缓存实例时如果设置了totalCostLimit必然存储缓存的方法调用必然带上了cost，否则
+            return self.memCache?.totalCostLimit ?? 0
+        }
+    }
+    
+    var  maxMemoryCountLimit:Int{
+        set{
+            _maxMemoryCountLimit = newValue
+        }
+        get{
+            return self.memCache?.countLimit ?? 0
+        }
+    }
     
     
     func makeDiskCachePath(fullNamespace:String) -> String {
@@ -508,15 +566,211 @@ class SDImageCache: NSObject {
     }
     
     @objc func clearMemory()  {
+        self.memCache?.removeAllObjects()
+    }
+    
+     /// 移除磁盘过期的缓存 expired
+    @objc func cleanDisk(){
+        cleanDiskWithCompletionBlock { () -> Void? in
+            return nil
+        }
+    }
+    
+    
+    /// 移除磁盘过期的缓存 expired
+    /// - Parameter completion: <#completion description#>
+    func cleanDiskWithCompletionBlock(_ completion: @escaping SDWebImageNoParamsBlock ){
+         ioQueue?.async {
+            let diskCacheURL = URL.init(fileURLWithPath: self.diskCachePath ?? "", isDirectory: true)
+            let resourceKeys = [URLResourceKey.isDirectoryKey,URLResourceKey.contentModificationDateKey,URLResourceKey.totalFileAllocatedSizeKey]
+            //Ambiguous reference to member 'fileManager'
+           
+            let fileEnumerator = self.fileManager?.enumerator(at: diskCacheURL, includingPropertiesForKeys: resourceKeys, options: .skipsHiddenFiles, errorHandler: nil)
+            //timeIntervalSinceNow
+            let expirationDate = Date.init(timeIntervalSinceNow:-TimeInterval(self.maxCacheAge ?? 0))
+            var currentCacheSize = 0
+            let cacheFiles = NSMutableDictionary.init()
+            // 1  移除所有过去文件
+            // 2 存储删除的过期文件
+            var urlsToDelete = [NSURL]()
+            
+            if fileEnumerator == nil{
+                return
+            }
+            for fileURL in fileEnumerator! {
+                let  fileURL_ResourceValues = fileURL as! NSURL
+                let  resourceValues = try? fileURL_ResourceValues.resourceValues(forKeys: resourceKeys)
+                if ((resourceValues?[URLResourceKey.isDirectoryKey]) != nil) {
+                    let isKey:NSNumber = resourceValues?[URLResourceKey.isDirectoryKey] as! NSNumber
+                    if isKey.boolValue {
+                        continue
+                    }
+                }
+                
+                let  modificationDate:NSDate = resourceValues?[URLResourceKey.contentModificationDateKey] as! NSDate
+                if modificationDate.laterDate(expirationDate) == expirationDate {
+                    urlsToDelete.append(fileURL_ResourceValues)
+                    continue
+                }
+                
+                let totalAllocatedSize:NSNumber = resourceValues?[URLResourceKey.totalFileAllocatedSizeKey] as! NSNumber
+                currentCacheSize += Int(totalAllocatedSize.uintValue)
+                if (resourceValues != nil) {
+                     cacheFiles.setObject(resourceValues!, forKey: fileURL_ResourceValues)
+                }
+            }
+            
+            for fileURL in urlsToDelete{
+               try?self.fileManager?.removeItem(at: fileURL as URL)
+            }
+            
+            // 如果剩余磁盘缓存超过配置大小,请执行第二次
+            // 基于大小的清理过程,我们先删除最旧的文件
+            if self.maxCacheSize ?? 0 > 0 && currentCacheSize > self.maxCacheSize ?? 0{
+                // 清理缓存大小一半
+                let desiredCacheSize = (self.maxCacheSize ?? 0)/2
+                // 按最早修改的文件,对剩余的缓存文件进行排序
+                //   首先concurrent，是“并发的，一致的，同时发生的”，stable，是“稳定的”。
+                let sortedFiles = cacheFiles.keysSortedByValue(options: NSSortOptions.concurrent) { (obj1:Any, obj2:Any) -> ComparisonResult in
+                    let objOne = obj1 as! [URLResourceKey:Any]
+                    let objTwo = obj2 as! [URLResourceKey:Any]
+                    let objOneDate = objOne[URLResourceKey.contentModificationDateKey] as! NSDate
+                    let objTwoDate = objTwo[URLResourceKey.contentModificationDateKey] as! NSDate
+                    return objOneDate.compare(objTwoDate as Date)
+                }
+                // 删除文件只到低于所需缓存的大小
+                for fileURL in sortedFiles {
+                    if((try?self.fileManager?.removeItem(at: fileURL as! URL)) != nil) {
+                       let resourceValues = cacheFiles[fileURL] as! [URLResourceKey:Any]
+                        let totalAllocatedSize = resourceValues[URLResourceKey.fileAllocatedSizeKey] as! NSNumber
+                        currentCacheSize -= Int(totalAllocatedSize.uintValue)
+                        if currentCacheSize < desiredCacheSize {
+                            break
+                        }
+                    }
+                }
+                
+               
+            }
+            
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
         
     }
     
-    @objc func cleanDisk(){
-        
+    
+    /// 异步清理磁盘缓存
+    /// - Parameter completion: 非阻塞方法 立刻返回
+    func clearDiskOnCompletion(_ completion:@escaping SDWebImageNoParamsBlock){
+        self.ioQueue?.async {
+            try?self.fileManager?.removeItem(atPath: self.diskCachePath ?? "")
+            try?self.fileManager?.createDirectory(atPath: self.diskCachePath ?? "", withIntermediateDirectories: true, attributes: nil)
+           // if completion != nil{
+            DispatchQueue.main.async {
+                completion()
+            }
+           // }
+        }
+    }
+    
+    func clearDisk(){
+        clearDiskOnCompletion { () -> Void? in
+          return nil
+        }
     }
     
     @objc func backgroundCleanDisk(){
-           
+        let applicationClass = NSClassFromString("UIApplication") as! UIApplication.Type
+        if  !applicationClass.responds(to: #selector(getter: UIApplication.shared)) {
+            return
+        }
+        _ = UIApplication.perform(#selector(getter: UIApplication.shared))
+        var bgTask = UIApplication.shared.beginBackgroundTask {
+            //Variable used within its own initial value
+//            UIApplication.shared.endBackgroundTask(bgTask)
+//            bgTask = UIBackgroundTaskInvalid
+        }
+        cleanDiskWithCompletionBlock { () -> Void? in
+            UIApplication.shared.endBackgroundTask(bgTask)
+            bgTask = UIBackgroundTaskIdentifier.invalid
+            return nil
+        }
+        
+    }
+    
+    
+    /// 获取已经使用的磁盘缓存大小
+    func getSize() -> UInt64{
+        var size:UInt64 = 0
+        ioQueue?.async {
+            let fileEnumerator = self.fileManager?.enumerator(atPath: self.diskCachePath ?? "")
+            if fileEnumerator == nil{
+                return
+            }
+            for fileName in fileEnumerator!{
+                let  filePath = (self.diskCachePath ?? "") + "\(fileName)"
+                let  attrs = try?FileManager.default.attributesOfItem(atPath: filePath) as NSDictionary
+                if attrs != nil {
+                     size += attrs!.fileSize()
+                }
+               
+            }
+            
+        }
+        return size
+    }
+    
+    
+    /// 获取磁盘图片大小
+    func getDiskCount() -> Int{
+      var count:Int = 0
+        ioQueue?.async {
+           let fileEnumerator = self.fileManager?.enumerator(atPath: self.diskCachePath ?? "")
+           if fileEnumerator == nil{
+               return
+           }
+            count += fileEnumerator?.allObjects.count ?? 0
+        }
+        
+        return count
+    }
+    
+    
+    /// 异步计算磁盘大小
+    /// - Parameter completionBlock: <#completionBlock description#>
+    func calculateSizeWithCompletionBlock(_ completionBlock: @escaping SDWebImageCalculateSizeBlock){
+        let diskCacheURL =  URL.init(fileURLWithPath: self.diskCachePath ?? "", isDirectory: true)
+        ioQueue?.async {
+            var fileCount = 0
+            var totalSize = 0
+            let fileEnumerator = self.fileManager?.enumerator(at: diskCacheURL, includingPropertiesForKeys: [URLResourceKey.fileSizeKey], options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, errorHandler: nil)
+            if fileEnumerator == nil{
+                return
+            }
+            for fileURL in fileEnumerator!{
+                var fileSize:NSNumber? = nil ;
+                let fileURLS = fileURL as! NSURL
+                // ?????????????????
+                //let sizeUtablePointer = AutoreleasingUnsafeMutablePointer<NSNumber?>.init(bitPattern: 4)
+                //fileURLS.getResourceValue(&fileSize, forKey: URLResourceKey.fileSizeKey)
+               // fileURLS.getResourceValue( AutoreleasingUnsafeMutablePointer<AnyObject?>, forKey: URLResourceKey.fileSizeKey)
+                totalSize += fileSize?.intValue ?? 0
+                fileCount += 1
+                
+            }
+        
+            DispatchQueue.main.async {
+                completionBlock(fileCount,totalSize)
+            }
+            
+            
+        }
+        
+    }
+    func takesAnAutoreleasingPointer(_ p: AutoreleasingUnsafeMutablePointer<NSNumber?>) {
+        // ...
     }
     
     
