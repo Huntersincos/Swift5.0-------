@@ -113,4 +113,12 @@ class SDWebImageManager: NSObject {
     weak var delegate:SDWebImageManagerDelegate?
     private(set) var imageCache: SDImageCache?
     
+    override init() {
+        super.init()
+    }
+     
+    
+//    convenience override init(_ cache:SDImageCache?) {
+//        
+//    }
 }

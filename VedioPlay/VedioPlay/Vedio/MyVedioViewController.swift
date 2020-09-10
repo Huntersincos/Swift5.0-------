@@ -41,6 +41,10 @@ class MyVedioViewController: UIViewController {
     
          return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.landscapeLeft.rawValue | UIInterfaceOrientationMask.landscapeRight.rawValue | UIInterfaceOrientationMask.portrait.rawValue)
     }
+    
+    deinit {
+        
+    }
 
     /*
     // MARK: - Navigation

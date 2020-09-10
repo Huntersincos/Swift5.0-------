@@ -108,7 +108,9 @@ public enum DirectionDevice:NSInteger{
    case DirectionScrollVertical   //垂直方向滑动
 }
 
-class AVVedioPlayView: UIView {
+class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
+   
+    
 
     /*
     // Only override draw() if you perform custom drawing.
@@ -151,6 +153,8 @@ class AVVedioPlayView: UIView {
     
     var progressTap:UITapGestureRecognizer?
     
+    var isFinishLoad:Bool?
+    var resouerLoader:VedioPalyURLConnection?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -340,6 +344,50 @@ class AVVedioPlayView: UIView {
         
 
     }
+    
+    
+    /// 播放url视频 边播边缓存
+    /// - Parameter url: <#url description#>
+    func playWithUrl(_ url:URL?){
+        resouerLoader = VedioPalyURLConnection.init()
+        resouerLoader?.downDelegate = self
+        if url != nil{
+            let playUrl  = resouerLoader?.getSchemeVideoURL(url!) ?? url!
+            let videoURLAsset = AVURLAsset.init(url: playUrl, options: nil)
+            // 不执行 setDelegate resouerLoader写成存储属性即可
+            videoURLAsset.resourceLoader.setDelegate(resouerLoader, queue: DispatchQueue.main)
+            let item = MyAVPlayerItem.init(asset: videoURLAsset)
+           item.observer = self
+           item.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+           item.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+           if (self.playView != nil) {
+               self.playView?.removeTimeObserver(self.playTimeObserver ?? NSObject())
+               // 替换item
+               self.playView?.replaceCurrentItem(with: item)
+           }else{
+               self.playView = AVPlayer.init(playerItem: item)
+           }
+           
+           weak var weakPlayer:AVPlayer? = self.playView
+           weak var weakSlider:UISlider? = self.progressSlider
+           weak var weakCurrentTime:UILabel? =  self.currentTimeLable
+           weak var weakSelf = self
+           // 检查播放进度
+           self.playTimeObserver = self.playView?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: Int64(1.0), timescale: Int32(1.0)), queue: DispatchQueue.main, using: { (time:CMTime) in
+               let current = CMTimeGetSeconds(weakPlayer?.currentItem?.currentTime() ?? CMTime.init())
+               let pro = current * 1.0/Float64(weakSelf?.totoalDurtime ?? 1)
+               if pro >= 0 && pro <= 1{
+                   weakSlider?.value = Float(pro)
+                   weakCurrentTime?.text = self.getTime(NSInteger(current))
+               }
+           })
+            
+            //self.setPlayer(self.playView ?? AVPlayer.init())
+        }
+       
+        
+    }
+    
     
     
     func setPlayer(_ myPlayView:AVPlayer)  {
@@ -684,6 +732,16 @@ class AVVedioPlayView: UIView {
        }
         
   }
+    
+    func didFinishLoadingWithTask(_ task: VedioRequsetTask) {
+        isFinishLoad = task.isFinishLoad
+         play()
+        
+    }
+       
+   func didFailLoadingWithTask(_ task: VedioRequsetTask, errorCode: Int) {
+       
+   }
     
     required init?(coder: NSCoder) {
            fatalError("init(coder:) has not been implemented")

@@ -64,7 +64,17 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
     override init() {
         super.init()
         //taskArray = NSMutableArray.init()
+        onceAgain = false
         tempPath = JRFileUtil.getDocumentPath() + "/\(vidioFileName)"
+        #if DEBUG
+        print(tempPath ?? "")
+
+        #else
+               
+
+        #endif
+               
+        
         if  FileManager.default.fileExists(atPath: tempPath ?? "") {
             try?FileManager.default.removeItem(atPath: tempPath ?? "")
             FileManager.default.createFile(atPath: tempPath ?? "", contents: nil, attributes: nil)
@@ -77,6 +87,7 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
     func videoURL(_ url:URL,_ offset:Int){
         self.path_url = url
         self.offset_ReadOnly = offset
+        self.url = url
         
         //if self.taskArray != nil {
             ////如果建立第二次请求，先移除原来文件，再创建新的
@@ -96,8 +107,10 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
         sessiomConfiguration.requestCachePolicy = .reloadIgnoringLocalCacheData
         
       // 在HTTPAdditionalHeaders额外添加的头部字段与NSURLRequest中重复了，则优先使用NSURLRequest对象中的请求头部字段。
-
-        sessiomConfiguration.httpAdditionalHeaders = ["Range":"bytes=\(offset)-\((self.videoLength_ReadOnly ?? 1) - 1)"]
+        if offset_ReadOnly ?? 0 > 0 && offset > 0 {
+             sessiomConfiguration.httpAdditionalHeaders = ["Range":"bytes=\(offset)-\((self.videoLength_ReadOnly ?? 1) - 1)"]
+        }
+       
         // 默认情况最大为4 设置范围1-20 可能系统版本不同 并发数不同
         //sessiomConfiguration.httpMaximumConnectionsPerHost = 20;
         //delegate 调用完成处理程序块；如果提供了自定义的 delegate，则不会调用完成处理程序块。
@@ -153,19 +166,26 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         
         //Forced cast from 'Error?' to 'NSError' only unwraps and bridges; did you mean to use '!' with 'as'?
+        if error == nil {
+            return
+        }
         let errorCode =  error! as NSError
         if errorCode.code == -1001 && (self.onceAgain == false )  {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.onceAgain = true
-                let actualURLComponents = NSURLComponents.init(url: self.url, resolvingAgainstBaseURL: false)
-                actualURLComponents?.scheme = "http"
-                let sessiomConfiguration  = URLSessionConfiguration.default
-                sessiomConfiguration.timeoutIntervalForRequest  = 20
-                sessiomConfiguration.requestCachePolicy = .reloadIgnoringLocalCacheData
-                sessiomConfiguration.httpAdditionalHeaders = ["Range":"bytes=\(self.downLoadingOffset_ReadOnly ?? 0)-\((self.videoLength_ReadOnly ?? 1) - 1)"]
-                self.downViedoTask?.cancel()
-                self.downViedoTask = self.sessionRequest?.downloadTask(with: actualURLComponents?.url ?? self.url)
-                self.downViedoTask?.resume()
+                //if self.url != nil{
+                    self.onceAgain = true
+                    let actualURLComponents = NSURLComponents.init(url: self.url, resolvingAgainstBaseURL: false)
+                    actualURLComponents?.scheme = "http"
+                    let sessiomConfiguration  = URLSessionConfiguration.default
+                    sessiomConfiguration.timeoutIntervalForRequest  = 20
+                    sessiomConfiguration.requestCachePolicy = .reloadIgnoringLocalCacheData
+                    sessiomConfiguration.httpAdditionalHeaders = ["Range":"bytes=\(self.downLoadingOffset_ReadOnly ?? 0)-\((self.videoLength_ReadOnly ?? 1) - 1)"]
+                    self.downViedoTask?.cancel()
+                    self.downViedoTask = self.sessionRequest?.downloadTask(with: actualURLComponents?.url ?? self.url)
+                    self.downViedoTask?.resume()
+                    
+               // }
+                
 
             }
         }
@@ -233,30 +253,45 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
            
            let httpResponse:HTTPURLResponse =  downloadTask.response as! HTTPURLResponse
            let responseDic = httpResponse.allHeaderFields
-           let content:String =  responseDic["Content-Range"] as! String
-           let array_substring = content.split(separator: "/")
-           // substring 转化成 string
-           var array:[String] = []
-           for item in array_substring {
-               array.append("\(item)")
-           }
-           if array.count != 0 {
-             let length = array[array.count - 1]
-             var videoLength:Int64 = 0;
-             if length.isEmpty {
-                videoLength = httpResponse.expectedContentLength
-             }else{
-                // 强转可能有问题
-                videoLength = Int64(length)!
-            }
+        // Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
+           let content:String? =  responseDic["Content-Range"] as? String
+           //if content != nil {
+            let array_substring = content?.split(separator: "/")
+             // substring 转化成 string
+             var array:[String] = []
+             for item in array_substring ?? [] {
+                 array.append("\(item)")
+              }
+              var length:String? = nil
+               if array.count != 0 {
+                length = array[array.count - 1]
+               }
+               var videoLength:Int64 =  Int64(length ?? "") ?? 0;
+            // isEmpty 不对用法
+               if videoLength  == 0{
+                //if length?.isEmpty == true  {
+                     videoLength = httpResponse.expectedContentLength
+                //}
+                 
+               }else{
+                  // 强转可能有问题
+//                if length?.isEmpty == true  {
+//                     videoLength = httpResponse.expectedContentLength
+//                }else{
+                    videoLength = Int64(length ?? "") ?? 0
+               // }
+               
+              }
+        
+              self.videoLength_ReadOnly = videoLength
+              self.mimeType_ReadOnly = "video/mp4"
+              self.delegate?.task?(viedio: self, didReceiveVideoLength: self.videoLength_ReadOnly ?? 0, mimeType: self.mimeType_ReadOnly ?? "")
+              self.taskArray.append(session)
+              self.fileHandle =  FileHandle.init(forWritingAtPath: tempPath ?? "")
+              
             
-            self.videoLength_ReadOnly = videoLength
-            self.mimeType_ReadOnly = "video/mp4"
-            self.delegate?.task?(viedio: self, didReceiveVideoLength: self.videoLength_ReadOnly ?? 0, mimeType: self.mimeType_ReadOnly ?? "")
-            self.taskArray.append(session)
-            self.fileHandle =  FileHandle.init(forWritingAtPath: tempPath ?? "")
-            
-           }
+           //}
+           
           
             
 //        } catch  {

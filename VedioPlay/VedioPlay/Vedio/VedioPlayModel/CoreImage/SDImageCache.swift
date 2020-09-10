@@ -682,8 +682,9 @@ class SDImageCache: NSObject {
     }
     
     @objc func backgroundCleanDisk(){
-        let applicationClass = NSClassFromString("UIApplication") as! UIApplication.Type
-        if  !applicationClass.responds(to: #selector(getter: UIApplication.shared)) {
+       // let applicationClass = NSClassFromString("UIApplication") as! UIApplication.Type
+        let applicationClass:AnyClass?  =  NSClassFromString("UIApplication")
+        if  (applicationClass?.responds(to: #selector(getter: UIApplication.shared)) ?? false) {
             return
         }
         _ = UIApplication.perform(#selector(getter: UIApplication.shared))

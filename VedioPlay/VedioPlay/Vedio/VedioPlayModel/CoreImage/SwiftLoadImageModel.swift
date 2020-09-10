@@ -19,6 +19,9 @@ import ImageIO
    6 不支持webp格式图片
    7 对swift进行了指针操作,安全性降低
    8 只支持iOS 8以上版本
+   9 把SDNetworkActivityIndicator换成 ActivityIndicator
+   10 自定义使用泛型
+   11 不考虑 后台加载问题 beginBackgroundTaskWithExpirationHandler swift没找到performSelector代替方案
  */
 
 extension String{
