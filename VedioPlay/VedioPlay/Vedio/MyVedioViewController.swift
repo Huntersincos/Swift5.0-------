@@ -9,7 +9,7 @@
 import UIKit
 
 
-class MyVedioViewController: UIViewController {
+class MyVedioViewController: UIViewController,AVVedioPlayViewDelegate {
    
     var playerView:AVVedioPlayView?
     override func viewDidLoad() {
@@ -22,9 +22,14 @@ class MyVedioViewController: UIViewController {
         guard let filePath = Bundle.main.path(forResource: "v02004060000bq0sotqmac2oa0c1pftg", ofType: "mp4") else { return  }
         let fileURL:URL = URL.init(fileURLWithPath: filePath)
         self.playerView = AVVedioPlayView.init(frame:self.view.bounds)
+        self.playerView?.delegate = self
         self.playerView?.playWith(fileURL)
         self.view.addSubview(self.playerView ?? UIView.init())
         
+    }
+    
+    func goBack() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     override var prefersStatusBarHidden: Bool{

@@ -55,7 +55,7 @@ class SDWebImageDecoder: UIImage {
         // CGBitmapContextCreate 不支持kCGImageAlphaNone
         // 原始图像没有alpha信息，使用kCGImageAlphaNoneSkipLast
         // 创建没有透明透明因素,在UI渲染的时候,实际上是把多个图层按像素叠加计算的过程，需要对每一个像素进行 RGBA 的叠加计算。当某个 layer 的是不透明的，也就是 opaque 为 YES 时，GPU 可以直接忽略掉其下方的图层，这就减少了很多工作量。这也是调用 CGBitmapContextCreate 时 bitmapInfo 参数设置为忽略掉 alpha 通道的原因。
-        let context = CGContext.init(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorspaceRef ?? CGColorSpaceCreateDeviceRGB(), bitmapInfo:CGImageAlphaInfo.noneSkipLast.rawValue | CGImageAlphaInfo.none.rawValue )
+        let context = CGContext.init(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorspaceRef ?? CGColorSpaceCreateDeviceRGB(), bitmapInfo:CGBitmapInfo.byteOrderMask.rawValue | CGImageAlphaInfo.none.rawValue )
         if imageRef != nil {
             // 绘制
              context?.draw(imageRef!, in: CGRect(x: 0, y: 0, width: width, height: height))

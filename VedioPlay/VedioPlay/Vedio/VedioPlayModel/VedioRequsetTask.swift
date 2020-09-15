@@ -207,7 +207,9 @@ class VedioRequsetTask: NSObject,URLSessionDelegate,URLSessionDownloadDelegate,A
            
         // 回调的时候 不会调用这个方法 downloadTask(with: actualURLComponents?.url ?? url, completionHandler: { (temURL, response, error) in})
         self.fileHandle?.seekToEndOfFile()
-        self.fileHandle?.write(location.dataRepresentation)
+        // dataRepresentation写入的是MPG4编码格式 不是mp4文件
+       // self.fileHandle?.write(location.dataRepresentation)
+        self.fileHandle?.write(try!Data.init(contentsOf: location))
         // ! downLoadingOffset_ReadOnly! += location.dataRepresentation.count
         downLoadingOffset_ReadOnly = location.dataRepresentation.count + (downLoadingOffset_ReadOnly ?? 0)
         self.delegate?.didReceiveVideoDataTask?(self)

@@ -15,6 +15,8 @@ class MyAVPlayerItem: AVPlayerItem {
         if (self.observer != nil) {
             self.removeObserver(self.observer as! NSObject, forKeyPath: "status")
             self.removeObserver(self.observer as! NSObject, forKeyPath: "loadedTimeRanges")
+            self.removeObserver(self.observer as! NSObject, forKeyPath: "playbackBufferEmpty")
+            self.removeObserver(self.observer as! NSObject, forKeyPath: "playbackLikelyToKeepUp")
         }
     }
     

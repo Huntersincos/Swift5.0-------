@@ -113,6 +113,14 @@ class SDWebImageManager: NSObject {
     weak var delegate:SDWebImageManagerDelegate?
     private(set) var imageCache: SDImageCache?
     
+    fileprivate static let instance = SDWebImageManager()
+    
+    static public var sharedManager:SDWebImageManager {
+        get{
+            return instance
+        }
+    }
+    
     override init() {
         super.init()
     }
@@ -121,4 +129,8 @@ class SDWebImageManager: NSObject {
 //    convenience override init(_ cache:SDImageCache?) {
 //        
 //    }
+    
+    func cacheKeyForURL(_ url:URL) -> String{
+        return ""
+    }
 }

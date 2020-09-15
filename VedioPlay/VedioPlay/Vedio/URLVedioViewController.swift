@@ -15,15 +15,21 @@ class URLVedioViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         title = "URL视频播放"
-        
-        let  url = URL.init(string: "http://v4ttyey-10001453.video.myqcloud.com/Microblog/288-4-1452304375video1466172731.mp4")
+       // URL(string: <#T##String#>)
+        //http://v4ttyey-10001453.video.myqcloud.com/Microblog/288-4-1452304375video1466172731.mp4  // 播放不了 mts错误
+        let  url =   URL(string: "http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4")
+            
+
         self.playerView = AVVedioPlayView.init(frame:self.view.bounds)
-        self.playerView?.playWithUrl(url)
+        self.playerView?.playWithUrl(url,VeidoStoreType.URLANDLOCALVedio)
         self.view.addSubview(self.playerView ?? UIView.init())
         
         
     }
     
+//    override func viewWillDisappear(_ animated: Bool) {
+//
+//    }
     override var prefersStatusBarHidden: Bool{
            
            return true

@@ -34,7 +34,7 @@ public enum SDWebImageDownloaderExecutionOrder:Int{
     
 }
 
-typealias SDWebImageDownloaderProgressBlock = (_ receivedSize:Int, _ expectedSize:Int) -> Void?
+typealias SDWebImageDownloaderProgressBlock = (_ receivedSize:Int, _ expectedSize:Int64?) -> Void?
 typealias SDWebImageDownloaderCompletedBlock = (_ image:UIImage?, _ data:Data?, _ error:Error?, _ finished:Bool) -> Void?
 typealias SDWebImageDownloaderHeadersFilterBlock = (_ url:URL?,_ headers:[String:String]?) -> [String:String]?
 extension SDWebImageDownloader{

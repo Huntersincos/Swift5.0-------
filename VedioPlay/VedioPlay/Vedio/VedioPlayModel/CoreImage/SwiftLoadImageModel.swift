@@ -226,7 +226,7 @@ extension UIImage{
 extension Data{
     
     static func sd_contentTypeForImageData(_ data:NSData) ->String?{
-        let c_byte:UInt8 = 0
+        var c_byte:UInt8 = 0
         
         /**
           检测内存:MemoryLayout<T>
@@ -235,11 +235,13 @@ extension Data{
              3  stride  T实际占有的内存大小
           UnsafePointer:一旦操作了内存,编译器不会对这种操作进行操作,需要对自己行为承担责任
          */
-        let stride = MemoryLayout<UInt8>.stride
-        let aligment = MemoryLayout<UInt8>.alignment
-        let byteCount = stride * Int(c_byte)
+//        let stride = MemoryLayout<UInt8>.stride
+//        let aligment = MemoryLayout<UInt8>.alignment
+//        let byteCount = stride * Int(c_byte)
         //data.getBytes(UnsafeMutableRawPointer.allocate(byteCount: <#T##Int#>, alignment: <#T##Int#>)
-        data.getBytes(UnsafeMutableRawPointer.allocate(byteCount: byteCount, alignment: aligment), length: 1)
+        //data.getBytes(UnsafeMutableRawPointer.allocate(byteCount: byteCount, alignment: aligment), length: 1)
+        
+        data.getBytes(&c_byte, length: 1)
         /**
           switch c_byte {
               case 0xFF:

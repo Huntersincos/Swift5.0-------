@@ -14,10 +14,20 @@ import MediaPlayer
 // 1 添加计算属性 // 2 实例方法 类型方法 3 提供新的便利构造器 4 定义下标 5 定义和使用新的嵌套类型  6 协议
 // 扩展可以向类添加新的便利构造器，但是它们不能向类添加新的指定构造器或析构器。指定构造器或析构器必须始终由原始类实现提供。
 
+public enum VeidoStoreType:Int{
+    case  LocalVedio // 本地
+    case  URLVedio // url播放
+    case  URLANDLOCALVedio // 边播边缓存
+}
+
+
 protocol BaseViewControllerProtocol {
     func base_SupportedInterfaceOrientations() -> UIInterfaceOrientationMask
 }
 
+@objc  protocol AVVedioPlayViewDelegate {
+    func goBack()
+}
 
 extension UIViewController:BaseViewControllerProtocol {
     
@@ -155,6 +165,9 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
     
     var isFinishLoad:Bool?
     var resouerLoader:VedioPalyURLConnection?
+    var videoProgressView:UIProgressView?
+    var isBuffering:Bool?
+    weak var delegate:AVVedioPlayViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -281,6 +294,12 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
         progressSlider?.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
         toolView?.addSubview(progressSlider ?? UIView.init())
         
+        videoProgressView = UIProgressView.init(frame: self.progressSlider?.frame ?? CGRect(x: 0, y: 0, width: 0, height: 0))
+        videoProgressView?.progressTintColor = UIColor.orange
+        videoProgressView?.trackTintColor = .clear
+        videoProgressView?.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
+        toolView?.addSubview(videoProgressView ?? UIView.init())
+        
       
         
        
@@ -303,7 +322,7 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
         
     }
     
-   
+   /// 本地播放
     
     func playWith(_ url:URL) {
         
@@ -316,6 +335,7 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
                 item.observer = self
                 item.addObserver(self, forKeyPath: "status", options: .new, context: nil)
                 item.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+                item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
                 if (self.playView != nil) {
                     self.playView?.removeTimeObserver(self.playTimeObserver ?? NSObject())
                     // 替换item
@@ -348,11 +368,18 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
     
     /// 播放url视频 边播边缓存
     /// - Parameter url: <#url description#>
-    func playWithUrl(_ url:URL?){
+    func playWithUrl(_ url:URL? , _ videoStrogeType:VeidoStoreType){
         resouerLoader = VedioPalyURLConnection.init()
         resouerLoader?.downDelegate = self
         if url != nil{
-            let playUrl  = resouerLoader?.getSchemeVideoURL(url!) ?? url!
+            //resouerLoader?.getSchemeVideoURL(url!) ??
+           
+            // 带缓存播放
+            var playUrl =  resouerLoader?.getSchemeVideoURL(url!) ?? url!
+            if videoStrogeType == .URLVedio {
+                // 直接播放
+                playUrl  = url!
+            }
             let videoURLAsset = AVURLAsset.init(url: playUrl, options: nil)
             // 不执行 setDelegate resouerLoader写成存储属性即可
             videoURLAsset.resourceLoader.setDelegate(resouerLoader, queue: DispatchQueue.main)
@@ -360,12 +387,23 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
            item.observer = self
            item.addObserver(self, forKeyPath: "status", options: .new, context: nil)
            item.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+           item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
+           item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
            if (self.playView != nil) {
                self.playView?.removeTimeObserver(self.playTimeObserver ?? NSObject())
                // 替换item
                self.playView?.replaceCurrentItem(with: item)
            }else{
-               self.playView = AVPlayer.init(playerItem: item)
+            self.playView = AVPlayer.init(playerItem: item)
+            //playView
+            self.playView?.actionAtItemEnd = .none;
+            //self.playView. = .
+            if #available(iOS 10.0, *) {
+                // url播放不闪退
+               //self.playView?.automaticallyWaitsToMinimizeStalling = true
+            } else {
+                // Fallback on earlier versions
+            }
            }
            
            weak var weakPlayer:AVPlayer? = self.playView
@@ -417,7 +455,7 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
     @objc func goBack(){
         if fullBtn?.isSelected ?? false {
             //fullBtnClick()
-         
+
             if self.viewViewController().isKind(of: UIViewController.self) {
                   let currentVC:UIViewController = self.viewViewController() as! UIViewController
                    currentVC.vc_interfaceOrientation(UIInterfaceOrientation.portrait,false,true)
@@ -428,11 +466,12 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
                 if currentVC.navigationController?.topViewController == currentVC{
                    self.viewViewController().navigationController?.popViewController(animated: true)
                }else{
-                   self.viewViewController().dismiss(animated: true, completion: nil)
+                  currentVC.dismiss(animated: true, completion: nil)
                }
             }
-    
+
         }
+       // self.delegate?.goBack()
         
     }
     
@@ -454,8 +493,8 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
         
     }
     
-    @objc func playBtnClick(_ playBtn:UIButton){
-        if playBtn.isSelected {
+    @objc func playBtnClick(_ btn:UIButton){
+        if self.playBtn?.isSelected ?? false {
             pause()
         }else{
             play()
@@ -696,7 +735,11 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
        let item = object as! AVPlayerItem
+        print(item.error as Any)
        if keyPath == "status"{
+        //  item.error Error Domain=NSURLErrorDomain Code=-1001 "The request timed out." UserInfo={NSLocalizedDescription=The request timed out., NSUnderlyingError=0x600003ee51d0 {Error Domain=NSOSStatusErrorDomain Code=-1001 "(null)"}}
+        
+        //=AVFoundationErrorDomain Code=-11800 "The operation could not be completed" UserInfo={NSLocalizedFailureReason=An unknown error occurred (1718449215), NSLocalizedDescription=The operation could not be completed, NSUnderlyingError=0x6000005b9d40 {Error Domain=NSOSStatusErrorDomain Code=1718449215 "(null)" UserInfo={AVErrorFourCharCode='fmt?'}}}
           if item.status == .readyToPlay{
             let  currentTime = CMTimeGetSeconds(item.currentTime())
             self.totoalDurtime = Float(CMTimeGetSeconds(item.duration))
@@ -711,6 +754,7 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
             self.playView?.play()
             
           }else if item.status == .failed{
+            //
              print("AVPlayerStatusFailed")
             
           }else{
@@ -726,16 +770,48 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
          let pro = Float(timeInterval)/(self.totoalDurtime ?? 1.0)
          if (pro >= 0.0 && pro <= 1.0) {
             print("缓冲进度\(pro)")
+            videoProgressView?.setProgress(pro, animated: true)
          }
-        
-        
-       }
+    
+       }else if keyPath == "playbackBufferEmpty" {
+         
+         if item.isPlaybackBufferEmpty {
+           
+            bufferingSomeSecond()
+        }
+      
+    }
         
   }
     
+    func bufferingSomeSecond(){
+       
+        isBuffering = false
+        if isBuffering ?? false {
+            return
+        }
+        isBuffering = true
+        pause()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            if self.playBtn?.isSelected == false{
+                self.isBuffering = false
+                return
+            }
+            self.play()
+            self.isBuffering = false
+            
+            if self.playView?.currentItem?.isPlaybackLikelyToKeepUp == false{
+                self.bufferingSomeSecond()
+            }
+            
+        }
+        
+    }
+    
     func didFinishLoadingWithTask(_ task: VedioRequsetTask) {
         isFinishLoad = task.isFinishLoad
-         play()
+        // play()
         
     }
        
@@ -748,10 +824,13 @@ class AVVedioPlayView: UIView,VedioPalyTastkDownDelegate {
     }
     
     deinit {
+        // 无法释放
         playView?.removeTimeObserver(playTimeObserver ?? "")
         playView?.currentItem?.removeObserver(self, forKeyPath: "status")
-        playView?.currentItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
+        playView?.currentItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+        playView?.currentItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
         NotificationCenter.default.removeObserver(self)
+        
     }
 
 
