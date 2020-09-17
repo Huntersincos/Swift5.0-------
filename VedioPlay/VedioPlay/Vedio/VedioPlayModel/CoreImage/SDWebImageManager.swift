@@ -91,7 +91,12 @@ public enum SDWebImageOptions:Int{
 
 typealias SDWebImageCompletionBlock = (_ image:UIImage,_ error:NSError,_ cacheType:SDWebImageOptions,_ imageURL:URL) ->Void
 typealias SDWebImageCompletionWithFinishedBlock = (_ image:UIImage,_ error:NSError,_ cacheType:SDWebImageOptions,_ imageURL:URL,_ finished:Bool) ->Void
-typealias SDWebImageCacheKeyFilterBlock = (_ url:URL) ->Void
+typealias SDWebImageCacheKeyFilterBlock = (_ url:URL?) ->String?
+
+//protocol SDWebImageCombinedOperation:SDWebImageOperation{
+//    var cancelBlock:SDWebImageNoParamsBlock?
+//    var cacheOperation:Operation?
+//}
 
 @objc protocol SDWebImageManagerDelegate{
     @objc optional
@@ -112,7 +117,14 @@ typealias SDWebImageCacheKeyFilterBlock = (_ url:URL) ->Void
 class SDWebImageManager: NSObject {
     weak var delegate:SDWebImageManagerDelegate?
     private(set) var imageCache: SDImageCache?
+    private(set) var imageDownloader:SDWebImageDownloader?
+    var failedURLs = Set<URL>()
+        //[Any]()
+    var runningOperations = [Any]()
     
+    /// 图片过滤是个闭包,每次SDWebImageManage需要将url转化成缓存的key值,可动态删除图片
+    ///  比如::::
+    var cacheKeyFilter:SDWebImageCacheKeyFilterBlock?
     fileprivate static let instance = SDWebImageManager()
     
     static public var sharedManager:SDWebImageManager {
@@ -121,16 +133,124 @@ class SDWebImageManager: NSObject {
         }
     }
     
-    override init() {
-        super.init()
-    }
+//    override init() {
+//        super.init()
+//    }
      
     
-//    convenience override init(_ cache:SDImageCache?) {
-//        
-//    }
-    
-    func cacheKeyForURL(_ url:URL) -> String{
-        return ""
+    convenience  init(WithCache cache:SDImageCache?,downloader:SDWebImageDownloader?) {
+        self.init()
+        imageCache = cache
+        imageDownloader = downloader
     }
+    
+    
+    
+    /// URL--- Cache key
+    /// - Parameter url: <#url description#>
+    func cacheKeyForURL(_ url:URL?) -> String{
+        if url == nil {
+             return ""
+        }
+        if self.cacheKeyFilter != nil {
+            return self.cacheKeyFilter!(url) ?? ""
+        }else{
+            return url?.absoluteString ?? ""
+        }
+       
+    }
+    
+    
+    /// 检查url是否存在缓存图片
+    /// - Parameter url: <#url description#>
+    func cachedImageExistsForURL(_ url:URL?) -> Bool{
+        let key = self.cacheKeyForURL(url)
+        if ((self.imageCache?.imageFromMemoryCacheForKey(key)) != nil) {
+            return true
+        }
+        
+        return self.imageCache?.diskImageExistsWithKey(key) ?? false
+    }
+    
+    
+    /// 检查磁盘中是否有图片
+    /// - Parameter url: <#url description#>
+    func diskImageExistsForURL(_ url:URL?) -> Bool{
+         let key = self.cacheKeyForURL(url)
+        return self.imageCache?.diskImageExistsWithKey(key) ?? false
+    }
+    
+    
+    /// 异步检查图片是否已经缓存
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - completionBlock: <#completionBlock description#>
+    func cachedImageExistsForURL(_ url:URL? ,completion completionBlock:@escaping SDWebImageCheckCacheCompletionBlock) {
+        let key = self.cacheKeyForURL(url)
+        let isInMemoryCache =  self.imageCache?.imageFromMemoryCacheForKey(key) != nil
+        if isInMemoryCache {
+            DispatchQueue.main.async {
+               // if(completionBlock != nil){
+                    completionBlock(true)
+               // }
+            }
+            return
+        }
+        
+        self.imageCache?.diskImageExistsWithKey(key, completion: { (isInDiskCache:Bool) in
+            completionBlock(isInDiskCache)
+        })
+        
+    }
+    
+    
+    /// 检出检出磁盘是否已经缓存了图片
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - completionBlock: <#completionBlock description#>
+    func diskImageExistsForURL(_ url:URL?,completion completionBlock:@escaping SDWebImageCheckCacheCompletionBlock){
+          let key = self.cacheKeyForURL(url)
+          self.imageCache?.diskImageExistsWithKey(key, completion: { (isInDiskCache:Bool) in
+            completionBlock(isInDiskCache)
+        })
+    }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - options: <#options description#>
+    ///   - progressBlock: <#progressBlock description#>
+    ///   - completedBlock: <#completedBlock description#>
+    func downloadImageWithURL(_ url:URL,_ options:SDWebImageOptions, _ progressBlock:@escaping SDWebImageDownloaderProgressBlock,_ completedBlock:@escaping SDWebImageCompletionWithFinishedBlock) -> Optional<SDWebImageOperation>{
+        
+         //var operation:SDWebImageDownloaderOperation?
+        // weak var weakSelf = self
+        ///在没有completedBlock的情况下调用此方法是没有意义的
+        /// 如果要预取图像，请改用-[SDWebImagePrefetcher prefetchURLs]
+         assert(completedBlock != nil, "如果要预取图像，请改用-[SDWebImagePrefetcher prefetchURLs]")
+        
+        /// swift 对类型转换要求严格 不考虑  if ([url isKindOfClass:NSString.class]) {url = [NSURL URLWithString:(NSString *)url];}  if (![url isKindOfClass:NSURL.class]) {url = nil;}
+        var operation = SDWebImageCombinedOperation.init()
+        weak var weakOperation = operation
+        var isFailedUrl = false
+        SDWebImageDownloaderOperation.synchronized(anyID: self.failedURLs) {
+            isFailedUrl  = self.failedURLs.contains(url)
+        }
+        let key = self.cacheKeyForURL(url)
+        
+        operation.cacheOperation = self.imageCache?.queryDiskCacheForKey(key: key, doneBlock: { (image:UIImage?, cacheType:SDImageCacheType) in
+            
+        })
+        
+        
+        
+        
+        
+        return operation
+        
+        
+    }
+    
+    
 }

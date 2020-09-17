@@ -61,7 +61,14 @@ class CreatTableHelper: NSObject {
     
     // trigger 创建 触发器
     
+    /// 触发器名rms_update_conversation_read_on_update
+    /// AFTER  + 触发事件:UPDATE OF is_read
+    ///  ON:表名
+    /// 多条语句的触发器   new 新的数据  old 删除的数据
+    /// begin  执行语句 end
+    /// 查看触发器信息 SHOW TRIGGER
     class func chatTriggerUpadateMsgRead() ->String{
+        
         return "CREATE TRIGGER IF NOT EXISTS rms_update_conversation_read_on_update AFTER UPDATE OF is_read ON \(tableAllMessage) BEGIN UPDATE \(ConversationsMessageTable) SET unread_message_count = (SELECT count(*) FROM \(tableAllMessage) WHERE is_read = 0 AND \(tableAllMessage).conv_id = NEW.conv_id) WHERE \(ConversationsMessageTable)._id = NEW.conv_id;END;";
     
     }

@@ -58,7 +58,8 @@ extension SDWebImageDownloader{
 }
 
 protocol SDWebImageOperation {
-    func cancel()
+    
+      func cancel()
 }
 
 
@@ -187,7 +188,7 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
     }
     
     ///通过URL 创建一个异步SDWebImageDownloader实例 ,返回delegate:当下载成功或者失败回值.cancelable
-    /// - Parameters:
+    /// - Parameters: ??????
     ///   - url: <#url description#>
     ///   - options: options description 使用下载调用快
     ///   - progressBlock: 当下载时调用block progress
@@ -218,11 +219,83 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
             }else{
                 request.allHTTPHeaderFields = weakSelf?.HTTPHeader
             }
-             //options = 
+            operation = SDWebImageDownloaderOperation.init(withRequest: request as URLRequest, inSession: self.session ?? URLSession.init(), options, progress: { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+                let  sself:SDWebImageDownloader? = weakSelf
+                if sself != nil{
+                    var callbacksForURL = [Optional<Any>]()
+                    sself?.barrierQueue?.async {
+                        if sself?.URLCallbacks[url] != nil{
+                            callbacksForURL = (sself?.URLCallbacks[url])!
+                        }
+                    }
+                    for item in callbacksForURL {
+                        let callbacks = item as! Dictionary<String, Any>
+                        DispatchQueue.main.async {
+                            let callback:SDWebImageDownloaderProgressBlock? = callbacks[SDWebImageDownloader.kProgressCallbackKey] as? SDWebImageDownloaderProgressBlock
+                            if callback != nil{
+                                callback!(receivedSize,expectedSize)
+                            }
+                        }
+                    }
+                }
+                
+                return nil
+            }, completed: { (image:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void? in
+                let  sself:SDWebImageDownloader? = weakSelf
+                if sself != nil{
+                    var callbacksForURL = [Optional<Any>]()
+                       sself?.barrierQueue?.async {
+                           if sself?.URLCallbacks[url] != nil{
+                            callbacksForURL = (sself?.URLCallbacks[url])!
+                        }
+                    }
+                    for item in callbacksForURL {
+                        let callbacks = item as! Dictionary<String, Any>
+                        DispatchQueue.main.async {
+                            let callback:SDWebImageDownloaderCompletedBlock? = callbacks[SDWebImageDownloader.kCompletedCallbackKey] as? SDWebImageDownloaderCompletedBlock
+                            if callback != nil{
+                                callback!(image,data,error,finished)
+                            }
+                        }
+                    }
+                    
+                 }
+                
+                return  nil
+            }, cancelled: { () -> Void? in
+                 let  sself:SDWebImageDownloader? = weakSelf
+                if sself != nil{
+                    sself?.barrierQueue?.async {
+                        sself?.URLCallbacks.removeValue(forKey: url)
+                    }
+                }
+                
+                return nil
+            })
             
            return nil
             
         }, url)
+        
+        operation?.shouldDecompressImages = weakSelf?.shouldDecompressImages
+        if weakSelf?.urlCredential != nil {
+            operation?.credential = weakSelf?.urlCredential
+        }else if (weakSelf?.username != nil && weakSelf?.password != nil){
+            operation?.credential = URLCredential.init(user: weakSelf?.username ?? "", password: weakSelf?.password ?? "", persistence: URLCredential.Persistence.forSession)
+        }
+        
+        if options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderHighPriority.rawValue != 0 {
+            operation?.queuePriority = .high
+        }else if options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority.rawValue != 0{
+            operation?.queuePriority = .low
+        }
+        
+        weakSelf?.downloadQueue?.addOperation(operation ?? Operation.init())
+        if weakSelf?.executionOrder == SDWebImageDownloaderExecutionOrder.SDWebImageDownloaderLIFOExecutionOrder  {
+            // 操作lastAddedOperation依赖operation
+            weakSelf?.lastAddedOperation?.addDependency(operation ?? Operation.init())
+            weakSelf?.lastAddedOperation = operation
+        }
         
         return operation
         
@@ -258,6 +331,64 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
             
         })
         
+    }
+    
+    
+    /// 设置下载队列挂起状态
+    /// - Parameter suspended: <#suspended description#>
+    func setSuspended(_ suspended:Bool){
+        self.downloadQueue?.isSuspended = suspended
+    }
+    
+    
+    /// 删除下载队列的操作
+    func cancelAllDownloads(){
+        self.downloadQueue?.cancelAllOperations()
+    }
+    
+    private func operationWithTask(_ task:URLSessionTask) -> SDWebImageDownloaderOperation?{
+        var returnOperation:SDWebImageDownloaderOperation? = nil
+        for item in self.downloadQueue?.operations ?? [Operation.init()] {
+            let operation:SDWebImageDownloaderOperation = item as! SDWebImageDownloaderOperation
+            if operation.dataTask?.taskIdentifier == task.taskIdentifier {
+                returnOperation = operation
+                break
+            }
+            
+        }
+        
+        return returnOperation
+        
+    }
+    
+    /// URLSessionDataDelegate
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        let dataOperation = self.operationWithTask(dataTask)
+        dataOperation?.urlSession(session, dataTask: dataTask, didReceive: response, completionHandler: completionHandler)
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        let dataOperation = self.operationWithTask(dataTask)
+        dataOperation?.urlSession(session, dataTask: dataTask, didReceive: data)
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, willCacheResponse proposedResponse: CachedURLResponse, completionHandler: @escaping (CachedURLResponse?) -> Void) {
+        let dataOperation = self.operationWithTask(dataTask)
+        dataOperation?.urlSession(session, dataTask: dataTask, willCacheResponse: proposedResponse, completionHandler: completionHandler)
+    }
+    
+    /// URLSessionTaskDelegate
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+         let dataOperation = self.operationWithTask(task)
+        dataOperation?.urlSession(session, task: task, didCompleteWithError: error)
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        let dataOperation = self.operationWithTask(task)
+        dataOperation?.urlSession(session, task: task, didReceive: challenge, completionHandler: completionHandler)
     }
     
     deinit {
