@@ -10,7 +10,7 @@ import UIKit
 
 /// <#Description#>
 public enum SDWebImageDownloaderOptions:Int{
-    case SDWebImageDownloaderLowPriority = 1
+    case SDWebImageDownloaderLowPriority = 0
     case SDWebImageDownloaderProgressiveDownload = 2
     /// SDWebimaage 默认情况下,是阻止 NSURLCache缓存,这个值可以使得NSURLCache和默认缓存策略一起使用
     case SDWebImageDownloaderUseNSURLCache = 4

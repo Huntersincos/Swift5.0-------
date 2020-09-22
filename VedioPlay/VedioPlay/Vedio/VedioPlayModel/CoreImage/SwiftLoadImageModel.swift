@@ -19,10 +19,254 @@ import ImageIO
    6 不支持webp格式图片
    7 对swift进行了指针操作,安全性降低
    8 只支持iOS 8以上版本
-   9 把SDNetworkActivityIndicator换成 ActivityIndicator
+   9 把SDNetworkActivityIndicator换成 ActivityIndicator 后续加
    10 自定义使用泛型
    11 不考虑 后台加载问题 beginBackgroundTaskWithExpirationHandler swift没找到performSelector代替方案
  */
+
+public var loadOperationKey:CChar? = 0
+public var imageURLKey:CChar? = 0
+public var TAG_ACTIVITY_SHOW:CChar? = 0
+public var TAG_ACTIVITY_INDICATOR:CChar? = 0
+
+
+extension UIImageView{
+    
+    /// image的图片=== url  异步 缓存
+    /// - Parameter url: <#url description#>
+       func sd_setImageWithURL( _ url:URL?) {
+        
+             self.sd_setImageWithURL(url, placeholderImage: nil, options: SDWebImageOptions.SDWebImageRetryFailed, completed: { (image:UIImage, error:Error, cacheType:SDImageCacheType, imageURL:URL) -> Void? in
+                return nil
+             }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+                 return nil
+             }
+       }
+      
+
+    /// <#Description#>
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - placeholder: placeholder description 展位图
+       func sd_setImageWithURL(_ url:URL?,placeholderImage placeholder:UIImage?){
+        
+           self.sd_setImageWithURL(url, placeholderImage: placeholder, options: SDWebImageOptions.SDWebImageRetryFailed, completed: { (image:UIImage, error:Error, cacheType:SDImageCacheType, imageURL:URL) -> Void? in
+              return nil
+           }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+               return nil
+           }
+           
+       }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - placeholder: <#placeholder description#>
+    ///   - options: <#options description#>
+    func sd_setImageWithURL( _ url:URL?,placeholderImage placeholder:UIImage?,options:SDWebImageOptions){
+        
+        self.sd_setImageWithURL(url, placeholderImage: placeholder, options: options, completed: { (image:UIImage, error:Error, cacheType:SDImageCacheType, imageURL:URL) -> Void? in
+             return nil
+          }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+              return nil
+          }
+        
+    }
+    
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - completedBlock: <#completedBlock description#>
+    func sd_setImageWithURL(_ url:URL?,completed completedBlock:@escaping SDWebImageCompletionBlock){
+        self.sd_setImageWithURL(url, placeholderImage: nil, options: SDWebImageOptions.SDWebImageRetryFailed, completed: completedBlock) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+            return nil
+        }
+        
+    }
+    
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - placeholder: <#placeholder description#>
+    ///   - completedBlock: <#completedBlock description#>
+    func sd_setImageWithURL( _ url:URL?,placeholderImage placeholder:UIImage?,completedBlock:@escaping SDWebImageCompletionBlock){
+        self.sd_setImageWithURL(url, placeholderImage: nil, options: SDWebImageOptions.SDWebImageRetryFailed, completed: completedBlock) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+           return nil
+        }
+        
+    }
+    
+    
+    /// 获取图片 回调 completedBlock
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - placeholder: <#placeholder description#>
+    ///   - options: <#options description#>
+    ///   - completedBlock: <#completedBlock description#>
+    func sd_setImageWithURL( _ url:URL?,placeholderImage placeholder:UIImage?,options:SDWebImageOptions, completed completedBlock:@escaping SDWebImageCompletionBlock){
+        
+        self.sd_setImageWithURL(url, placeholderImage: placeholder, options: options, completed: completedBlock) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+              return nil
+        }
+        
+    }
+    
+    
+    
+    ///  获取图片   回调 progressBlock  completedBlock
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - placeholder: <#placeholder description#>
+    ///   - options: <#options description#>
+    ///   - completedBlock: <#completedBlock description#>
+    ///   - progressBlock: <#progressBlock description#>
+    func sd_setImageWithURL( _ url:URL?,placeholderImage placeholder:UIImage?,options:SDWebImageOptions, completed completedBlock: @escaping SDWebImageCompletionBlock, progress progressBlock: @escaping SDWebImageDownloaderProgressBlock){
+        
+        self.sd_cancelCurrentImageLoad()
+        objc_setAssociatedObject(self, &imageURLKey, url, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        if options.rawValue & SDWebImageOptions.SDWebImageDelayPlaceholder.rawValue == 0 {
+            if Thread.isMainThread {
+                self.image = placeholder ?? UIImage.init()
+            }else{
+                DispatchQueue.main.async {
+                    self.image = placeholder ?? UIImage.init()
+                }
+            }
+        }
+        
+        if url != nil {
+            if self.showActivityIndicatorView() {
+                
+            }
+        }
+        
+    }
+    
+    
+    /// 取消当前下载
+    func sd_cancelCurrentImageLoad(){
+        self.sd_cancelImageLoadOperationWithKey("UIImageViewImageLoad")
+    }
+      
+    func setShowActivityIndicatorView(_ show:Bool)
+    {
+        objc_setAssociatedObject(self, &TAG_ACTIVITY_SHOW, NSNumber.init(value: show), objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        
+    }
+    
+    func showActivityIndicatorView() ->Bool{
+        let showAIndicator:NSNumber? = objc_getAssociatedObject(self, &TAG_ACTIVITY_SHOW) as? NSNumber
+        return showAIndicator?.boolValue ?? false
+    }
+    
+    
+    func activityIndicator() -> UIActivityIndicatorView?{
+        
+        let activityIndicatorView:UIActivityIndicatorView? = objc_getAssociatedObject(self, &TAG_ACTIVITY_INDICATOR) as? UIActivityIndicatorView
+        
+        return activityIndicatorView
+    }
+    
+    func setActivityIndicator(activityIndicator:UIActivityIndicatorView?){
+    
+        objc_setAssociatedObject(self, &TAG_ACTIVITY_INDICATOR, activityIndicator, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        
+    }
+    
+    func addActivityIndicator(){
+        
+        if (self.activityIndicator() == nil) {
+            var activityIndicator = self.activityIndicator()
+             activityIndicator = UIActivityIndicatorView.init()
+        }
+        
+    }
+       
+}
+
+
+extension UIView {
+    
+    
+    func operationDictionary() -> NSMutableDictionary?{
+        
+        /// objc_getAssociatedObject
+        var  operations:NSMutableDictionary? = objc_getAssociatedObject(self, &loadOperationKey) as? NSMutableDictionary
+        if operations != nil {
+            return operations
+        }
+        
+        operations = NSMutableDictionary.init()
+        objc_setAssociatedObject(self, &loadOperationKey, operations, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return operations
+    }
+    
+    
+    /// 获取UIimageView 加载图片操作
+    /// - Parameters:
+    ///   - operation: <#operation description#>
+    ///   - key: <#key description#>
+    func sd_setImageLoadOperation(_ operation:NSObject, forKey key:NSString){
+        self.sd_cancelImageLoadOperationWithKey(key)
+        let operationDictionary = self.operationDictionary()
+        operationDictionary?.setObject(operation, forKey: key)
+    }
+    
+    
+    /// 删除当前所有view的操作
+    /// - Parameter key: <#key description#>
+    func sd_cancelImageLoadOperationWithKey(_ key:NSString){
+        let operationDictionary = self.operationDictionary()
+        let operations:NSObject? = operationDictionary?.object(forKey: key) as! NSObject?
+        if operations != nil {
+            if operations?.isKind(of: NSArray.self) ?? false {
+                let array_operations:NSArray? = operations as? NSArray
+                for item in array_operations ?? NSArray.init() {
+                    let operation:Optional<SDWebImageOperation> =  item as? SDWebImageOperation
+                    if operation != nil {
+                        operation?.cancel()
+                    }
+                    
+                }
+                
+            }else if(/**operations?.conforms(to:protocol(SDWebImageOperation)) ?? **/ false){
+                 let operation:Optional<SDWebImageOperation> =  operations as? SDWebImageOperation
+                if operation != nil {
+                    operation?.cancel()
+                }
+                
+            }
+            
+            operationDictionary?.removeObject(forKey: key)
+        }
+        
+    }
+    
+    
+    
+    /// 只需删除与当前UIView和key对应的操作，而不取消它们
+    /// - Parameter key: <#key description#>
+    func sd_removeImageLoadOperationWithKey(_ key:String){
+        let operationDictionary = self.operationDictionary()
+        operationDictionary?.removeObject(forKey: key)
+    }
+    
+    
+}
+
+//extension String:CustomStringConvertible
+//{
+//    public var description: String {
+//
+//    }
+//
+//
+//}
 
 extension String{
     /// 将任一字符串转换为英文字母字符串
@@ -55,22 +299,7 @@ extension String{
     
 }
 
- extension UIImageView{
-    // 常用方法
-       func sd_setImageWithURL(imageURL url:URL) {
-           
-           
-       }
-       // 常用方法
-       func sd_setImageWithURL(imageURL url:URL,placeholderImage placeholder:UIImage){
-           
-           
-       }
-    
-   // func sd_setImageWithURL(imageURL url:URL,placeholderImage placeholder:UIImage,options:Int,)
-      
-       
-}
+ 
 
 extension UIImage{
     
@@ -287,3 +516,6 @@ class SwiftLoadImageModel: NSObject {
 
     
 }
+
+
+

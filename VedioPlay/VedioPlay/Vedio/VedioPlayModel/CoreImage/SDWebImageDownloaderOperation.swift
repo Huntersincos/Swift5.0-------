@@ -21,7 +21,7 @@ class SDWebImageDownloaderOperation: Operation,SDWebImageOperation,URLSessionDat
     private(set) var dataTask:URLSessionTask?
     var shouldDecompressImages:Bool?
     
-    /// 过期属性 __deprecated_msg swift
+    /// 过期属性 __deprecated_msg swift shouldUseCredentialStorage
     @available(*, deprecated, message: "Property deprecated. Does nothing. Kept only for backwards compatibility 属性已经废弃,属性已弃用。什么都不做。仅为向后兼容而保留")
     var shouldUseCredentialStorage:Bool?
     
