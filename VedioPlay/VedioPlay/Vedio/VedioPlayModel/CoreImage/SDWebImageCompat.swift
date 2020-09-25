@@ -34,8 +34,11 @@ import UIKit
                     scale = 3.0
                 }
             }
-            let scaledImage = UIImage.init(cgImage: (image?.cgImage)!, scale: CGFloat(scale), orientation: image?.imageOrientation ?? UIImage.Orientation.up)
-            return scaledImage
+            if image?.cgImage != nil {
+                let scaledImage = UIImage.init(cgImage: (image?.cgImage)!, scale: CGFloat(scale), orientation: image?.imageOrientation ?? UIImage.Orientation.up)
+                return scaledImage
+            }
+           
             
         }
         return image

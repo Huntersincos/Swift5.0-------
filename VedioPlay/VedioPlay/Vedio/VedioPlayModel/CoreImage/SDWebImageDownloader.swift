@@ -9,8 +9,9 @@
 import UIKit
 
 /// <#Description#>
-public enum SDWebImageDownloaderOptions:Int{
-    case SDWebImageDownloaderLowPriority = 0
+public enum SDWebImageDownloaderOptions:UInt{
+    case  SDWebImageDownloaderNone = 0
+    case SDWebImageDownloaderLowPriority = 1
     case SDWebImageDownloaderProgressiveDownload = 2
     /// SDWebimaage 默认情况下,是阻止 NSURLCache缓存,这个值可以使得NSURLCache和默认缓存策略一起使用
     case SDWebImageDownloaderUseNSURLCache = 4
@@ -34,6 +35,7 @@ public enum SDWebImageDownloaderExecutionOrder:Int{
     
 }
 
+ //open func dismiss(animated flag: Bool, completion: (() -> Void)? = nil)
 typealias SDWebImageDownloaderProgressBlock = (_ receivedSize:Int, _ expectedSize:Int64?) -> Void?
 typealias SDWebImageDownloaderCompletedBlock = (_ image:UIImage?, _ data:Data?, _ error:Error?, _ finished:Bool) -> Void?
 typealias SDWebImageDownloaderHeadersFilterBlock = (_ url:URL?,_ headers:[String:String]?) -> [String:String]?
@@ -244,11 +246,17 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
                 let  sself:SDWebImageDownloader? = weakSelf
                 if sself != nil{
                     var callbacksForURL = [Optional<Any>]()
-                       sself?.barrierQueue?.async {
-                           if sself?.URLCallbacks[url] != nil{
-                            callbacksForURL = (sself?.URLCallbacks[url])!
+                    sself?.barrierQueue?.sync(flags: .barrier, execute: {
+                        if sself?.URLCallbacks[url] != nil{
+                           callbacksForURL = (sself?.URLCallbacks[url])!
                         }
-                    }
+                        if finished{
+                            sself?.URLCallbacks.removeValue(forKey: url)
+                        }
+                    
+                    })
+
+                    
                     for item in callbacksForURL {
                         let callbacks = item as! Dictionary<String, Any>
                         DispatchQueue.main.async {
@@ -310,8 +318,8 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
         //dispatch_barrier_sync
         self.barrierQueue?.sync(flags: .barrier, execute: {
             var first =  false
-            if self.URLCallbacks[url ?? URL.init(fileURLWithPath: "")] == nil{
-                //self.URLCallbacks[url ?? URL.init(fileURLWithPath: "")] = NSMutableArray.init() as? [String]
+            if self.URLCallbacks[url!] == nil{
+                self.URLCallbacks[url!] = NSMutableArray.init() as? [Optional<Any>]
                 first =  true
             }
             
@@ -381,6 +389,16 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
     /// URLSessionTaskDelegate
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        //Error Domain=NSURLErrorDomain Code=-999 "cancelled"
+           #if DEBUG
+         if error != nil {
+            print( error!)
+          }
+          
+              #else
+              
+
+              #endif
          let dataOperation = self.operationWithTask(task)
         dataOperation?.urlSession(session, task: task, didCompleteWithError: error)
         

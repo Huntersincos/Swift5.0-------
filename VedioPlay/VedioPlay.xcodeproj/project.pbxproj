@@ -10,6 +10,7 @@
 		6E16788624F3C1F400DD6863 /* SwiftLoadImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */; };
 		6E16788824F3C25600DD6863 /* SDWebImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788724F3C25600DD6863 /* SDWebImageManager.swift */; };
 		6E16788C24F4E62D00DD6863 /* SDImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788B24F4E62C00DD6863 /* SDImageCache.swift */; };
+		6E38C4CE251D9E2E00201C05 /* OtherClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E38C4CD251D9E2E00201C05 /* OtherClassViewController.swift */; };
 		6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */; };
 		6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E699BAB2499F3FF0065115C /* AJGradientView.swift */; };
 		6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = 6E882B8B24A84AF80001710C /* viedio.MP4 */; };
@@ -44,6 +45,8 @@
 		6E9BB5E324E38E950040FF15 /* player_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E124E38E950040FF15 /* player_play.png */; };
 		6E9BB5E524E39AC10040FF15 /* MyAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */; };
 		6EA8545924D8127F00C83530 /* backBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EA8545824D8127D00C83530 /* backBtn@2x.png */; };
+		6EA94F15251B4CA00093A865 /* LoadURLImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA94F13251B4CA00093A865 /* LoadURLImageViewController.swift */; };
+		6EA94F16251B4CA00093A865 /* LoadURLImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EA94F14251B4CA00093A865 /* LoadURLImageViewController.xib */; };
 		6EAA5B4024FCFE0900B8FBF9 /* SDWebImageCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAA5B3F24FCFE0900B8FBF9 /* SDWebImageCompat.swift */; };
 		6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */; };
 		6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */; };
@@ -100,6 +103,7 @@
 		6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLoadImageModel.swift; sourceTree = "<group>"; };
 		6E16788724F3C25600DD6863 /* SDWebImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageManager.swift; sourceTree = "<group>"; };
 		6E16788B24F4E62C00DD6863 /* SDImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDImageCache.swift; sourceTree = "<group>"; };
+		6E38C4CD251D9E2E00201C05 /* OtherClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherClassViewController.swift; sourceTree = "<group>"; };
 		6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVVedioPlayView.swift; sourceTree = "<group>"; };
 		6E699BAB2499F3FF0065115C /* AJGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJGradientView.swift; sourceTree = "<group>"; };
 		6E882B8B24A84AF80001710C /* viedio.MP4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = viedio.MP4; sourceTree = "<group>"; };
@@ -142,6 +146,8 @@
 		6E9BB5E124E38E950040FF15 /* player_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_play.png; sourceTree = "<group>"; };
 		6E9BB5E424E39AC10040FF15 /* MyAVPlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAVPlayerItem.swift; sourceTree = "<group>"; };
 		6EA8545824D8127D00C83530 /* backBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backBtn@2x.png"; sourceTree = "<group>"; };
+		6EA94F13251B4CA00093A865 /* LoadURLImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadURLImageViewController.swift; sourceTree = "<group>"; };
+		6EA94F14251B4CA00093A865 /* LoadURLImageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadURLImageViewController.xib; sourceTree = "<group>"; };
 		6EAA5B3F24FCFE0900B8FBF9 /* SDWebImageCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageCompat.swift; sourceTree = "<group>"; };
 		6EB5D3EF2497393A008DA35A /* JRAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRAlbumViewController.swift; sourceTree = "<group>"; };
 		6EB5D3F02497393A008DA35A /* JRAlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JRAlbumViewController.xib; sourceTree = "<group>"; };
@@ -403,6 +409,9 @@
 				6E56076624E0EDDC00DA43FF /* VedioPlayView */,
 				6EB79A30249374DF00B56296 /* MyVedioViewController.swift */,
 				6E96D3BB2505D9C400EA3486 /* URLVedioViewController.swift */,
+				6EA94F13251B4CA00093A865 /* LoadURLImageViewController.swift */,
+				6E38C4CD251D9E2E00201C05 /* OtherClassViewController.swift */,
+				6EA94F14251B4CA00093A865 /* LoadURLImageViewController.xib */,
 			);
 			path = Vedio;
 			sourceTree = "<group>";
@@ -525,6 +534,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EA94F16251B4CA00093A865 /* LoadURLImageViewController.xib in Resources */,
 				6EA8545924D8127F00C83530 /* backBtn@2x.png in Resources */,
 				6EDDBD2124D2A1B10087AAA7 /* ic-audio-animation-left-2@2x.png in Resources */,
 				6EDDBD2924D2A1D70087AAA7 /* ic-audio-animation-right-2@2x.png in Resources */,
@@ -606,10 +616,12 @@
 				6EB5D40424989E5A008DA35A /* AJPhotoListCellTapView.swift in Sources */,
 				6E92753624F7755D009F5D63 /* AutoPurgeCache.swift in Sources */,
 				6E986C8224C8264200482F35 /* VoiceRecordProgressView.swift in Sources */,
+				6EA94F15251B4CA00093A865 /* LoadURLImageViewController.swift in Sources */,
 				6E90185024F361C000A8D6CA /* VedioRequsetTask.swift in Sources */,
 				6E96D3C125062AC800EA3486 /* SDWebImageDownloaderOperation.swift in Sources */,
 				6E97C95524D3F38600D4CFB1 /* DisplayLocationViewController.swift in Sources */,
 				6E97271425134AC70075F2A9 /* SDWebImageCombinedOperation.swift in Sources */,
+				6E38C4CE251D9E2E00201C05 /* OtherClassViewController.swift in Sources */,
 				6E9B3C1024FF8A4B00C161C2 /* DBHerlper.swift in Sources */,
 				6E96D3BC2505D9C400EA3486 /* URLVedioViewController.swift in Sources */,
 				6E16788C24F4E62D00DD6863 /* SDImageCache.swift in Sources */,

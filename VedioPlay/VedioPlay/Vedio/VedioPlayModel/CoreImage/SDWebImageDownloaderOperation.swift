@@ -227,7 +227,8 @@ class SDWebImageDownloaderOperation: Operation,SDWebImageOperation,URLSessionDat
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void){
         // 除去304 Not Modified 访问资源出现304访问的情况下其实就是先在本地缓存了访问的资源。 300 --400
         let httpURLResponse:HTTPURLResponse? = response as? HTTPURLResponse
-        if response.responds(to: #selector(getter: HTTPURLResponse.statusCode)) == false ||  (httpURLResponse?.statusCode == 400 && httpURLResponse?.statusCode != 304) {
+//          if (![response respondsToSelector:@selector(statusCode)] || ([((NSHTTPURLResponse *)response) statusCode] < 400 && [((NSHTTPURLResponse *)response) statusCode] != 304)) ????????   {
+        if response.responds(to: #selector(getter: HTTPURLResponse.statusCode)) == false ||  (httpURLResponse?.statusCode ?? 400 < 400 && httpURLResponse?.statusCode != 304) {
             let expected = httpURLResponse?.expectedContentLength ?? 0 > 0 ? httpURLResponse?.expectedContentLength:0
             self.expectedSize = expected
             if  self.progressBlock != nil{

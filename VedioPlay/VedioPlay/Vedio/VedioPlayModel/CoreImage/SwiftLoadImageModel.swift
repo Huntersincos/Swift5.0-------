@@ -14,12 +14,12 @@ import ImageIO
    1 大量使用值类型,减少引用类型
    2 不考虑NSImage
    3 不考虑条件编译
-   4 使用@escaping 可能会引起循环引用
+   4 使用@escaping 可能会引起循环引用,去 weak弱引用下 在闭包区域 可能会导致nil 而crash
    5 使用了很多 as ! 性能折扣
    6 不支持webp格式图片
    7 对swift进行了指针操作,安全性降低
    8 只支持iOS 8以上版本
-   9 把SDNetworkActivityIndicator换成 ActivityIndicator 后续加
+   9 把SDNetworkActivityIndicator不考虑添加
    10 自定义使用泛型
    11 不考虑 后台加载问题 beginBackgroundTaskWithExpirationHandler swift没找到performSelector代替方案
  */
@@ -28,6 +28,7 @@ public var loadOperationKey:CChar? = 0
 public var imageURLKey:CChar? = 0
 public var TAG_ACTIVITY_SHOW:CChar? = 0
 public var TAG_ACTIVITY_INDICATOR:CChar? = 0
+public var  TAG_ACTIVITY_STYLE:CChar? = 0
 
 
 extension UIImageView{
@@ -36,9 +37,9 @@ extension UIImageView{
     /// - Parameter url: <#url description#>
        func sd_setImageWithURL( _ url:URL?) {
         
-             self.sd_setImageWithURL(url, placeholderImage: nil, options: SDWebImageOptions.SDWebImageRetryFailed, completed: { (image:UIImage, error:Error, cacheType:SDImageCacheType, imageURL:URL) -> Void? in
+        self.sd_setImageWithURL(url, placeholderImage: nil, options: SDWebImageOptions.SDWebImageRetryFailed, completed: { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?) -> Void? in
                 return nil
-             }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+                } ) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
                  return nil
              }
        }
@@ -50,9 +51,9 @@ extension UIImageView{
     ///   - placeholder: placeholder description 展位图
        func sd_setImageWithURL(_ url:URL?,placeholderImage placeholder:UIImage?){
         
-           self.sd_setImageWithURL(url, placeholderImage: placeholder, options: SDWebImageOptions.SDWebImageRetryFailed, completed: { (image:UIImage, error:Error, cacheType:SDImageCacheType, imageURL:URL) -> Void? in
+           self.sd_setImageWithURL(url, placeholderImage: placeholder, options: SDWebImageOptions.SDWebImageRetryFailed, completed: { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?) -> Void? in
               return nil
-           }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+            }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
                return nil
            }
            
@@ -66,9 +67,9 @@ extension UIImageView{
     ///   - options: <#options description#>
     func sd_setImageWithURL( _ url:URL?,placeholderImage placeholder:UIImage?,options:SDWebImageOptions){
         
-        self.sd_setImageWithURL(url, placeholderImage: placeholder, options: options, completed: { (image:UIImage, error:Error, cacheType:SDImageCacheType, imageURL:URL) -> Void? in
+        self.sd_setImageWithURL(url, placeholderImage: placeholder, options: options, completed: { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?) -> Void? in
              return nil
-          }) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+            } ) { (receivedSize:Int, expectedSize:Int64?) -> Void? in
               return nil
           }
         
@@ -140,11 +141,122 @@ extension UIImageView{
         }
         
         if url != nil {
-            if self.showActivityIndicatorView() {
+            if self.showActivityIndicatorView {
+                addActivityIndicator()
+            }
+            
+            weak var wself = self
+            let operation:Optional<SDWebImageOperation> = SDWebImageManager.sharedManager.downloadImageWithURL(url!, options, progressBlock) { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?, finished:Bool) -> Void? in
+                wself?.removeActivityIndicator()
+                if wself != nil{
+                    if image != nil && (options.rawValue & SDWebImageOptions.SDWebImageAvoidAutoSetImage.rawValue != 0 ) {
+                        completedBlock(image,error,cacheType,url)
+                        return nil
+                    }else if image != nil{
+                        wself?.image = image
+                       // 一定会调用layoutSubviews方法（有延迟，在下一轮runloop结束前）
+                        wself?.setNeedsLayout()
+                    }else{
+                        if options.rawValue & SDWebImageOptions.SDWebImageDelayPlaceholder.rawValue != 0 {
+                            wself?.image = image
+                             // 一定会调用layoutSubviews方法（有延迟，在下一轮runloop结束前）
+                            wself?.setNeedsLayout()
+                        }
+                    }
+                    
+                    if finished {
+                         completedBlock(image, error, cacheType, url)
+                    }
+                }
                 
+                
+                return nil
+            }
+            
+            self.sd_setImageLoadOperation(operation as! NSObject, forKey: "UIImageViewImageLoad")
+        }else{
+            if Thread.isMainThread {
+                self.removeActivityIndicator()
+                completedBlock(nil, NSError.init(domain: SDWebImageErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey : "Trying to load a nil url"]), SDImageCacheType.SDImageCacheTypeNone, url)
+            }else{
+                self.removeActivityIndicator()
+                 completedBlock(nil, NSError.init(domain: SDWebImageErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey : "Trying to load a nil url"]), SDImageCacheType.SDImageCacheTypeNone, url)
             }
         }
         
+    }
+    
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - url: <#url description#>
+    ///   - placeholder: <#placeholder description#>
+    ///   - options: <#options description#>
+    ///   - progress: <#progress description#>
+    ///   - completedBlock: <#completedBlock description#>
+    func sd_setImageWithPreviousCachedImageWithURL(_ url:URL,placeholderImage placeholder:UIImage?,_ options:SDWebImageOptions, progressBlock: @escaping SDWebImageDownloaderProgressBlock, completed completedBlock: @escaping SDWebImageCompletionBlock) {
+        
+        let key = SDWebImageManager.sharedManager.cacheKeyForURL(url)
+        let lastPreviousCachedImage = SDImageCache.sharedImageCache.imageFromDiskCacheForKey(key)
+        self.sd_setImageWithURL(url, placeholderImage: (lastPreviousCachedImage != nil) ?lastPreviousCachedImage: placeholder, options: options, completed: completedBlock, progress: progressBlock)
+    }
+    
+    func sd_imageURL() -> URL{
+        let sdimage_Url = objc_getAssociatedObject(self, &imageURLKey) as! URL
+        return sdimage_Url
+    }
+    
+    
+    /// 下载图像数组并在动画循环中启动它们
+    /// - Parameter arrayOfURLs: <#arrayOfURLs description#>
+    func sd_setAnimationImagesWithURLs(_ arrayOfURLs:Array<URL>){
+        sd_cancelCurrentAnimationImagesLoad()
+        let operationsArray = NSMutableArray.init()
+        for logoImageURL in arrayOfURLs {
+            weak var wself = self
+            let operation:Optional<SDWebImageOperation> = SDWebImageManager.sharedManager.downloadImageWithURL(logoImageURL, SDWebImageOptions.SDWebImageRetryFailed, { (a:Int, b:Int64?) -> Void? in
+                return nil
+            }) { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?, finished:Bool) -> Void? in
+                
+                if wself != nil{
+                    if Thread.isMainThread {
+                        wself?.stopAnimating()
+                        if image != nil {
+                            var currentImages:NSMutableArray? = wself?.animationImages as? NSMutableArray
+                                  if currentImages != nil {
+                                      currentImages = NSMutableArray.init()
+                                  }
+                                  currentImages?.add(image!)
+                                  wself?.animationImages = currentImages as? [UIImage]
+                                  wself?.setNeedsLayout()
+                        }
+                    }else{
+                        DispatchQueue.main.async {
+                            wself?.stopAnimating()
+                            if image != nil {
+                                var currentImages:NSMutableArray? = wself?.animationImages as? NSMutableArray
+                                if currentImages != nil {
+                                    currentImages = NSMutableArray.init()
+                                }
+                                currentImages?.add(image!)
+                                wself?.animationImages = currentImages as? [UIImage]
+                                wself?.setNeedsLayout()
+                            }
+                            
+                        }
+                    }
+                }
+                
+                return nil
+            }
+            if operation != nil {
+                operationsArray.add(operation!)
+            }
+            
+        
+        }
+        self.sd_setImageLoadOperation(NSArray.init(array: operationsArray) as NSObject, forKey: "UIImageViewImageLoad")
     }
     
     
@@ -152,40 +264,106 @@ extension UIImageView{
     func sd_cancelCurrentImageLoad(){
         self.sd_cancelImageLoadOperationWithKey("UIImageViewImageLoad")
     }
+    
+    /// 取消当前动画加载
+    func sd_cancelCurrentAnimationImagesLoad(){
+        self.sd_cancelImageLoadOperationWithKey("UIImageViewAnimationImages")
+    }
       
-    func setShowActivityIndicatorView(_ show:Bool)
-    {
-        objc_setAssociatedObject(self, &TAG_ACTIVITY_SHOW, NSNumber.init(value: show), objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+//    func setShowActivityIndicatorView(_ show:Bool)
+//    {
+//        objc_setAssociatedObject(self, &TAG_ACTIVITY_SHOW, NSNumber.init(value: show), objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+//
+//    }
+//
+//    func showActivityIndicatorView() ->Bool{
+//        let showAIndicator:NSNumber? = objc_getAssociatedObject(self, &TAG_ACTIVITY_SHOW) as? NSNumber
+//        return showAIndicator?.boolValue ?? false
+//    }
+    
+    var showActivityIndicatorView:Bool{
+        set(newValue){
+            objc_setAssociatedObject(self, &TAG_ACTIVITY_SHOW, NSNumber.init(value: newValue), objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        }
         
+        get{
+            let showAIndicator:NSNumber? = objc_getAssociatedObject(self, &TAG_ACTIVITY_SHOW) as? NSNumber
+            return showAIndicator?.boolValue ?? false
+        }
     }
     
-    func showActivityIndicatorView() ->Bool{
-        let showAIndicator:NSNumber? = objc_getAssociatedObject(self, &TAG_ACTIVITY_SHOW) as? NSNumber
-        return showAIndicator?.boolValue ?? false
+    
+    var activityIndicator:UIActivityIndicatorView?{
+        set(newValue){
+             objc_setAssociatedObject(self, &TAG_ACTIVITY_INDICATOR, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        }
+        get{
+            let activityIndicatorView:UIActivityIndicatorView? = objc_getAssociatedObject(self, &TAG_ACTIVITY_INDICATOR) as? UIActivityIndicatorView
+                   
+            return activityIndicatorView
+            
+        }
     }
     
-    
-    func activityIndicator() -> UIActivityIndicatorView?{
+    var  indicatorStyle:UIActivityIndicatorView.Style{
         
-        let activityIndicatorView:UIActivityIndicatorView? = objc_getAssociatedObject(self, &TAG_ACTIVITY_INDICATOR) as? UIActivityIndicatorView
+        set(newValue){
+             objc_setAssociatedObject(self, &TAG_ACTIVITY_STYLE, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+        }
         
-        return activityIndicatorView
+        get{
+            let styleActvityView = objc_getAssociatedObject(self, &TAG_ACTIVITY_STYLE) as! UIActivityIndicatorView.Style
+            return styleActvityView
+        }
     }
     
-    func setActivityIndicator(activityIndicator:UIActivityIndicatorView?){
-    
-        objc_setAssociatedObject(self, &TAG_ACTIVITY_INDICATOR, activityIndicator, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-        
-    }
+
     
     func addActivityIndicator(){
         
-        if (self.activityIndicator() == nil) {
-            var activityIndicator = self.activityIndicator()
-             activityIndicator = UIActivityIndicatorView.init()
+        if (self.activityIndicator == nil) {
+            //var activityIndicator = self.activityIndicator()
+            self.activityIndicator = UIActivityIndicatorView.init(style: self.indicatorStyle)
+             //Autoresizing Mask。在使用 Auto Layout 时，首先需要将视图的 setTranslatesAutoresizingMaskIntoConstraints属性设置为 NO。这个属性默认为 YES。当它为 YES 时，运行时系统会自动将 Autoresizing Mask 转换为 Auto Layout 的约束，这些约束很有可能会和我们自己添加的产生冲突。
+            // 在xib中，如果我们勾选了use auto layout，则编译器会自动帮我们关闭Autoresizing Mask，如果是使用代码添加约束，则需要手动关闭Autoresizing Mask。 setTranslatesAutoresizingMaskIntoConstraints这个方法是交给被添加约束的视图来执行的，关闭该视图的Autoresizing Mask。在添加约束前，就应该关闭该属性
+
+            self.activityIndicator?.translatesAutoresizingMaskIntoConstraints = false
+            if Thread.isMainThread {
+                self.addSubview(activityIndicator ?? UIView.init())
+                self.addConstraint(NSLayoutConstraint.init(item: activityIndicator ?? UIView.init(), attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1.0, constant: 0.0))
+                
+                self.addConstraint(NSLayoutConstraint.init(item: activityIndicator ?? UIView.init(), attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1.0, constant: 0.0))
+                
+                
+            }else{
+                DispatchQueue.main.async {
+                    self.addSubview(self.activityIndicator ?? UIView.init())
+                    
+                    self.addConstraint(NSLayoutConstraint.init(item: self.activityIndicator ?? UIView.init(), attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1.0, constant: 0.0))
+                    
+                    self.addConstraint(NSLayoutConstraint.init(item: self.activityIndicator ?? UIView.init(), attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1.0, constant: 0.0))
+                }
+            }
+        
         }
         
+        if Thread.isMainThread {
+            self.activityIndicator?.startAnimating()
+        }else{
+            DispatchQueue.main.async {
+                self.activityIndicator?.startAnimating()
+            }
+        }
     }
+    
+    func removeActivityIndicator(){
+        if self.activityIndicator != nil {
+            self.activityIndicator?.removeFromSuperview()
+            self.activityIndicator = nil
+        }
+    }
+    
+    
        
 }
 
@@ -315,7 +493,7 @@ extension UIImage{
     }else if imageContentType == "image/webp"{
         //image = UIImage.sd_imageWithWebPData
     }else{
-        image = UIImage.init(data: data ?? Data.init())
+        image = UIImage.init(data: data!)
         let orientation = sd_imageOrientationFromImageData(data ?? Data.init())
         if orientation != UIImage.Orientation.up {
             if image != nil {
@@ -455,7 +633,9 @@ extension UIImage{
 extension Data{
     
     static func sd_contentTypeForImageData(_ data:NSData) ->String?{
-        var c_byte:UInt8 = 0
+        //   swift ===> unsigned char === CUnsignedChar === UInt8 在这里都可以的
+        //var c_byte:UInt8?
+        var c_byte:CUnsignedChar?
         
         /**
           检测内存:MemoryLayout<T>
@@ -469,8 +649,9 @@ extension Data{
 //        let byteCount = stride * Int(c_byte)
         //data.getBytes(UnsafeMutableRawPointer.allocate(byteCount: <#T##Int#>, alignment: <#T##Int#>)
         //data.getBytes(UnsafeMutableRawPointer.allocate(byteCount: byteCount, alignment: aligment), length: 1)
-        
+        //let imgeData:NSData? = data
         data.getBytes(&c_byte, length: 1)
+       // imgeData?.getBytes(&c_byte, length: 1)
         /**
           switch c_byte {
               case 0xFF:

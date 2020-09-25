@@ -19,7 +19,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     
    
-    let array = ["相册","相机","麦克风","定位","本地视频播放","URL视频播放"]
+    let array = ["相册","相机","麦克风","定位","本地视频播放","URL视频播放","swift-SDWebImage加载图片","其他功能"]
     @IBOutlet weak var dataTabView: UITableView!
     var recordProgressView:VoiceRecordProgressView!
     override func viewDidLoad() {
@@ -80,6 +80,16 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             let vedioURLVC = URLVedioViewController.init()
             vedioURLVC.modalPresentationStyle = .fullScreen
             self.present(vedioURLVC, animated: true, completion: nil)
+        }else if(indexPath.row == 6){
+            let imageURLVC = LoadURLImageViewController.init()
+            imageURLVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(imageURLVC, animated: true)
+            
+        }else{
+            let otherClassVC = OtherClassViewController.init()
+            otherClassVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(otherClassVC, animated: true)
+            
         }
     }
     

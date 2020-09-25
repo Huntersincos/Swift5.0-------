@@ -131,26 +131,31 @@ class SDImageCache: NSObject {
         }
     }
     
-    override convenience init() {
-      //  super.init()
-        self.init(withNamespace: "default")
+    override init() {
+        super.init()
+        self.initCache(withNamespace: "default", diskCacheDirectory: makeDiskCachePath(fullNamespace: "default"))
     }
-    
-    
-    /// 创建新的空间名称
-    /// - Parameter ns: 名称
-    convenience init(withNamespace ns:String) {
-        //self' used before 'self.init' call or assignment to 'self'
-        self.init()
-        self.init(withNamespace:ns ,diskCacheDirectory:makeDiskCachePath(fullNamespace: ns))
-    }
+    // convenience call convenience 不可取
+//    override convenience init() {
+//        // self.init()
+//         self.init(withNamespace: "default")
+//    }
+//
+//
+//    /// 创建新的空间名称
+//    /// - Parameter ns: 名称
+//    convenience init(withNamespace ns:String) {
+//        //self' used before 'self.init' call or assignment to 'self'
+//        self.init()
+//        self.init(withNamespace:ns ,diskCacheDirectory:makeDiskCachePath(fullNamespace: ns))
+//    }
     
     /// 创建新的缓存空间名称和目录
     /// - Parameters:
     ///   - ns: 名称
     ///   - directory: 目录
-    convenience init(withNamespace ns:String,diskCacheDirectory  directory: String?){
-        self.init()
+    func initCache(withNamespace ns:String,diskCacheDirectory  directory: String?){
+        //self.init()
         
         let fullNamespace = "com.hackemist.SDWebImageCache.\(ns)"
         kPNGSignatureData = Data.init(bytes: kPNGSignatureBytes, count: 8)
@@ -244,6 +249,7 @@ class SDImageCache: NSObject {
         
         if toDisk{
             ioQueue?.async {
+                 var data = imageData
                 if image != nil && (recalculate || imageData == nil){
                     // 确认是png jpeg
                     // png特征唯一,容易检测出
@@ -252,7 +258,7 @@ class SDImageCache: NSObject {
                     // 而且图像有一个alpha通道，会考虑它的png以避免失去透明度
                    // #if TARGET_OS_IPHONE
                     // iphone
-                    var data = imageData
+                   
                     let alphaInfo = image?.cgImage?.alphaInfo
                     var hasAlpha = !(alphaInfo == CGImageAlphaInfo.none || alphaInfo == CGImageAlphaInfo.noneSkipLast || alphaInfo ==  CGImageAlphaInfo.noneSkipFirst)
                     //Binary operator '>=' cannot be applied to two 'Int?' operands
@@ -269,9 +275,11 @@ class SDImageCache: NSObject {
                        // mac
                     //data = NSBitmapImageRep.
                     
-                    self.storeImageDataToDisk(data, forKey: key ?? "")
+                   
                    // #endif
                 }
+                
+                 self.storeImageDataToDisk(data, forKey: key ?? "")
             }
         }
         
@@ -315,7 +323,7 @@ class SDImageCache: NSObject {
         let cachePathForKey = defaultCachePathForKey(key)
         let fileURL = NSURL.init(fileURLWithPath: cachePathForKey)
         fileManager?.createFile(atPath: cachePathForKey, contents: imageData, attributes: nil)
-        if self.shouldDisableiCloud ?? false {
+        if self.shouldDisableiCloud ?? true {
             //NSURLIsExcludedFromBackupKey 不需要iCloud备份
             try?fileURL.setResourceValue(NSNumber.init(value: true), forKey: .isExcludedFromBackupKey)
             
@@ -381,17 +389,19 @@ class SDImageCache: NSObject {
     
     /// 检测内存内存缓存后在同步检测磁盘缓存
     /// - Parameter key: <#key description#>
-    func imageFromDiskCacheForKey(_ key:String) ->UIImage{
+    func imageFromDiskCacheForKey(_ key:String) ->UIImage?{
         var image = imageFromMemoryCacheForKey(key)
         if image != nil {
-            return image ?? UIImage.init();
+            return image
+                //?? UIImage.init();
         }
         image = diskImageForKey(key)
         if image != nil && self.shouldCacheImagesInMemory ?? false {
             let  cost = SDCacheCostForImage(image ?? UIImage.init())
             self.memCache?.setObject(image ?? UIImage.init(), forKey: key as NSString, cost: cost)
         }
-        return image ?? UIImage.init()
+        return image
+            //?? UIImage.init()
     }
     
     
@@ -400,7 +410,7 @@ class SDImageCache: NSObject {
         let data = diskImageDataBySearchingAllPathsForKey(key)
         if data != nil {
             var image = UIImage.sd_imageWithData(data)
-            image = scaledImageForKey(key, image ?? UIImage.init())
+            image = scaledImageForKey(key, image)
             if shouldDecompressImages ?? true {
                 image = SDWebImageDecoder.decodedImageWithImage(image)
             }
@@ -409,14 +419,15 @@ class SDImageCache: NSObject {
         return nil
     }
     
-    private func scaledImageForKey(_ key:String,_ image:UIImage) -> UIImage{
-        return SDScaledImageForKey(key, image) ?? UIImage.init()
+    private func scaledImageForKey(_ key:String,_ image:UIImage?) -> UIImage?{
+        return SDScaledImageForKey(key, image)
     }
     
     func diskImageDataBySearchingAllPathsForKey(_ key:String) -> Data?{
         let defaultPath = defaultCachePathForKey(key)
         ///
-        let data = defaultPath.data(using: .utf8)
+        //let data = defaultPath.data(using: .utf8)
+        let data = try?Data.init(contentsOf: URL.init(fileURLWithPath: defaultPath))
         if data != nil {
             return data
         }
@@ -465,6 +476,7 @@ class SDImageCache: NSObject {
             //@autoreleasepool
             let diskImage = self.diskImageForKey(key ?? "")
             if diskImage != nil && self.shouldCacheImagesInMemory ?? false{
+                // 查询的时候这里又写入内存
                 let cost = SDCacheCostForImage(diskImage ?? UIImage.init())
                 if key != nil {
                      self.memCache?.setObject(diskImage ?? UIImage.init(), forKey: key! as NSString , cost: cost)
@@ -562,6 +574,12 @@ class SDImageCache: NSObject {
     
     func makeDiskCachePath(fullNamespace:String) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+        #if DEBUG
+         print( paths[0] + "/\(fullNamespace)")
+        #else
+        
+
+        #endif
         return paths[0] + "/\(fullNamespace)"
     }
     
