@@ -116,6 +116,7 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
         self.operationClass = SDWebImageDownloaderOperation.self
         self.shouldDecompressImages = true
         self.executionOrder = .SDWebImageDownloaderFIFOExecutionOrder
+        // 非主队列通过并发数确定是否为并行和串行 创建队列的任务默认是异步的,并行的的 特殊情况下 有并/串行特性
         self.downloadQueue = OperationQueue.init()
         self.downloadQueue?.name = "com.hackemist.SDWebImageDownloader"
         //self.URLCallbacks = NSMutableDictionary.init()
@@ -159,6 +160,7 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
     var maxConcurrentDownloads:Int{
         set{
             /// 最大并发数
+            /// > 1 并行  == 1 串行
             downloadQueue?.maxConcurrentOperationCount = newValue
         }
         get{

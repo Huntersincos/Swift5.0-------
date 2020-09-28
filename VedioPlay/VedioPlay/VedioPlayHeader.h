@@ -9,5 +9,6 @@
 #ifndef VedioPlayHeader_h
 #define VedioPlayHeader_h
 #import "FMDB.h"
+#import "BrigeOCSwiftModel.h"
 
 #endif /* VedioPlayHeader_h */

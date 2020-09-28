@@ -455,11 +455,11 @@ class SDWebImageManager: NSObject {
                                 };
                                 
                                 if Thread.isMainThread {
-                                    if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation) == false ){
+                                    if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false ){
                                         completedBlock(transformedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
                                     }
                                 }else{
-                                    if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation) == false ) {
+                                    if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false ) {
                                      completedBlock(transformedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
                                     }
                                 }
@@ -472,7 +472,7 @@ class SDWebImageManager: NSObject {
                             if downloadedImage != nil  && finished {
                                 self.imageCache?.storeImage(downloadedImage, recalculateFromImage: false, imageData: data, forKey: key, toDisk: cacheOnDisk)
                                  if Thread.isMainThread {
-                                       if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation) == false ){
+                                       if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false){
                                       completedBlock(downloadedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
                                        }
                                    }else{
@@ -515,12 +515,12 @@ class SDWebImageManager: NSObject {
                 // __strong __typeof(weakOperation) strongOperation = weakOperation;
                  
                 if Thread.isMainThread {
-                    if weakOperation != nil && (weakOperation?.isCancelled == false || weakOperation?.isCancelled == nil ) {
+                    if weakOperation != nil && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
                         completedBlock(image,nil,cacheType,url,true)
                     }
                 }else{
                     DispatchQueue.main.sync {
-                        if weakOperation != nil && weakOperation?.isCancelled == false {
+                        if weakOperation != nil &&  (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
                             completedBlock(image,nil,cacheType,url,true)
                         }
                     }
@@ -532,12 +532,12 @@ class SDWebImageManager: NSObject {
                 
             }else{
                 if Thread.isMainThread {
-                   if weakOperation != nil && weakOperation?.isCancelled == false {
+                   if weakOperation != nil && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
                        completedBlock(nil,nil,cacheType,url,true)
                    }
                }else{
                    DispatchQueue.main.sync {
-                       if weakOperation != nil && weakOperation?.isCancelled == false {
+                       if weakOperation != nil && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
                            completedBlock(nil,nil,cacheType,url,true)
                        }
                    }

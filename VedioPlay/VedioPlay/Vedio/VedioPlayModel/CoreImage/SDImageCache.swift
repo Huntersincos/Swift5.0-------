@@ -769,7 +769,7 @@ class SDImageCache: NSObject {
                 return
             }
             for fileURL in fileEnumerator!{
-                var fileSize:NSNumber? = nil ;
+                let fileSize:NSNumber? = nil ;
                 let fileURLS = fileURL as! NSURL
                 // ?????????????????
                 //let sizeUtablePointer = AutoreleasingUnsafeMutablePointer<NSNumber?>.init(bitPattern: 4)

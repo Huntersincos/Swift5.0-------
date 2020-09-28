@@ -363,7 +363,19 @@ extension UIImageView{
         }
     }
     
-    
+    func grayImage(_ sourceImage:UIImage) ->UIImage{
+        
+        let context = CGContext.init(data: nil, width: Int(sourceImage.size.width), height: Int(sourceImage.size.height), bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpaceCreateDeviceGray(), bitmapInfo: CGImageAlphaInfo.none.rawValue)
+        if context == nil {
+            return sourceImage
+        }
+        context?.draw(sourceImage.cgImage!, in: CGRect(x: 0, y: 0, width: sourceImage.size.width, height: sourceImage.size.height))
+        if context?.makeImage() != nil {
+             return UIImage.init(cgImage: (context?.makeImage())!)
+        }
+       
+        return sourceImage
+    }
        
 }
 

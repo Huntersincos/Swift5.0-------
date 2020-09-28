@@ -92,6 +92,8 @@ class SDWebImageDownloaderOperation: Operation,SDWebImageOperation,URLSessionDat
         self.unownedSession = session
         /// ???
         self.responseFromCached = true
+        width = 0
+        height = 0
     }
     
     override func start() {
@@ -284,45 +286,53 @@ class SDWebImageDownloaderOperation: Operation,SDWebImageOperation,URLSessionDat
                 //CFDataAppendBytes(cfData, Unmanaged.passUnretained(self.imageData ?? NSObject.init()).autorelease().toOpaque(), 0)
                 
                 let totalSize = self.imageData?.length
-                let imageSource =  CGImageSourceCreateWithData(self.imageData ?? Data.init() as CFData, nil)!
+                //ImageIO
+                if self.imageData == nil || totalSize ?? 0 <=  0{
+                    return
+                }
+                let imageSource =  CGImageSourceCreateWithData(self.imageData! as CFData, nil)!
             
                 if (self.width ?? 0) + (self.height ?? 0) == 0 {
+                    //    CGImageSourceRef    ----- CFDictionaryRef
                     let  properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil)
                     if properties != nil {
-                        var orientationValue = -1
-                        //let kCGImagePixelHeight = kCGImagePropertyPixelHeight
+                        let orientationValue = -1
+                      
+                        //let kCGImagePixelHeight = kCGImagePropertyPixelHeight  此处用oc混编 没找到合适的代替方法
+                          BrigeOCSwiftModel.creatImageDataTransFormImage(orientationValue, properties: properties!, dataWidth: &self.width!, dataHeigth: &self.height!)
                         /// ????
-                        var val:CFTypeRef? = CFDictionaryGetValue(properties, Unmanaged.passRetained(kCGImagePropertyPixelHeight).autorelease().toOpaque()) as CFTypeRef?
-                        
-                        if val != nil {
-                            //let number:CFNumber? = nil ????
-                            val  =  CFNumberGetValue((val as! CFNumber), .longType, &self.height) as CFTypeRef
-                         }
-                        if val != nil {
-                                ///???
-                              val = CFDictionaryGetValue(properties, Unmanaged.passRetained(kCGImagePropertyPixelWidth).autorelease().toOpaque()) as CFTypeRef?
-                        }
-                                
-                        if val != nil {
-                            /// ???
-                           val  =  CFNumberGetValue((val as! CFNumber), .longType, &self.width) as CFTypeRef
-                        }
-                        
-                        if val != nil {
-                            
-                            val = CFDictionaryGetValue(properties, Unmanaged.passRetained(kCGImagePropertyOrientation).autorelease().toOpaque()) as CFTypeRef?
-                        }
-                        
-                        if val != nil {
-                            
-                            val = CFNumberGetValue((val as! CFNumber), .nsIntegerType, &orientationValue) as CFTypeRef
-                        }
+//                        var val:CFTypeRef? = CFDictionaryGetValue(properties, Unmanaged.passRetained(kCGImagePropertyPixelHeight).autorelease().toOpaque()) as CFTypeRef?
+//
+//                        if val != nil {
+//                            //let number:CFNumber? = nil ????   -[__SwiftValue _getValue:forType:]: unrecognized selector sent to instance 0x6000038286c0'
+//                           // val  =  CFNumberGetValue((val as! CFNumber), .longType, &self.height) as CFTypeRef
+//                            val  =  CFNumberGetValue((val as! CFNumber), .longType, &self.height) as CFTypeRef
+//                         }
+//                        if val != nil {
+//                                ///???
+//                              val = CFDictionaryGetValue(properties, Unmanaged.passRetained(kCGImagePropertyPixelWidth).autorelease().toOpaque()) as CFTypeRef?
+//                        }
+//
+//                        if val != nil {
+//                            /// ???
+//                           val  =  CFNumberGetValue((val as! CFNumber), .longType, &self.width) as CFTypeRef
+//                        }
+//
+//                        if val != nil {
+//
+//                            val = CFDictionaryGetValue(properties, Unmanaged.passRetained(kCGImagePropertyOrientation).autorelease().toOpaque()) as CFTypeRef?
+//                        }
+//
+//                        if val != nil {
+//
+//                            val = CFNumberGetValue((val as! CFNumber), .nsIntegerType, &orientationValue) as CFTypeRef
+//                        }
                                     
                         //CFRelease
                         // 当使用Graphics绘图时,会丢失图片定向信息
                         //
-                        
-                        self.orientation =  SDWebImageDownloaderOperation.orientationFromPropertyValue(orientationValue)
+                         //EXC_BAD_ACCESS (code=EXC_I386_GPFLT)
+                        self.orientation =  SDWebImageDownloaderOperation.orientationFromPropertyValue(orientationValue == -1 ? 1 : orientationValue)
                     }
                     
                 }
@@ -333,7 +343,7 @@ class SDWebImageDownloaderOperation: Operation,SDWebImageOperation,URLSessionDat
                     if partialImageRef != nil {
                         let partialHeight = partialImageRef?.height
                         let colorSpace = CGColorSpaceCreateDeviceRGB()
-                        let bmContext = CGContext.init(data: nil, width: self.width ?? 0, height: self.height ?? 0, bitsPerComponent: 8, bytesPerRow: (self.width ?? 0) * 4, space: colorSpace, bitmapInfo: CGBitmapInfo.byteOrderMask.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue )
+                        let bmContext = CGContext.init(data: nil, width: self.width ?? 0, height: self.height ?? 0, bitsPerComponent: 8, bytesPerRow: (self.width ?? 0) * 4, space: colorSpace, bitmapInfo: CGImageByteOrderInfo.orderDefault.rawValue  | CGImageAlphaInfo.premultipliedFirst.rawValue )
                         if bmContext != nil {
                             bmContext?.draw(partialImageRef!, in: CGRect(x: 0, y: 0, width: self.width ?? 0, height: partialHeight ?? 0))
                             partialImageRef = bmContext?.makeImage()
