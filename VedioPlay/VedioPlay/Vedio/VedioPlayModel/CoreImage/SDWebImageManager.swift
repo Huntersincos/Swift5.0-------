@@ -321,7 +321,7 @@ class SDWebImageManager: NSObject {
         
         /// swift 对类型转换要求严格 不考虑  if ([url isKindOfClass:NSString.class]) {url = [NSURL URLWithString:(NSString *)url];}  if (![url isKindOfClass:NSURL.class]) {url = nil;}
         let operation = SDWebImageCombinedOperation.init()
-        weak var weakOperation = operation
+        //weak var weakOperation = operation
         var isFailedUrl = false
         SDWebImageDownloaderOperation.synchronized(anyID: self.failedURLs ?? NSMutableSet.init()) {
             isFailedUrl  = self.failedURLs?.contains(url) ?? false
@@ -343,212 +343,217 @@ class SDWebImageManager: NSObject {
         
         let key = self.cacheKeyForURL(url)
         
-        operation.cacheOperation = self.imageCache?.queryDiskCacheForKey(key: key, doneBlock: { (image:UIImage?, cacheType:SDImageCacheType) in
+        operation.cacheOperation = self.imageCache?.queryDiskCacheForKey(key: key, doneBlock: { [weak self] (image:UIImage?, cacheType:SDImageCacheType) in
             
-            
-            if operation.isCancelled ?? false{
-                SDWebImageDownloaderOperation.synchronized(anyID: self.runningOperations ?? NSMutableArray.init()) {
-                    self.runningOperations?.remove(operation)
-                }
-                return
-            }
-            /*???????????????? */
-//            if ((!image || options & SDWebImageRefreshCached) && (![self.delegate respondsToSelector:@selector(imageManager:shouldDownloadImageForURL:)] || [self.delegate imageManager:self shouldDownloadImageForURL:url]) ==== swift逻辑不等价) {
-//
-            if (image == nil || options.rawValue &  SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0) && (self.delegate?.imageManager?(self, shouldDownloadImageForURL: url) ?? true){
-                if image != nil && options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0{
-                    /// 如果已经图片缓存但设置成SDWebImageRefreshCached,则通知图片缓存
-                    /// 并尝试重新下载它，以便让NSURLCache有机会从服务器刷新它
-                    if Thread.isMainThread {
-                        completedBlock(image,nil,cacheType,url,true)
-                    }else{
-                        DispatchQueue.main.async {
-                             completedBlock(image,nil,cacheType,url,true)
-                        }
+            if let strongSelf = self{
+                if operation.isCancelled ?? false{
+                    SDWebImageDownloaderOperation.synchronized(anyID: strongSelf.runningOperations ?? NSMutableArray.init()) {
+                        strongSelf.runningOperations?.remove(operation)
                     }
-                }
-                
-                /// download if no image or requested to refresh anyway, and download allowed by delegate
-                
-                var downloaderOptions:SDWebImageDownloaderOptions = SDWebImageDownloaderOptions.SDWebImageDownloaderNone
-                if options.rawValue & SDWebImageOptions.SDWebImageLowPriority.rawValue != 0 {
-                    downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                }
-                
-                if options.rawValue & SDWebImageOptions.SDWebImageProgressiveDownload.rawValue != 0 {
-                     downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderProgressiveDownload.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                }
-                
-                if options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0 {
-                      downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderUseNSURLCache.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                 }
-                
-                // 忽略SDWebImageContinueInBackground 不支持这种情况
-                if options.rawValue & SDWebImageOptions.SDWebImageContinueInBackground.rawValue != 0 {
-                         downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderContinueInBackground.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                }
-                
-                if options.rawValue & SDWebImageOptions.SDWebImageHandleCookies.rawValue != 0 {
-                     downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderHandleCookies.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                }
-                
-                if options.rawValue & SDWebImageOptions.SDWebImageAllowInvalidSSLCertificates.rawValue != 0 {
-                        downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderAllowInvalidSSLCertificates.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                }
-                
-                if options.rawValue & SDWebImageOptions.SDWebImageHighPriority.rawValue != 0 {
-                        downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderHighPriority.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                }
-                
-                if image != nil && options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0 {
-                    /// 如果图片已经缓存 但正在强制刷新  则强制禁用渐进式
-                    downloaderOptions =  SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderProgressiveDownload.rawValue & downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                    /// 如果图像已缓存，则忽略从NSURLCache读取的图片，但强制刷新
-                    
-                     downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderIgnoreCachedResponse.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
-                    
-                }
-                
-                let  subOperation:Optional<SDWebImageOperation> = self.imageDownloader?.downloadImageWithURL(url, progress: downloaderOptions, progress: progressBlock, completed: { (downloadedImage:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void? in
-                    if weakOperation == nil || weakOperation?.isCancelled ?? false{
-                        /// 如果这个操作被删除,则不不做任何操作
-                        /// 如果调用completedBlock,  则另外一个completedBlock之间存在竞争关系, 所以如果这个被第二次被调用,则重数据
-                    }else if(error != nil){
-                        if Thread.isMainThread {
-                            if weakOperation != nil && weakOperation?.isCancelled == false {
-                                completedBlock(nil,error,SDImageCacheType.SDImageCacheTypeNone,url,finished)
-                            }
-                        }else{
-                            DispatchQueue.main.async {
-                                if weakOperation != nil && weakOperation?.isCancelled == false {
-                                    completedBlock(nil,error,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                    return
+                   }
+                            /*???????????????? */
+                //            if ((!image || options & SDWebImageRefreshCached) && (![self.delegate respondsToSelector:@selector(imageManager:shouldDownloadImageForURL:)] || [self.delegate imageManager:self shouldDownloadImageForURL:url]) ==== swift逻辑不等价) {
+                //
+                    if (image == nil || options.rawValue &  SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0) && (strongSelf.delegate?.imageManager?(strongSelf, shouldDownloadImageForURL: url) ?? true){
+                        if image != nil && options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0{
+                            /// 如果已经图片缓存但设置成SDWebImageRefreshCached,则通知图片缓存
+                            /// 并尝试重新下载它，以便让NSURLCache有机会从服务器刷新它
+                            if Thread.isMainThread {
+                                completedBlock(image,nil,cacheType,url,true)
+                            }else{
+                                DispatchQueue.main.async {
+                                     completedBlock(image,nil,cacheType,url,true)
                                 }
                             }
                         }
                         
-                        let errorCode =  error! as NSError
-                        if errorCode.code != NSURLErrorNotConnectedToInternet && errorCode.code != NSURLErrorCancelled && errorCode.code != NSURLErrorTimedOut && errorCode.code != NSURLErrorInternationalRoamingOff && errorCode.code != NSURLErrorDataNotAllowed && errorCode.code != NSURLErrorCannotFindHost && errorCode.code != NSURLErrorCannotConnectToHost{
-                            SDWebImageDownloaderOperation.synchronized(anyID: self.failedURLs ?? NSMutableSet.init()) {
-                                self.failedURLs?.add(url)
-                            }
+                        /// download if no image or requested to refresh anyway, and download allowed by delegate
+                        
+                        var downloaderOptions:SDWebImageDownloaderOptions = SDWebImageDownloaderOptions.SDWebImageDownloaderNone
+                        if options.rawValue & SDWebImageOptions.SDWebImageLowPriority.rawValue != 0 {
+                            downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
                         }
                         
-                    }else{
-                        if options.rawValue & SDWebImageOptions.SDWebImageRetryFailed.rawValue != 0 {
-                            SDWebImageDownloaderOperation.synchronized(anyID: self.failedURLs ?? NSMutableSet.init()) {
-                                self.failedURLs?.remove(url)
-                            }
+                        if options.rawValue & SDWebImageOptions.SDWebImageProgressiveDownload.rawValue != 0 {
+                             downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderProgressiveDownload.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
                         }
                         
-                        let cacheOnDisk = options.rawValue & SDWebImageOptions.SDWebImageCacheMemoryOnly.rawValue == 0
-                        if options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0 && image != nil && (downloadedImage == nil) {
-                            /// 刷新命中NSURLCache缓存，不调用完成块
+                        if options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0 {
+                              downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderUseNSURLCache.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                         }
+                        
+                        // 忽略SDWebImageContinueInBackground 不支持这种情况
+                        if options.rawValue & SDWebImageOptions.SDWebImageContinueInBackground.rawValue != 0 {
+                                 downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderContinueInBackground.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                        }
+                        
+                        if options.rawValue & SDWebImageOptions.SDWebImageHandleCookies.rawValue != 0 {
+                             downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderHandleCookies.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                        }
+                        
+                        if options.rawValue & SDWebImageOptions.SDWebImageAllowInvalidSSLCertificates.rawValue != 0 {
+                                downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderAllowInvalidSSLCertificates.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                        }
+                        
+                        if options.rawValue & SDWebImageOptions.SDWebImageHighPriority.rawValue != 0 {
+                                downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderHighPriority.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                        }
+                        
+                        if image != nil && options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0 {
+                            /// 如果图片已经缓存 但正在强制刷新  则强制禁用渐进式
+                            downloaderOptions =  SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderProgressiveDownload.rawValue & downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                            /// 如果图像已缓存，则忽略从NSURLCache读取的图片，但强制刷新
                             
-                            /// downloadedImage && (!downloadedImage.images || (options & SDWebImageTransformAnimatedImage)) && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)??????
-                        }else if (downloadedImage != nil  && ( SDWebImageManager.jusgeAnyEmpty(downloadedImage?.images) == false || downloadedImage?.images?.count == 0 || (options.rawValue & SDWebImageOptions.SDWebImageTransformAnimatedImage.rawValue != 0)) &&  self.delegate?.imageManager?(self, transformDownloadedImage: downloadedImage ?? UIImage.init(), withURL: url) != nil){
-                            DispatchQueue.global(qos: .userInteractive).async {
-                                // 要实现 self.delegate?.imageManager?(self, transformDownloadedImage: downloadedImage ?? UIImage.init(), withURL: url)才行 这个方法
-                                let transformedImage = self.delegate?.imageManager?(self, transformDownloadedImage: downloadedImage ?? UIImage.init(), withURL: url)
-                                if (transformedImage != nil) && finished{
-                                    let  imageWasTransformed = transformedImage?.isEqual(downloadedImage)
-                                    self.imageCache?.storeImage(transformedImage, recalculateFromImage: imageWasTransformed ?? false, imageData: imageWasTransformed == nil ?nil:data, forKey: key, toDisk: cacheOnDisk)
-                                };
-                                
+                             downloaderOptions = SDWebImageDownloaderOptions(rawValue: SDWebImageDownloaderOptions.SDWebImageDownloaderIgnoreCachedResponse.rawValue | downloaderOptions.rawValue) ?? SDWebImageDownloaderOptions.SDWebImageDownloaderLowPriority
+                            
+                        }
+                        
+                        let  subOperation:Optional<SDWebImageOperation> = strongSelf.imageDownloader?.downloadImageWithURL(url, progress: downloaderOptions, progress: progressBlock, completed: { [weak operation](downloadedImage:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void? in
+                             let  weakOperation = operation
+                            
+                            if weakOperation == nil || weakOperation?.isCancelled ?? false{
+                                /// 如果这个操作被删除,则不不做任何操作
+                                /// 如果调用completedBlock,  则另外一个completedBlock之间存在竞争关系, 所以如果这个被第二次被调用,则重数据
+                            }else if(error != nil){
                                 if Thread.isMainThread {
-                                    if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false ){
-                                        completedBlock(transformedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                    if weakOperation != nil && weakOperation?.isCancelled == false {
+                                        completedBlock(nil,error,SDImageCacheType.SDImageCacheTypeNone,url,finished)
                                     }
                                 }else{
-                                    if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false ) {
-                                     completedBlock(transformedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                    DispatchQueue.main.async {
+                                        if weakOperation != nil && weakOperation?.isCancelled == false {
+                                            completedBlock(nil,error,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                        }
                                     }
                                 }
                                 
+                                let errorCode =  error! as NSError
+                                if errorCode.code != NSURLErrorNotConnectedToInternet && errorCode.code != NSURLErrorCancelled && errorCode.code != NSURLErrorTimedOut && errorCode.code != NSURLErrorInternationalRoamingOff && errorCode.code != NSURLErrorDataNotAllowed && errorCode.code != NSURLErrorCannotFindHost && errorCode.code != NSURLErrorCannotConnectToHost{
+                                    SDWebImageDownloaderOperation.synchronized(anyID: strongSelf.failedURLs ?? NSMutableSet.init()) {
+                                        strongSelf.failedURLs?.add(url)
+                                    }
+                                }
+                                
+                            }else{
+                                if options.rawValue & SDWebImageOptions.SDWebImageRetryFailed.rawValue != 0 {
+                                    SDWebImageDownloaderOperation.synchronized(anyID: strongSelf.failedURLs ?? NSMutableSet.init()) {
+                                        strongSelf.failedURLs?.remove(url)
+                                    }
+                                }
+                                
+                                let cacheOnDisk = options.rawValue & SDWebImageOptions.SDWebImageCacheMemoryOnly.rawValue == 0
+                                if options.rawValue & SDWebImageOptions.SDWebImageRefreshCached.rawValue != 0 && image != nil && (downloadedImage == nil) {
+                                    /// 刷新命中NSURLCache缓存，不调用完成块
+                                    
+                                    /// downloadedImage && (!downloadedImage.images || (options & SDWebImageTransformAnimatedImage)) && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)??????
+                                }else if (downloadedImage != nil  && ( SDWebImageManager.jusgeAnyEmpty(downloadedImage?.images) == false || downloadedImage?.images?.count == 0 || (options.rawValue & SDWebImageOptions.SDWebImageTransformAnimatedImage.rawValue != 0)) &&  strongSelf.delegate?.imageManager?(strongSelf, transformDownloadedImage: downloadedImage ?? UIImage.init(), withURL: url) != nil){
+                                    DispatchQueue.global(qos: .userInteractive).async {
+                                        // 要实现 self.delegate?.imageManager?(self, transformDownloadedImage: downloadedImage ?? UIImage.init(), withURL: url)才行 这个方法
+                                        let transformedImage = strongSelf.delegate?.imageManager?(strongSelf, transformDownloadedImage: downloadedImage ?? UIImage.init(), withURL: url)
+                                        if (transformedImage != nil) && finished{
+                                            let  imageWasTransformed = transformedImage?.isEqual(downloadedImage)
+                                            strongSelf.imageCache?.storeImage(transformedImage, recalculateFromImage: imageWasTransformed ?? false, imageData: imageWasTransformed == nil ?nil:data, forKey: key, toDisk: cacheOnDisk)
+                                        };
+                                        
+                                        if Thread.isMainThread {
+                                            if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false ){
+                                                completedBlock(transformedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                            }
+                                        }else{
+                                            if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false ) {
+                                             completedBlock(transformedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                            }
+                                        }
+                                        
+                                        
+                                    }
+                                    
+                                }else{
+                                    
+                                    if downloadedImage != nil  && finished {
+                                        strongSelf.imageCache?.storeImage(downloadedImage, recalculateFromImage: false, imageData: data, forKey: key, toDisk: cacheOnDisk)
+                                         if Thread.isMainThread {
+                                               if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false){
+                                              completedBlock(downloadedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                               }
+                                           }else{
+                                               if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager .jusgeAnyEmpty(weakOperation?.isCancelled) == false){
+                                                 completedBlock(downloadedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
+                                               }
+                                           }
+                                    
+                                    }
+                                    
+                                }
                                 
                             }
                             
-                        }else{
-                            
-                            if downloadedImage != nil  && finished {
-                                self.imageCache?.storeImage(downloadedImage, recalculateFromImage: false, imageData: data, forKey: key, toDisk: cacheOnDisk)
-                                 if Thread.isMainThread {
-                                       if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false){
-                                      completedBlock(downloadedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
-                                       }
-                                   }else{
-                                       if weakOperation != nil  && (weakOperation?.isCancelled == false || SDWebImageManager .jusgeAnyEmpty(weakOperation?.isCancelled) == false){
-                                         completedBlock(downloadedImage,nil,SDImageCacheType.SDImageCacheTypeNone,url,finished)
-                                       }
-                                   }
-                            
+                            if finished {
+                                SDWebImageDownloaderOperation.synchronized(anyID: strongSelf.runningOperations ?? NSMutableArray.init()) {
+                                    if (weakOperation != nil){
+                                        strongSelf.runningOperations?.add(weakOperation!)
+                                    }
+                                }
                             }
                             
+                            
+                            return nil
+                            
+                        })
+                        
+                        operation.setCancelBlock { [weak operation] () -> Void? in
+                            
+                            subOperation?.cancel()
+                            let strongOperation = operation
+                            if strongOperation != nil{
+                                strongSelf.runningOperations?.add(strongOperation!)
+                            }
+                            
+                            return nil
+                        }
+            
+                    }else if image != nil{
+                        // __strong __typeof(weakOperation) strongOperation = weakOperation;
+                         
+                        if Thread.isMainThread {
+                            if /** operation != nil &&**/ (operation.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(operation.isCancelled) == false) {
+                                completedBlock(image,nil,cacheType,url,true)
+                            }
+                        }else{
+                            DispatchQueue.main.sync {
+                                if /** operation != nil &&**/  (operation.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(operation.isCancelled) == false) {
+                                    completedBlock(image,nil,cacheType,url,true)
+                                }
+                            }
+                        }
+                        
+                        SDWebImageDownloaderOperation.synchronized(anyID: strongSelf.runningOperations ?? NSMutableArray.init()) {
+                            strongSelf.runningOperations?.remove(operation)
+                        }
+                        
+                    }else{
+                        if Thread.isMainThread {
+                           if /** operation != nil &&**/ (operation.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(operation.isCancelled) == false) {
+                               completedBlock(nil,nil,cacheType,url,true)
+                           }
+                       }else{
+                           DispatchQueue.main.sync {
+                               if /** operation != nil &&**/ (operation.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(operation.isCancelled) == false) {
+                                   completedBlock(nil,nil,cacheType,url,true)
+                               }
+                           }
+                       }
+                        
+                        SDWebImageDownloaderOperation.synchronized(anyID: strongSelf.runningOperations ?? NSMutableArray.init()) {
+                            strongSelf.runningOperations?.remove(operation)
                         }
                         
                     }
-                    
-                    if finished {
-                        SDWebImageDownloaderOperation.synchronized(anyID: self.runningOperations ?? NSMutableArray.init()) {
-                            if (weakOperation != nil){
-                                self.runningOperations?.add(weakOperation!)
-                            }
-                        }
-                    }
-                    
-                    
-                    return nil
-                    
-                })
-                
-                operation.setCancelBlock { () -> Void? in
-                    
-                    subOperation?.cancel()
-                    // strong var strongOperation = weakOperation
-                    if weakOperation != nil{
-                        self.runningOperations?.add(weakOperation!)
-                    }
-                    
-                    return nil
-                }
-    
-            }else if image != nil{
-                // __strong __typeof(weakOperation) strongOperation = weakOperation;
-                 
-                if Thread.isMainThread {
-                    if weakOperation != nil && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
-                        completedBlock(image,nil,cacheType,url,true)
-                    }
-                }else{
-                    DispatchQueue.main.sync {
-                        if weakOperation != nil &&  (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
-                            completedBlock(image,nil,cacheType,url,true)
-                        }
-                    }
-                }
-                
-                SDWebImageDownloaderOperation.synchronized(anyID: self.runningOperations ?? NSMutableArray.init()) {
-                    self.runningOperations?.remove(operation)
-                }
-                
-            }else{
-                if Thread.isMainThread {
-                   if weakOperation != nil && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
-                       completedBlock(nil,nil,cacheType,url,true)
-                   }
-               }else{
-                   DispatchQueue.main.sync {
-                       if weakOperation != nil && (weakOperation?.isCancelled == false || SDWebImageManager.jusgeAnyEmpty(weakOperation?.isCancelled) == false) {
-                           completedBlock(nil,nil,cacheType,url,true)
-                       }
-                   }
-               }
-                
-                SDWebImageDownloaderOperation.synchronized(anyID: self.runningOperations ?? NSMutableArray.init()) {
-                    self.runningOperations?.remove(operation)
-                }
-                
             }
-        })
+            
+          }
+        )
         
         return operation
     
@@ -594,6 +599,27 @@ class SDWebImageManager: NSObject {
         return false
     }
     
+     class func  isBlankString( _ string:String?) ->  Bool{
+           if string ==  nil {
+               return true
+           }else if (string == "(null)"){
+               return true
+           }
+           
+           let  clssString:NSString? = string as NSString?
+           
+           if clssString?.isKind(of: NSNull.self) ?? false {
+               return true
+           }
+           
+           if (clssString?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0) {
+               return true
+           }
+           
+           
+           return false
+           
+    }
 }
 
 

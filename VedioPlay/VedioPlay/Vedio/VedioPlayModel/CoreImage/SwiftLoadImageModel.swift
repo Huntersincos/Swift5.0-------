@@ -14,7 +14,7 @@ import ImageIO
    1 大量使用值类型,减少引用类型
    2 不考虑NSImage
    3 不考虑条件编译
-   4 使用@escaping 可能会引起循环引用,去 weak弱引用下 在闭包区域 可能会导致nil 而crash
+   4 使用@escaping 可能会引起循环引用,去 weak弱引用下 在闭包区域 可能会导致nil 而crash 使用[weak self]解决
    5 使用了很多 as ! 性能折扣
    6 不支持webp格式图片
    7 对swift进行了指针操作,安全性降低
@@ -214,34 +214,34 @@ extension UIImageView{
         sd_cancelCurrentAnimationImagesLoad()
         let operationsArray = NSMutableArray.init()
         for logoImageURL in arrayOfURLs {
-            weak var wself = self
+           // weak var wself = self
             let operation:Optional<SDWebImageOperation> = SDWebImageManager.sharedManager.downloadImageWithURL(logoImageURL, SDWebImageOptions.SDWebImageRetryFailed, { (a:Int, b:Int64?) -> Void? in
                 return nil
-            }) { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?, finished:Bool) -> Void? in
+            }) { [weak self] (image:UIImage?, error:Error?, cacheType:SDImageCacheType, imageURL:URL?, finished:Bool) -> Void?  in
                 
-                if wself != nil{
+                if  let wself = self{
                     if Thread.isMainThread {
-                        wself?.stopAnimating()
+                        wself.stopAnimating()
                         if image != nil {
-                            var currentImages:NSMutableArray? = wself?.animationImages as? NSMutableArray
+                            var currentImages:NSMutableArray? = wself.animationImages as? NSMutableArray
                                   if currentImages != nil {
                                       currentImages = NSMutableArray.init()
                                   }
                                   currentImages?.add(image!)
-                                  wself?.animationImages = currentImages as? [UIImage]
-                                  wself?.setNeedsLayout()
+                                  wself.animationImages = currentImages as? [UIImage]
+                                  wself.setNeedsLayout()
                         }
                     }else{
                         DispatchQueue.main.async {
-                            wself?.stopAnimating()
+                            wself.stopAnimating()
                             if image != nil {
-                                var currentImages:NSMutableArray? = wself?.animationImages as? NSMutableArray
+                                var currentImages:NSMutableArray? = wself.animationImages as? NSMutableArray
                                 if currentImages != nil {
                                     currentImages = NSMutableArray.init()
                                 }
                                 currentImages?.add(image!)
-                                wself?.animationImages = currentImages as? [UIImage]
-                                wself?.setNeedsLayout()
+                                wself.animationImages = currentImages as? [UIImage]
+                                wself.setNeedsLayout()
                             }
                             
                         }
@@ -486,6 +486,8 @@ extension String{
            return joined
 
        }
+    
+   
     
 }
 

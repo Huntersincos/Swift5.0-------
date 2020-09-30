@@ -197,101 +197,109 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
     ///   - options: options description 使用下载调用快
     ///   - progressBlock: 当下载时调用block progress
     ///   - completedBlock: completedBlock description 当下载完成时,如果下载成功,传值图片参数,最后一个参数参true
-    func downloadImageWithURL(_ url:URL , progress options: SDWebImageDownloaderOptions, progress progressBlock:@escaping SDWebImageDownloaderProgressBlock, completed completedBlock:@escaping SDWebImageDownloaderCompletedBlock) ->  Optional<SDWebImageOperation>{
+    func downloadImageWithURL(_ url:URL , progress options: SDWebImageDownloaderOptions, progress progressBlock:@escaping SDWebImageDownloaderProgressBlock, completed  completedBlock: @escaping SDWebImageDownloaderCompletedBlock)  ->  Optional<SDWebImageOperation>{ 
         var operation:SDWebImageDownloaderOperation?
-        weak var weakSelf = self
-        addProgressCallback(progressBlock, completedBlock, { () -> Void? in
-            var  timeoutInterval = weakSelf?.downloadTimeout
-            if timeoutInterval == 0.0{
-                timeoutInterval = 15.0
-            }
-            // 为了防止潜在的重复缓存（NSURLCache+SDImageCache），禁用了图像请求的缓存，除非另有说明
-            var cachePolicy =  NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
-            if options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderUseNSURLCache.rawValue != 0{
-                cachePolicy = NSURLRequest.CachePolicy.useProtocolCachePolicy
+        //weak var weakSelf = self
+        addProgressCallback(progressBlock, completedBlock, { [weak self] () -> Void? in
+            if let weakSelf = self {
                 
-            }
-           // NSMutableURLRequest.init(url: <#T##URL#>, cachePolicy: <#T##NSURLRequest.CachePolicy#>, timeoutInterval: <#T##TimeInterval#>)
-            let request = NSMutableURLRequest.init(url: url, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval ?? 15)
-            request.httpShouldHandleCookies = options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderHandleCookies.rawValue != 0
-            //通常默认情况下请求和响应是顺序的, 也就是说请求–>得到响应后,再请求.
-            //如果将HTTPShouldUsePipelining设置为YES, 则允许不必等到response, 就可以再次请求. 这个会很大的提高网络请求的效率,但是也可能会出问题.
-           // 因为客户端无法正确的匹配请求与响应, 所以这依赖于服务器必须保证,响应的顺序与客户端请求的顺序一致.如果服务器不能保证这一点, 那可能导致响应和请求混乱.
-            request.httpShouldUsePipelining =  true
-            if weakSelf?.headersFilter != nil{
-                request.allHTTPHeaderFields = weakSelf?.headersFilter!(url,weakSelf?.HTTPHeader)
-            }else{
-                request.allHTTPHeaderFields = weakSelf?.HTTPHeader
-            }
-            operation = SDWebImageDownloaderOperation.init(withRequest: request as URLRequest, inSession: self.session ?? URLSession.init(), options, progress: { (receivedSize:Int, expectedSize:Int64?) -> Void? in
-                let  sself:SDWebImageDownloader? = weakSelf
-                if sself != nil{
-                    var callbacksForURL = [Optional<Any>]()
-                    sself?.barrierQueue?.async {
-                        if sself?.URLCallbacks[url] != nil{
-                            callbacksForURL = (sself?.URLCallbacks[url])!
-                        }
-                    }
-                    for item in callbacksForURL {
-                        let callbacks = item as! Dictionary<String, Any>
-                        DispatchQueue.main.async {
-                            let callback:SDWebImageDownloaderProgressBlock? = callbacks[SDWebImageDownloader.kProgressCallbackKey] as? SDWebImageDownloaderProgressBlock
-                            if callback != nil{
-                                callback!(receivedSize,expectedSize)
-                            }
-                        }
-                    }
+                var  timeoutInterval = weakSelf.downloadTimeout
+                  if timeoutInterval == 0.0{
+                      timeoutInterval = 15.0
+                  }
+                  // 为了防止潜在的重复缓存（NSURLCache+SDImageCache），禁用了图像请求的缓存，除非另有说明
+                  var cachePolicy =  NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
+                  if options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderUseNSURLCache.rawValue != 0{
+                      cachePolicy = NSURLRequest.CachePolicy.useProtocolCachePolicy
+                      
+                  }
+                 // NSMutableURLRequest.init(url: <#T##URL#>, cachePolicy: <#T##NSURLRequest.CachePolicy#>, timeoutInterval: <#T##TimeInterval#>)
+                  let request = NSMutableURLRequest.init(url: url, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval ?? 15)
+                  request.httpShouldHandleCookies = options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderHandleCookies.rawValue != 0
+                  //通常默认情况下请求和响应是顺序的, 也就是说请求–>得到响应后,再请求.
+                  //如果将HTTPShouldUsePipelining设置为YES, 则允许不必等到response, 就可以再次请求. 这个会很大的提高网络请求的效率,但是也可能会出问题.
+                 // 因为客户端无法正确的匹配请求与响应, 所以这依赖于服务器必须保证,响应的顺序与客户端请求的顺序一致.如果服务器不能保证这一点, 那可能导致响应和请求混乱.
+                  request.httpShouldUsePipelining =  true
+                 if weakSelf.headersFilter != nil{
+                      request.allHTTPHeaderFields = weakSelf.headersFilter!(url,weakSelf.HTTPHeader)
+                  }else{
+                      request.allHTTPHeaderFields = weakSelf.HTTPHeader
+                  }
+                if weakSelf.session == nil {
+                    return  nil
                 }
-                
-                return nil
-            }, completed: { (image:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void? in
-                let  sself:SDWebImageDownloader? = weakSelf
-                if sself != nil{
-                    var callbacksForURL = [Optional<Any>]()
-                    sself?.barrierQueue?.sync(flags: .barrier, execute: {
-                        if sself?.URLCallbacks[url] != nil{
-                           callbacksForURL = (sself?.URLCallbacks[url])!
-                        }
-                        if finished{
-                            sself?.URLCallbacks.removeValue(forKey: url)
-                        }
-                    
-                    })
+                  operation = SDWebImageDownloaderOperation.init(withRequest: request as URLRequest, inSession: weakSelf.session!, options, progress: { (receivedSize:Int, expectedSize:Int64?) -> Void? in
+                      let  sself:SDWebImageDownloader? = weakSelf
+                      if sself != nil{
+                          var callbacksForURL = [Optional<Any>]()
+                          sself?.barrierQueue?.async {
+                              if sself?.URLCallbacks[url] != nil{
+                                  callbacksForURL = (sself?.URLCallbacks[url])!
+                              }
+                          }
+                          for item in callbacksForURL {
+                              let callbacks = item as! Dictionary<String, Any>
+                              DispatchQueue.main.async {
+                                  let callback:SDWebImageDownloaderProgressBlock? = callbacks[SDWebImageDownloader.kProgressCallbackKey] as? SDWebImageDownloaderProgressBlock
+                                  if callback != nil{
+                                      callback!(receivedSize,expectedSize)
+                                  }
+                              }
+                          }
+                      }
+                      
+                      return nil
+                  }, completed: { (image:UIImage?, data:Data?, error:Error?, finished:Bool) -> Void? in
+                      let  sself:SDWebImageDownloader? = weakSelf
+                      if sself != nil{
+                          var callbacksForURL = [Optional<Any>]()
+                          sself?.barrierQueue?.sync(flags: .barrier, execute: {
+                              if sself?.URLCallbacks[url] != nil{
+                                 callbacksForURL = (sself?.URLCallbacks[url])!
+                              }
+                              if finished{
+                                  sself?.URLCallbacks.removeValue(forKey: url)
+                              }
+                          
+                          })
 
-                    
-                    for item in callbacksForURL {
-                        let callbacks = item as! Dictionary<String, Any>
-                        DispatchQueue.main.async {
-                            let callback:SDWebImageDownloaderCompletedBlock? = callbacks[SDWebImageDownloader.kCompletedCallbackKey] as? SDWebImageDownloaderCompletedBlock
-                            if callback != nil{
-                                callback!(image,data,error,finished)
-                            }
-                        }
-                    }
-                    
-                 }
+                          
+                          for item in callbacksForURL {
+                              let callbacks = item as! Dictionary<String, Any>
+                              DispatchQueue.main.async {
+                                  let callback:SDWebImageDownloaderCompletedBlock? = callbacks[SDWebImageDownloader.kCompletedCallbackKey] as? SDWebImageDownloaderCompletedBlock
+                                  if callback != nil{
+                                      callback!(image,data,error,finished)
+                                  }
+                              }
+                          }
+                          
+                       }
+                      
+                      return  nil
+                  }, cancelled: { () -> Void? in
+                       let  sself:SDWebImageDownloader? = weakSelf
+                      if sself != nil{
+                          sself?.barrierQueue?.async {
+                              sself?.URLCallbacks.removeValue(forKey: url)
+                          }
+                      }
+                      
+                      return nil
+                  })
+                  
+                 return nil
                 
-                return  nil
-            }, cancelled: { () -> Void? in
-                 let  sself:SDWebImageDownloader? = weakSelf
-                if sself != nil{
-                    sself?.barrierQueue?.async {
-                        sself?.URLCallbacks.removeValue(forKey: url)
-                    }
-                }
-                
-                return nil
-            })
-            
-           return nil
+            }
+            return nil
             
         }, url)
         
-        operation?.shouldDecompressImages = weakSelf?.shouldDecompressImages
-        if weakSelf?.urlCredential != nil {
-            operation?.credential = weakSelf?.urlCredential
-        }else if (weakSelf?.username != nil && weakSelf?.password != nil){
-            operation?.credential = URLCredential.init(user: weakSelf?.username ?? "", password: weakSelf?.password ?? "", persistence: URLCredential.Persistence.forSession)
+        operation?.shouldDecompressImages = self.shouldDecompressImages
+        if self.urlCredential != nil {
+            operation?.credential = self.urlCredential
+        }else if (self.username != nil && self.password != nil){
+            operation?.credential = URLCredential.init(user: self.username ?? "", password: self.password ?? "", persistence: URLCredential.Persistence.forSession)
         }
         
         if options.rawValue & SDWebImageDownloaderOptions.SDWebImageDownloaderHighPriority.rawValue != 0 {
@@ -300,11 +308,11 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
             operation?.queuePriority = .low
         }
         
-        weakSelf?.downloadQueue?.addOperation(operation ?? Operation.init())
-        if weakSelf?.executionOrder == SDWebImageDownloaderExecutionOrder.SDWebImageDownloaderLIFOExecutionOrder  {
+        self.downloadQueue?.addOperation(operation ?? Operation.init())
+        if self.executionOrder == SDWebImageDownloaderExecutionOrder.SDWebImageDownloaderLIFOExecutionOrder  {
             // 操作lastAddedOperation依赖operation
-            weakSelf?.lastAddedOperation?.addDependency(operation ?? Operation.init())
-            weakSelf?.lastAddedOperation = operation
+            self.lastAddedOperation?.addDependency(operation ?? Operation.init())
+            self.lastAddedOperation = operation
         }
         
         return operation

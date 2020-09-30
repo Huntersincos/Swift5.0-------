@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  VedioPlay
+
+  Created by wenze on 2020/9/29.
+  Copyright © 2020 wenze. All rights reserved.
+*/
+
+"LISTMESSAGE" = "Chat";
+"REVOKE_A_MESSAGE" = "Revoke Message";
+"BEEN_AT" = "@ you";
+"MESSAGE_UNKNOW" = "[Unknow]";
+"MESSAGE_LOCATION" = "[location]";
+"MESSAGE_AUDIO" = "[audio]";
+"MESSAGE_IMAGE" = "photo";
+"MESSAGE_VCARD" = "card";
+"MESSAGE_VIDEO" = "[vedio]";
+"MESSAGE_FILE" = "[文件]";
