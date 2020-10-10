@@ -79,7 +79,13 @@ class ChatListViewController: UIViewController,UITableViewDelegate,UITableViewDa
         return 70
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let listChatListModel = self.conversationsArray![indexPath.row]
+        let chatDetailVC = ChatDetailViewController.init(with: listChatListModel.peerUserName)
+        self.navigationController?.pushViewController(chatDetailVC, animated: true)
+        
+    }
     
     deinit {
         self.token?.invalidate()

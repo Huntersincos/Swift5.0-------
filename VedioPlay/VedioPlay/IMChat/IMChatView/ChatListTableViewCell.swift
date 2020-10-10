@@ -28,12 +28,14 @@ class ChatListTableViewCell: UITableViewCell {
     
     func configWithConversation( _ conversation:ListConversationObject?){
         if conversation?.isGroup ?? false {
-            //
+            self.iconView.image = UIImage.init(named:"avatar_group")
+            
+            
         }else{
             self.iconView.image = UIImage.init(named: "img_greenman_nor")
             self.titleLabel.text = conversation?.peerUserName
             if SDWebImageManager.isBlankString(conversation?.conversationTitleName) {
-
+                
                  self.titleLabel.text =  conversation?.conversationTitleName
             }else{
                 if conversation?.getAllMessages() == nil {

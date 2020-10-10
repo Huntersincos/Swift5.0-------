@@ -10,5 +10,6 @@
 #define VedioPlayHeader_h
 #import "FMDB.h"
 #import "BrigeOCSwiftModel.h"
+#import "HBEmojiPageView.h"
 
 #endif /* VedioPlayHeader_h */

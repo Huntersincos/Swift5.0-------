@@ -15,4 +15,7 @@
 "MESSAGE_IMAGE" = "photo";
 "MESSAGE_VCARD" = "card";
 "MESSAGE_VIDEO" = "[vedio]";
-"MESSAGE_FILE" = "[文件]";
+"MESSAGE_FILE" = "[file]";
+"INPUT_SOMETHING" = "LoogPress Say Someting";
+"RECORD_TIPS" = "Hold To Talk";
+"RECORD_COMPLETE" = "Record Complete";

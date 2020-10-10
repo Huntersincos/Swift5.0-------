@@ -16,3 +16,6 @@
 "MESSAGE_VCARD" = "[名片]";
 "MESSAGE_VIDEO" = "[视频]";
 "MESSAGE_FILE" = "[文件]";
+"INPUT_SOMETHING" = "长按,说点什么";
+"RECORD_TIPS" = "按住说话";
+"RECORD_COMPLETE" = "录音结束";

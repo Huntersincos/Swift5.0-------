@@ -12,6 +12,8 @@ import RealmSwift
 public enum MessageChannelType:Int{
      // 单聊
     case MessageChannelType1On1
+    case MessageChannelTypeGroup
+    case MessageChannelTypeList
     
 }
 
