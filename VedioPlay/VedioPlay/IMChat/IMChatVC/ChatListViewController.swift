@@ -23,20 +23,33 @@ class ChatListViewController: UIViewController,UITableViewDelegate,UITableViewDa
         let realm = RealmInitModel.getRealmInstance()
         if realm != nil {
             self.conversationsArray = realm?.objects(ListConversationObject.self).sorted(byKeyPath: "updateTime", ascending: false)
-            
-            self.token = self.conversationsArray?._observe(DispatchQueue.init(label: "com.getRealmInstance"), { [weak self] (change:RealmCollectionChange<AnyRealmCollection<ListConversationObject>>) in
-                if let strongSelf = self{
-                    if Thread.isMainThread{
-                        strongSelf.chatListTableView?.reloadData()
-                    }else{
-                        DispatchQueue.main.async {
-                         strongSelf.chatListTableView?.reloadData()
-                        }
-                    }
-                    
-                }
+            //DispatchQueue.init(label: "com.getRealmInstance"
+            self.token = self.conversationsArray?.observe({ [weak self] (change:RealmCollectionChange<Results<ListConversationObject>>) in
                 
+                if let strongSelf = self{
+                       if Thread.isMainThread{
+                           strongSelf.chatListTableView?.reloadData()
+                       }else{
+                           DispatchQueue.main.async {
+                            strongSelf.chatListTableView?.reloadData()
+                           }
+                       }
+                       
+                }
             })
+//            self.token = self.conversationsArray?._observe(DispatchQueue.init(label: "com.getRealmInstance"), { [weak self] (change:RealmCollectionChange<AnyRealmCollection<ListConversationObject>>) in
+//                if let strongSelf = self{
+//                    if Thread.isMainThread{
+//                        strongSelf.chatListTableView?.reloadData()
+//                    }else{
+//                        DispatchQueue.main.async {
+//                         strongSelf.chatListTableView?.reloadData()
+//                        }
+//                    }
+//
+//                }
+//
+//            })
         }else{
             #if DEBUG
              print("数据加载失败")

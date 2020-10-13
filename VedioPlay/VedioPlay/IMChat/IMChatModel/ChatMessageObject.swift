@@ -22,11 +22,20 @@ public enum JRMessageItemState:Int{
     /// 消息的初始状态
     case MessageItemStateInit
     
+    /// 正在发送消息
+    case MessageItemStateSending
+    
     // 消息接收成功
     case MessageItemStateReceiveOK
     
     /// 消息已经撤回
     case MessageItemStateRevoked
+    
+    /// 消息已读
+    case MessageItemStateDelivered
+    
+    /// 消息已读
+    case MessageItemStateRead
 }
 
 public enum JRMessageItemType:Int{
@@ -49,6 +58,11 @@ public enum JRMessageItemType:Int{
    case  MessageItemTypeOtherFile
     /// 群提示消息
    case   MessageItemTypeNotify
+}
+
+public enum MessageItemDirection:Int{
+    case MessagirectionSend
+    case MessageDirectionReceive
 }
 
 
@@ -75,5 +89,32 @@ class ChatMessageObject: Object {
     
     /// 文本内容
     @objc dynamic var content = ""
+    
+    /// 消息时间戳
+    @objc dynamic var timestamp:NSString = ""
+    
+    /// 消息唯一标识符
+    
+    @objc dynamic var imdnId = ""
+    
+    /// 消息传输方向
+    
+    var messageTranDirection:MessageItemDirection = .MessagirectionSend
+    
+    /// 是否抄送
+    @objc dynamic var isCarbonCopy = false
+    
+    /// 图片缩列图相对路径
+    
+    @objc dynamic var fileThumbPath = ""
+    
+    /// 媒体长度
+    
+    @objc dynamic var fileMediaDuration = ""
+    
+    /// 定位描述
+    
+    @objc dynamic var geoFreeText = ""
+    
     
 }

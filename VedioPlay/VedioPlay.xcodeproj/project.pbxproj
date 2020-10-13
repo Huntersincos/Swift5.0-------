@@ -32,6 +32,31 @@
 		6E4E5F132530581300A1F317 /* HBEmojiPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4E5F092530581300A1F317 /* HBEmojiPageView.m */; };
 		6E4E5F142530581300A1F317 /* msg-delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4E5F0A2530581300A1F317 /* msg-delete@2x.png */; };
 		6E4E5F152530581300A1F317 /* UIColor+FlatUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4E5F0C2530581300A1F317 /* UIColor+FlatUI.m */; };
+		6E4EDC8F253441CB003DE1CC /* MessageLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDC8E253441CB003DE1CC /* MessageLayoutManager.swift */; };
+		6E4EDC9125344565003DE1CC /* RevokeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9025344565003DE1CC /* RevokeLayout.swift */; };
+		6E4EDC9325345971003DE1CC /* BaseBubbleLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9225345971003DE1CC /* BaseBubbleLayout.swift */; };
+		6E4EDC9825357C1C003DE1CC /* im_sending@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9725357C1C003DE1CC /* im_sending@2x.png */; };
+		6E4EDC9A25357EC9003DE1CC /* im_dli@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9925357EC9003DE1CC /* im_dli@2x.png */; };
+		6E4EDC9C25357F4D003DE1CC /* im_dispok@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9B25357F4D003DE1CC /* im_dispok@2x.png */; };
+		6E4EDC9E25358234003DE1CC /* img_blueman_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9D25358234003DE1CC /* img_blueman_nor.png */; };
+		6E4EDCA2253592AE003DE1CC /* TextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA1253592AE003DE1CC /* TextLayout.swift */; };
+		6E4EDCA425359517003DE1CC /* ThumbImageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */; };
+		6E4EDCA625359715003DE1CC /* btn_play@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA525359715003DE1CC /* btn_play@2x..png */; };
+		6E4EDCA825359BB9003DE1CC /* AudioLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */; };
+		6E4EDCAA2535A048003DE1CC /* msg-location-current@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA92535A048003DE1CC /* msg-location-current@2x.png */; };
+		6E4EDCAC2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */; };
+		6E4EDCAE2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */; };
+		6E4EDCB32535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */; };
+		6E4EDCB42535A33F003DE1CC /* ReceiverVoiceNodePlaying001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCB02535A33F003DE1CC /* ReceiverVoiceNodePlaying001@2x.png */; };
+		6E4EDCB52535A33F003DE1CC /* ReceiverVoiceNodePlaying003@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCB12535A33F003DE1CC /* ReceiverVoiceNodePlaying003@2x.png */; };
+		6E4EDCB62535A33F003DE1CC /* ReceiverVoiceNodePlaying002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCB22535A33F003DE1CC /* ReceiverVoiceNodePlaying002@2x.png */; };
+		6E4EDCBB2535A351003DE1CC /* SenderVoiceNodePlaying003@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCB72535A350003DE1CC /* SenderVoiceNodePlaying003@2x.png */; };
+		6E4EDCBC2535A351003DE1CC /* SenderVoiceNodePlaying000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCB82535A350003DE1CC /* SenderVoiceNodePlaying000@2x.png */; };
+		6E4EDCBD2535A351003DE1CC /* SenderVoiceNodePlaying002@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCB92535A350003DE1CC /* SenderVoiceNodePlaying002@2x.png */; };
+		6E4EDCBE2535A351003DE1CC /* SenderVoiceNodePlaying001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCBA2535A350003DE1CC /* SenderVoiceNodePlaying001@2x.png */; };
+		6E4EDCC02535A533003DE1CC /* LoactionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCBF2535A533003DE1CC /* LoactionLayout.swift */; };
+		6E4EDCC22535A5EC003DE1CC /* message_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCC12535A5EC003DE1CC /* message_map@2x.png */; };
+		6E4EDCC42535A7C1003DE1CC /* CardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCC32535A7C1003DE1CC /* CardLayout.swift */; };
 		6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */; };
 		6E604A992522E537009D5D1F /* RealmInitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604A982522E537009D5D1F /* RealmInitModel.swift */; };
 		6E604AA52522EDC9009D5D1F /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E604AA32522EDBC009D5D1F /* RealmSwift.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -172,6 +197,31 @@
 		6E4E5F0A2530581300A1F317 /* msg-delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "msg-delete@2x.png"; sourceTree = "<group>"; };
 		6E4E5F0B2530581300A1F317 /* UIColor+FlatUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+FlatUI.h"; sourceTree = "<group>"; };
 		6E4E5F0C2530581300A1F317 /* UIColor+FlatUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+FlatUI.m"; sourceTree = "<group>"; };
+		6E4EDC8E253441CB003DE1CC /* MessageLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageLayoutManager.swift; sourceTree = "<group>"; };
+		6E4EDC9025344565003DE1CC /* RevokeLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeLayout.swift; sourceTree = "<group>"; };
+		6E4EDC9225345971003DE1CC /* BaseBubbleLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBubbleLayout.swift; sourceTree = "<group>"; };
+		6E4EDC9725357C1C003DE1CC /* im_sending@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "im_sending@2x.png"; sourceTree = "<group>"; };
+		6E4EDC9925357EC9003DE1CC /* im_dli@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "im_dli@2x.png"; sourceTree = "<group>"; };
+		6E4EDC9B25357F4D003DE1CC /* im_dispok@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "im_dispok@2x.png"; sourceTree = "<group>"; };
+		6E4EDC9D25358234003DE1CC /* img_blueman_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_blueman_nor.png; sourceTree = "<group>"; };
+		6E4EDCA1253592AE003DE1CC /* TextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayout.swift; sourceTree = "<group>"; };
+		6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbImageLayout.swift; sourceTree = "<group>"; };
+		6E4EDCA525359715003DE1CC /* btn_play@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_play@2x..png"; sourceTree = "<group>"; };
+		6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLayout.swift; sourceTree = "<group>"; };
+		6E4EDCA92535A048003DE1CC /* msg-location-current@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "msg-location-current@2x.png"; path = "../../../../../../../Users/wenze/Documents/5.04Branch/MobileEhallGuangxiTwo_6.01【小版本】/MobileEhallGuangxiTwo/RCS_HeFeiXin/IM/Image/msg-location-current@2x.png"; sourceTree = "<group>"; };
+		6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying@2x.png"; sourceTree = "<group>"; };
+		6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying@2x.png"; sourceTree = "<group>"; };
+		6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying000@2x.png"; sourceTree = "<group>"; };
+		6E4EDCB02535A33F003DE1CC /* ReceiverVoiceNodePlaying001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying001@2x.png"; sourceTree = "<group>"; };
+		6E4EDCB12535A33F003DE1CC /* ReceiverVoiceNodePlaying003@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying003@2x.png"; sourceTree = "<group>"; };
+		6E4EDCB22535A33F003DE1CC /* ReceiverVoiceNodePlaying002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying002@2x.png"; sourceTree = "<group>"; };
+		6E4EDCB72535A350003DE1CC /* SenderVoiceNodePlaying003@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying003@2x.png"; sourceTree = "<group>"; };
+		6E4EDCB82535A350003DE1CC /* SenderVoiceNodePlaying000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying000@2x.png"; sourceTree = "<group>"; };
+		6E4EDCB92535A350003DE1CC /* SenderVoiceNodePlaying002@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying002@2x.png"; sourceTree = "<group>"; };
+		6E4EDCBA2535A350003DE1CC /* SenderVoiceNodePlaying001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying001@2x.png"; sourceTree = "<group>"; };
+		6E4EDCBF2535A533003DE1CC /* LoactionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoactionLayout.swift; sourceTree = "<group>"; };
+		6E4EDCC12535A5EC003DE1CC /* message_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message_map@2x.png"; sourceTree = "<group>"; };
+		6E4EDCC32535A7C1003DE1CC /* CardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLayout.swift; sourceTree = "<group>"; };
 		6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVVedioPlayView.swift; sourceTree = "<group>"; };
 		6E604A982522E537009D5D1F /* RealmInitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmInitModel.swift; sourceTree = "<group>"; };
 		6E604AA32522EDBC009D5D1F /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
@@ -399,6 +449,14 @@
 				6E604AB5252327FE009D5D1F /* ChatMessageObject.swift */,
 				6EE8F663252756DD00B9FEFD /* MessageDBHelper.swift */,
 				6E6540802531A0AB00326634 /* MessageManager.swift */,
+				6E4EDC8E253441CB003DE1CC /* MessageLayoutManager.swift */,
+				6E4EDC9025344565003DE1CC /* RevokeLayout.swift */,
+				6E4EDC9225345971003DE1CC /* BaseBubbleLayout.swift */,
+				6E4EDCA1253592AE003DE1CC /* TextLayout.swift */,
+				6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */,
+				6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */,
+				6E4EDCBF2535A533003DE1CC /* LoactionLayout.swift */,
+				6E4EDCC32535A7C1003DE1CC /* CardLayout.swift */,
 			);
 			path = IMChatModel;
 			sourceTree = "<group>";
@@ -514,6 +572,23 @@
 				6E9B3C0E24FF88C600C161C2 /* FMDB_Base */,
 				6E92754D24F7B6C8009F5D63 /* fmdb */,
 				6EE5BA4024E24B7C0021807D /* back_white_small.png */,
+				6E4EDCA92535A048003DE1CC /* msg-location-current@2x.png */,
+				6E4EDCA525359715003DE1CC /* btn_play@2x..png */,
+				6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */,
+				6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */,
+				6E4EDCB02535A33F003DE1CC /* ReceiverVoiceNodePlaying001@2x.png */,
+				6E4EDCB22535A33F003DE1CC /* ReceiverVoiceNodePlaying002@2x.png */,
+				6E4EDCB12535A33F003DE1CC /* ReceiverVoiceNodePlaying003@2x.png */,
+				6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */,
+				6E4EDCB82535A350003DE1CC /* SenderVoiceNodePlaying000@2x.png */,
+				6E4EDCBA2535A350003DE1CC /* SenderVoiceNodePlaying001@2x.png */,
+				6E4EDCB92535A350003DE1CC /* SenderVoiceNodePlaying002@2x.png */,
+				6E4EDCB72535A350003DE1CC /* SenderVoiceNodePlaying003@2x.png */,
+				6E4EDCC12535A5EC003DE1CC /* message_map@2x.png */,
+				6E4EDC9725357C1C003DE1CC /* im_sending@2x.png */,
+				6E4EDC9D25358234003DE1CC /* img_blueman_nor.png */,
+				6E4EDC9B25357F4D003DE1CC /* im_dispok@2x.png */,
+				6E4EDC9925357EC9003DE1CC /* im_dli@2x.png */,
 				6EB5D4062498A272008DA35A /* ic_pic_choose@2x.png */,
 				6EB5D4072498A272008DA35A /* ic_pic_choose@3x.png */,
 				6E908D2C24A09CF8003E9404 /* AssetsPickerVideo@2x.png */,
@@ -738,26 +813,38 @@
 				6EE8F66D252A03B200B9FEFD /* btn_smile_nor@2x..png in Resources */,
 				6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */,
 				6EDDBD2B24D2A1DF0087AAA7 /* ic-audio-animation-right-3@2x.png in Resources */,
+				6E4EDC9C25357F4D003DE1CC /* im_dispok@2x.png in Resources */,
 				6E9BB5E224E38E950040FF15 /* player_pause.png in Resources */,
+				6E4EDCBB2535A351003DE1CC /* SenderVoiceNodePlaying003@2x.png in Resources */,
 				6E97C95A24D3F97C00D4CFB1 /* msg-location-current@2x.png in Resources */,
 				6EE8F669252A029700B9FEFD /* btn_voice_nor@2x..png in Resources */,
 				6EE8F66F252A03CB00B9FEFD /* btn_smile_pre@2x..png in Resources */,
 				6E4C3B6F252081890019A6EB /* LoadURLImageViewController.xib in Resources */,
+				6E4EDC9E25358234003DE1CC /* img_blueman_nor.png in Resources */,
 				6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */,
 				6E97C95624D3F38600D4CFB1 /* DisplayLocationViewController.xib in Resources */,
 				6EDDBD2724D2A1CE0087AAA7 /* ic-audio-animation-right-1@2x.png in Resources */,
+				6E4EDCAA2535A048003DE1CC /* msg-location-current@2x.png in Resources */,
 				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
 				6E65407C2530646400326634 /* textNor@2x.png in Resources */,
+				6E4EDCBE2535A351003DE1CC /* SenderVoiceNodePlaying001@2x.png in Resources */,
+				6E4EDCA625359715003DE1CC /* btn_play@2x..png in Resources */,
 				6EE8F66B252A037F00B9FEFD /* btn_voice_pre@2x..png in Resources */,
 				6EE5BA4124E24B7C0021807D /* back_white_small.png in Resources */,
 				6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */,
+				6E4EDCB52535A33F003DE1CC /* ReceiverVoiceNodePlaying003@2x.png in Resources */,
 				6E2616D7252472EA00034CC6 /* img_greenman_nor.png in Resources */,
 				6E97C95824D3F89600D4CFB1 /* msg-location-place@2x.png in Resources */,
+				6E4EDCB42535A33F003DE1CC /* ReceiverVoiceNodePlaying001@2x.png in Resources */,
 				6EDDBD2524D2A1C40087AAA7 /* ic-audio-animation-right-0@2x.png in Resources */,
+				6E4EDCB32535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png in Resources */,
 				6E4E5EF425304E7F00A1F317 /* message_photo@2x.png in Resources */,
 				6EDDBD1F24D2A1A50087AAA7 /* ic-audio-animation-left-1@2x.png in Resources */,
 				6E604AAF25231FC7009D5D1F /* Localizable.strings in Resources */,
+				6E4EDCAE2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png in Resources */,
+				6E4EDC9A25357EC9003DE1CC /* im_dli@2x.png in Resources */,
 				6EDDBD1D24D2A1990087AAA7 /* ic-audio-animation-left-0@2x.png in Resources */,
+				6E4EDCB62535A33F003DE1CC /* ReceiverVoiceNodePlaying002@2x.png in Resources */,
 				6E2616D425246A3500034CC6 /* ChatListTableViewCell.xib in Resources */,
 				6E4E5EF625304ED900A1F317 /* message_camera@2x.png in Resources */,
 				6E4E5EFA2530503200A1F317 /* message_file@2x.png in Resources */,
@@ -765,12 +852,17 @@
 				6E65407E2530649800326634 /* btn_voice_pre@2x..png in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
 				6EBD998F24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 in Resources */,
+				6E4EDC9825357C1C003DE1CC /* im_sending@2x.png in Resources */,
 				6EB5D4092498A272008DA35A /* ic_pic_choose@3x.png in Resources */,
+				6E4EDCC22535A5EC003DE1CC /* message_map@2x.png in Resources */,
 				6EE8F66225274FD400B9FEFD /* avatar_group@2x.png in Resources */,
+				6E4EDCBC2535A351003DE1CC /* SenderVoiceNodePlaying000@2x.png in Resources */,
 				6EDDBD2F24D2AC7F0087AAA7 /* ic-audio-record@2x.png in Resources */,
 				6EDDBD2324D2A1BA0087AAA7 /* ic-audio-animation-left-3@2x.png in Resources */,
+				6E4EDCBD2535A351003DE1CC /* SenderVoiceNodePlaying002@2x.png in Resources */,
 				6E4E5EF825304F6900A1F317 /* message_card@2x.png in Resources */,
 				6EDDBD2D24D2A4370087AAA7 /* ic-audio-delete@2x.png in Resources */,
+				6E4EDCAC2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png in Resources */,
 				6E908D2D24A09CF8003E9404 /* AssetsPickerVideo@2x.png in Resources */,
 				6E9BB5E324E38E950040FF15 /* player_play.png in Resources */,
 			);
@@ -799,6 +891,7 @@
 			files = (
 				6EB79A332493757D00B56296 /* ViewController.swift in Sources */,
 				6EB5D3F12497393A008DA35A /* JRAlbumViewController.swift in Sources */,
+				6E4EDC9325345971003DE1CC /* BaseBubbleLayout.swift in Sources */,
 				6E8D79AD24AF1B2200974FFC /* JRCameraHelper.swift in Sources */,
 				6E4E5F112530581300A1F317 /* EmojiPictographs.m in Sources */,
 				6E4E5F0E2530581300A1F317 /* EmojiCollectionViewCell.m in Sources */,
@@ -811,6 +904,7 @@
 				6E96D3BF2506069F00EA3486 /* SDWebImageDownloader.swift in Sources */,
 				6E89786D2500E94000FF114F /* CreatTableHelper.swift in Sources */,
 				6E8F061224FE24C400ADDEF7 /* SDWebImageDecoder.swift in Sources */,
+				6E4EDCC42535A7C1003DE1CC /* CardLayout.swift in Sources */,
 				6E4C3B7A2521BDFD0019A6EB /* BrigeOCSwiftModel.m in Sources */,
 				6EB79A2D2493700200B56296 /* MyTabBarViewController.swift in Sources */,
 				6EB5D3F624973A73008DA35A /* JPhotoManger.swift in Sources */,
@@ -818,8 +912,10 @@
 				6E604AB6252327FE009D5D1F /* ChatMessageObject.swift in Sources */,
 				6EB799FC2493696900B56296 /* AppDelegate.swift in Sources */,
 				6E4E5F152530581300A1F317 /* UIColor+FlatUI.m in Sources */,
+				6E4EDCA2253592AE003DE1CC /* TextLayout.swift in Sources */,
 				6E92755F24F7B6C8009F5D63 /* FMResultSet.m in Sources */,
 				6E97C95E24D3FE7C00D4CFB1 /* QWAnnotation.swift in Sources */,
+				6E4EDC9125344565003DE1CC /* RevokeLayout.swift in Sources */,
 				6EB5D40224986E37008DA35A /* AJPhotoListCollectionViewCell.swift in Sources */,
 				6EB79A31249374DF00B56296 /* MyVedioViewController.swift in Sources */,
 				6E2616D325246A3500034CC6 /* ChatListTableViewCell.swift in Sources */,
@@ -847,12 +943,16 @@
 				6E97C95524D3F38600D4CFB1 /* DisplayLocationViewController.swift in Sources */,
 				6E4C3B74252083D90019A6EB /* LoadURLImageViewController.swift in Sources */,
 				6EE8F66625276D0300B9FEFD /* InputView.swift in Sources */,
+				6E4EDCA425359517003DE1CC /* ThumbImageLayout.swift in Sources */,
 				6E97271425134AC70075F2A9 /* SDWebImageCombinedOperation.swift in Sources */,
 				6EE8F664252756DD00B9FEFD /* MessageDBHelper.swift in Sources */,
+				6E4EDCA825359BB9003DE1CC /* AudioLayout.swift in Sources */,
 				6E38C4CE251D9E2E00201C05 /* OtherClassViewController.swift in Sources */,
 				6E4E5F122530581300A1F317 /* EmojiTransport.m in Sources */,
+				6E4EDCC02535A533003DE1CC /* LoactionLayout.swift in Sources */,
 				6E9B3C1024FF8A4B00C161C2 /* DBHerlper.swift in Sources */,
 				6E96D3BC2505D9C400EA3486 /* URLVedioViewController.swift in Sources */,
+				6E4EDC8F253441CB003DE1CC /* MessageLayoutManager.swift in Sources */,
 				6E16788C24F4E62D00DD6863 /* SDImageCache.swift in Sources */,
 				6E4E5F132530581300A1F317 /* HBEmojiPageView.m in Sources */,
 				6EB79A352493768700B56296 /* BaseNavViewController.swift in Sources */,

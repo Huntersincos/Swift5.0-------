@@ -19,3 +19,5 @@
 "INPUT_SOMETHING" = "LoogPress Say Someting";
 "RECORD_TIPS" = "Hold To Talk";
 "RECORD_COMPLETE" = "Record Complete";
+"MESSAGE_REVOKED" = "Message Been Revoked";
+"REVOKED" = "Message Been Revoked";

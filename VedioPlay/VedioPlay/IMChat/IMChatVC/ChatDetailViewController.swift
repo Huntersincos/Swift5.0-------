@@ -17,6 +17,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
     var  tableView:UITableView?
     var  messageList:Results<ChatMessageObject>?
     var  messageListToken:NotificationToken?
+    var  currentCount:Int?
     
     convenience init(with peerUserName:String){
         self.init()
@@ -48,6 +49,8 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
         
         MessageManager.shareInstance.peerUserName = self.peerUserName
         
+        getMessages()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,10 +70,10 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
      
     func getMessages(){
         messageList = MessageDBHelper.getMessagesWithNumber(self.peerUserName ?? "")
-        messageListToken = messageList?.observe(on: DispatchQueue.init(label: "com.getRealmInstance"), { [weak self] (change:RealmCollectionChange<Results<ChatMessageObject>>?) in
+        messageListToken = messageList?.observe({ [weak self] (change:RealmCollectionChange<Results<ChatMessageObject>>?) in
              if let strongSelf = self{
                 if change == nil {
-                   
+                    strongSelf.messageFirstLoad()
                 }else{
                     
                 }
@@ -80,6 +83,38 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
         
     }
     
+    func messageFirstLoad(){
+        
+        var i = (messageList?.count ?? 0) - (currentCount ?? 0)
+        if messageList != nil {
+            for _ in messageList! {
+                if i  < messageList!.count {
+                    let message = messageList![i]
+                    
+                }
+               
+                i += 1
+            }
+        }
+    
+    }
+    
+    func shouldShowTime(_ message:ChatMessageObject) -> Bool{
+        let index = messageList?.index(of: message)
+        if index == nil {
+            return true
+        }
+        if index == 0{
+            return true
+        }
+        
+        let currentTime = messageList?[index!].timestamp
+        let previousTime = messageList?[index! - 1].timestamp
+        
+        return (currentTime?.longLongValue ?? 0) - (previousTime?.longLongValue ?? 0) > 180000 || (index ?? 0)%9 == 1
+        
+        
+    }
     
     ///  InputViewDelegate
     func menuViewHide() {

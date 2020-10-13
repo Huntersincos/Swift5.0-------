@@ -44,7 +44,11 @@ class RealmInitModel: NSObject {
         var realm:Realm? = nil
         if realmConfiguration != nil {
        ///一个可选的调度队列，用于Realm领域。如果给定，这个Realm实例可以从内部使用 块调度到给定队列而不是当前线程
-            realm = try? Realm.init(configuration: realmConfiguration!,queue: DispatchQueue.init(label: "com.getRealmInstance"))
+            //  单线程安全 详见 https://academy.realm.io/cn/posts/threading-deep-dive/
+            // 不能再线程间传递数据 保证数据的一致性和隔离性
+            
+            //realm = try? Realm.init(configuration: realmConfiguration!,queue: DispatchQueue.init(label: "com.getRealmInstance"))
+            realm = try? Realm.init(configuration: realmConfiguration!)
         }
         
         if !Thread.isMainThread {

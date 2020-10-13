@@ -19,3 +19,5 @@
 "INPUT_SOMETHING" = "长按,说点什么";
 "RECORD_TIPS" = "按住说话";
 "RECORD_COMPLETE" = "录音结束";
+"MESSAGE_REVOKED" = "消息撤销";
+"REVOKED" = "对方撤销了一条消息";

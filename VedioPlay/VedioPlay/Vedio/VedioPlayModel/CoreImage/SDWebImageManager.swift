@@ -620,6 +620,25 @@ class SDWebImageManager: NSObject {
            return false
            
     }
+    
+    class func IsArraySafe(_ array:[Any]?) -> Bool{
+        if array == nil{
+            return false
+        }else{
+            if array?.count == 0 {
+                return false
+            }
+            let  clssArray:NSArray? = array as NSArray?
+             
+            if (clssArray?.isKind(of: NSNull.self) == true || clssArray?.isKind(of: NSArray.self) == false) {
+                return false
+            }
+            
+            
+         return true
+        }
+        
+    }
 }
 
 
