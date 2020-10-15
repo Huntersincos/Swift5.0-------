@@ -57,6 +57,9 @@
 		6E4EDCC02535A533003DE1CC /* LoactionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCBF2535A533003DE1CC /* LoactionLayout.swift */; };
 		6E4EDCC22535A5EC003DE1CC /* message_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCC12535A5EC003DE1CC /* message_map@2x.png */; };
 		6E4EDCC42535A7C1003DE1CC /* CardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCC32535A7C1003DE1CC /* CardLayout.swift */; };
+		6E4EDCC92536E36E003DE1CC /* OtherFileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCC82536E36E003DE1CC /* OtherFileLayout.swift */; };
+		6E4EDCCB2536E53B003DE1CC /* ic_default_file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCCA2536E53B003DE1CC /* ic_default_file@2x.png */; };
+		6E4EDCD125380A1C003DE1CC /* BaseMessageCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */; };
 		6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */; };
 		6E604A992522E537009D5D1F /* RealmInitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604A982522E537009D5D1F /* RealmInitModel.swift */; };
 		6E604AA52522EDC9009D5D1F /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E604AA32522EDBC009D5D1F /* RealmSwift.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -222,6 +225,9 @@
 		6E4EDCBF2535A533003DE1CC /* LoactionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoactionLayout.swift; sourceTree = "<group>"; };
 		6E4EDCC12535A5EC003DE1CC /* message_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message_map@2x.png"; sourceTree = "<group>"; };
 		6E4EDCC32535A7C1003DE1CC /* CardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLayout.swift; sourceTree = "<group>"; };
+		6E4EDCC82536E36E003DE1CC /* OtherFileLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherFileLayout.swift; sourceTree = "<group>"; };
+		6E4EDCCA2536E53B003DE1CC /* ic_default_file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_default_file@2x.png"; sourceTree = "<group>"; };
+		6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMessageCellTableViewCell.swift; sourceTree = "<group>"; };
 		6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVVedioPlayView.swift; sourceTree = "<group>"; };
 		6E604A982522E537009D5D1F /* RealmInitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmInitModel.swift; sourceTree = "<group>"; };
 		6E604AA32522EDBC009D5D1F /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
@@ -457,6 +463,7 @@
 				6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */,
 				6E4EDCBF2535A533003DE1CC /* LoactionLayout.swift */,
 				6E4EDCC32535A7C1003DE1CC /* CardLayout.swift */,
+				6E4EDCC82536E36E003DE1CC /* OtherFileLayout.swift */,
 			);
 			path = IMChatModel;
 			sourceTree = "<group>";
@@ -489,6 +496,7 @@
 				6E2616D225246A3500034CC6 /* ChatListTableViewCell.xib */,
 				6EE8F66525276D0300B9FEFD /* InputView.swift */,
 				6E4E5EEF2530319500A1F317 /* ChatVoiceRecordButton.swift */,
+				6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */,
 			);
 			path = IMChatView;
 			sourceTree = "<group>";
@@ -609,6 +617,7 @@
 				6EBD998E24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 */,
 				6E9BB5E024E38E950040FF15 /* player_pause.png */,
 				6E9BB5E124E38E950040FF15 /* player_play.png */,
+				6E4EDCCA2536E53B003DE1CC /* ic_default_file@2x.png */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -848,6 +857,7 @@
 				6E2616D425246A3500034CC6 /* ChatListTableViewCell.xib in Resources */,
 				6E4E5EF625304ED900A1F317 /* message_camera@2x.png in Resources */,
 				6E4E5EFA2530503200A1F317 /* message_file@2x.png in Resources */,
+				6E4EDCCB2536E53B003DE1CC /* ic_default_file@2x.png in Resources */,
 				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
 				6E65407E2530649800326634 /* btn_voice_pre@2x..png in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
@@ -928,6 +938,8 @@
 				6EB799FE2493696900B56296 /* SceneDelegate.swift in Sources */,
 				6E604A992522E537009D5D1F /* RealmInitModel.swift in Sources */,
 				6EE8F65F252596A900B9FEFD /* ChatDetailViewController.swift in Sources */,
+				6E4EDCC92536E36E003DE1CC /* OtherFileLayout.swift in Sources */,
+				6E4EDCD125380A1C003DE1CC /* BaseMessageCellTableViewCell.swift in Sources */,
 				6E92756024F7B6C8009F5D63 /* FMUtil.m in Sources */,
 				6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */,
 				6E6540812531A0AB00326634 /* MessageManager.swift in Sources */,
@@ -1154,7 +1166,7 @@
 					"$(PROJECT_DIR)/VedioPlay/IMChat/IMChatSource",
 				);
 				INFOPLIST_FILE = VedioPlay/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1182,7 +1194,7 @@
 					"$(PROJECT_DIR)/VedioPlay/IMChat/IMChatSource",
 				);
 				INFOPLIST_FILE = VedioPlay/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -21,3 +21,5 @@
 "RECORD_COMPLETE" = "录音结束";
 "MESSAGE_REVOKED" = "消息撤销";
 "REVOKED" = "对方撤销了一条消息";
+"DELETMESSAGE" = "删除";
+"Revoke" = "撤销";

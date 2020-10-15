@@ -37,4 +37,26 @@ class MessageDBHelper: NSObject {
         
         return nil
     }
+    
+    /// 消息设置成已读
+    
+    class func readAllMessagesWithNumber(_ peerUserName:String){
+        
+        let realm = RealmInitModel.getRealmInstance()
+        let pred = NSPredicate(format: String(format: "%K == %@ && %K == 0","peerUserName",peerUserName,"isRead"))
+        if realm != nil {
+            let result:Results<ChatMessageObject>? = realm?.objects(ChatMessageObject.self).filter(pred)
+            realm?.beginWrite()
+            let count = result?.count ?? 0
+            for _ in 0..<count {
+                let messge = result?[0]
+                 messge?.isRead = true
+                // 应该回传服务端
+           }
+        }
+       
+        try?realm?.commitWrite()
+    }
+    
+    
 }

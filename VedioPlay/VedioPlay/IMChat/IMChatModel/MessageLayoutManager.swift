@@ -57,13 +57,23 @@ class MessageLayoutManager: NSObject {
             self.layoutDic[message.imdnId] = geoLayout
             break
             
-          default:
+        case .MessageItemTypeVcard:
             
+            let vcardLayout = CardLayout.init()
+             vcardLayout.configWithMessage(message, showTime, true)
+            self.layoutDic[message.imdnId] = vcardLayout
+            break
+            
+        case .MessageItemTypeOtherFile:
+            
+            let otherFileLayout = OtherFileLayout.init()
+            otherFileLayout.configWithMessage(message, showTime, true)
+            self.layoutDic[message.imdnId] = otherFileLayout
+           break
+          default:
             break
 
         }
-        
-        
         
     }
     

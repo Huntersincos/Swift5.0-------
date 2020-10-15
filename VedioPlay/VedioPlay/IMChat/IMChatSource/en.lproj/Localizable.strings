@@ -21,3 +21,5 @@
 "RECORD_COMPLETE" = "Record Complete";
 "MESSAGE_REVOKED" = "Message Been Revoked";
 "REVOKED" = "Message Been Revoked";
+"DELETMESSAGE" = "Delect Message";
+"Revoke" = "Revoke Message";

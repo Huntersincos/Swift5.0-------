@@ -116,5 +116,18 @@ class ChatMessageObject: Object {
     
     @objc dynamic var geoFreeText = ""
     
+    /// 文件路径
+    
+    @objc dynamic var filePath = ""
+    
+    /// 文件名
+    @objc dynamic var fileName = ""
+    
+    /// 文件大小
+    
+    @objc dynamic var fileSize = 0.0
+    
+    
+    
     
 }

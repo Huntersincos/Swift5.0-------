@@ -32,6 +32,11 @@ import UIKit
     func didVoiceRecordRecordTimeBig(_ button:ChatVoiceRecordButton)
 }
 
+public let InputHeadViewHeight:CGFloat = 90
+public let InputMenuViewHeight:CGFloat = 216
+public let  kKeyboardX:CGFloat = 5;
+public let  kInputViewMaxHeight:CGFloat = 60
+
 class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmojiPageViewDelegate {
     
     
@@ -62,10 +67,7 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
     var headHeight:CGFloat?
     var inputViewHeight:CGFloat?
     
-    public var InputHeadViewHeight:CGFloat = 90
-    public var InputMenuViewHeight:CGFloat = 216
-    public var  kKeyboardX:CGFloat = 5;
-    public var  kInputViewMaxHeight:CGFloat = 60
+   
     
     
     override init(frame: CGRect) {
