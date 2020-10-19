@@ -9,7 +9,15 @@
 import UIKit
 import RealmSwift
 
-class ChatDetailViewController: UIViewController,InputViewDelegate {
+public let TextCell = "TextCell"
+public let LocationCell = "LocationCell"
+public let AudioCell = "AudioCell"
+public let ThumbImgCell = "ThumbImgCell"
+public let  VCardCell = "VCardCell"
+public let OtherFileCell = "OtherFileCell"
+public let RevokeCell = "RevokeCell"
+public var contetntKey = ""
+class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDelegate,UITableViewDataSource,BaseMessageCellTableViewCellDelegate {
     
     
     var  peerUserName:String = ""
@@ -47,11 +55,15 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
         isFirstLoad = true
         
         view.addSubview(self.commentView)
-       // view.addSubview(self.tableView)
+        view.addSubview(self.tableView)
         
         MessageManager.shareInstance.peerUserName = self.peerUserName
         
         getMessages()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keypadChanged), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keypadChanged), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         
     }
     
@@ -83,15 +95,29 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
    lazy var tableView:UITableView = {
         
     let chatDetailView = UITableView.init(frame: CGRect.zero, style: .plain)
-    
+       chatDetailView.register(TextMessageTableViewCell.self, forCellReuseIdentifier: TextCell)
+       chatDetailView.register(LoactionTableViewCell.self, forCellReuseIdentifier: LocationCell)
+       chatDetailView.register(AudioMessageTableViewCell.self, forCellReuseIdentifier: AudioCell)
+       chatDetailView.register(ThumbImageTableViewCell.self, forCellReuseIdentifier: ThumbImgCell)
+       chatDetailView.register(VCardMessageTableViewCell.self, forCellReuseIdentifier: VCardCell)
+      chatDetailView.register(OtherFiledMessageTableViewCell.self, forCellReuseIdentifier: OtherFileCell)
+      chatDetailView.register(RevokeMessageTableViewCell.self, forCellReuseIdentifier: RevokeCell)
+      chatDetailView.backgroundColor = RGBCOLOR(244, 244, 244, 1)
+      chatDetailView.delegate = self
+      chatDetailView.dataSource = self
+      chatDetailView.estimatedRowHeight = 0
+      chatDetailView.estimatedSectionFooterHeight = 0
+      chatDetailView.estimatedSectionHeaderHeight = 0
+      chatDetailView.separatorStyle = .none
+      chatDetailView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(tap)))
         
-    return chatDetailView
+      return chatDetailView
     }()
     
     lazy var commentView:InputView = {
         let inputView = InputView.init(frame: CGRect.zero)
-        inputView.addObserver(self, forKeyPath: "frame", options: .new, context: nil)
-        inputView.addObserver(self, forKeyPath: "center", options: .new, context: nil)
+        inputView.addObserver(self, forKeyPath: "frame", options: .new, context: &contetntKey)
+        inputView.addObserver(self, forKeyPath: "center", options: .new, context: &contetntKey)
         inputView.delegate = self
         return inputView
     }()
@@ -236,6 +262,207 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
         tableView.reloadData()
     }
     
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        if object == nil {
+            return
+        }
+        
+        if context == &contetntKey && ( keyPath == "frame" || keyPath == "center") {
+           
+            layoutAndAnimateMessageInputTextView(object as! UIView)
+        }
+    }
+    
+    func layoutAndAnimateMessageInputTextView( _ textView:UIView){
+        
+        var frame = self.tableView.frame
+        frame.size.height = textView.frame.origin.y
+        tableView.frame = frame
+        scrollToBottomWithAnimated(false)
+    }
+    
+    @objc func keypadChanged( _ notification:Notification){
+        
+        let userInfo = notification.userInfo
+        let value = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
+        let keyBoardEndY = value.cgRectValue.origin.y
+        let duration = userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
+        let rectOfStatusbar = UIApplication.shared.statusBarFrame
+        let rectOfNavigationbar = navigationController?.navigationBar.frame
+        let height = rectOfStatusbar.size.height + (rectOfNavigationbar?.size.height ?? 0)
+        
+        UIView.animate(withDuration: duration.doubleValue) {
+           
+            UIView.setAnimationBeginsFromCurrentState(true)
+            
+            //self.tableView.center = CGPoint(x: self.commentView.frame.origin.x, y: keyBoardEndY + (self.commentView.headHeight + InputMenuViewHeight)/2 - self.commentView.headHeight - height) 无法编译卡主 编译器无法判断类型
+            let center_inputMenuViewHeight = ((self.commentView.headHeight ?? 0) + InputMenuViewHeight)/2
+            
+            let centerY =  center_inputMenuViewHeight - (self.commentView.headHeight ?? 0) - height
+            
+            self.tableView.center = CGPoint(x: self.commentView.frame.origin.x, y: keyBoardEndY + centerY)
+            
+        }
+        
+
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return currentCount
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let index = (messageList?.count ?? 0) - currentCount + indexPath.row
+        
+        if index >= messageList?.count ?? 0 || index < 0 {
+             return UITableViewCell.init()
+        }
+        
+        let message = messageList?[index]
+        
+        if message?.state ==  .MessageItemStateRevoked {
+            let cell:RevokeMessageTableViewCell = tableView.dequeueReusableCell(withIdentifier: RevokeCell, for: indexPath) as! RevokeMessageTableViewCell
+            cell.configWithLayout(MessageLayoutManager.shareInstance.layoutDic[message?.imdnId ?? ""] as? RevokeLayout)
+            
+            return cell
+        }else{
+           // var cell:BaseMessageCellTableViewCell?
+            switch message?.messageType {
+            case .MessageItemTypeText:
+               let cell = tableView.dequeueReusableCell(withIdentifier: TextCell, for: indexPath) as! TextMessageTableViewCell
+              cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.imdnId ?? ""] as? TextLayout)
+                 cell.setDelegate(self, self.tableView)
+                  return cell
+              //  break
+                
+            case .MessageItemTypeImage:fallthrough
+            case .MessageItemTypeVideo:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ThumbImgCell, for: indexPath) as! ThumbImageTableViewCell
+              cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? ThumbImageLayout)
+                 cell.setDelegate(self, self.tableView)
+                  return cell
+                  //break
+            case .MessageItemTypeAudio:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ThumbImgCell, for: indexPath) as! AudioMessageTableViewCell
+               
+               let layout = MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? AudioLayout
+               cell.configWithLayou(layout)
+               cell.setDelegate(self, self.tableView)
+                    // 播放
+                if AudioPlayHelper.shareInstance.filePath == JRFileUtil.getAbsolutePathWithFileRelativePath(layout?.message?.filePath ?? "") && AudioPlayHelper.shareInstance.isPlaying ?? false {
+                    cell.startAniamtion()
+                }else{
+                    cell.stopAniamtion()
+                }
+                
+                 return cell
+                   // break
+                
+            case .MessageItemTypeVcard:
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: VCardCell, for: indexPath) as! CardMessageTableViewCell
+                cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? CardLayout)
+                     cell.setDelegate(self, self.tableView)
+                    return cell
+            case .MessageItemTypeGeo:
+                
+                 let cell = tableView.dequeueReusableCell(withIdentifier: LocationCell, for: indexPath) as! LoactionTableViewCell
+                cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? LoactionLayout)
+                    cell.setDelegate(self, self.tableView)
+                    return cell
+                
+            case .MessageItemTypeOtherFile:
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: OtherFileCell, for: indexPath) as! OtherFiledMessageTableViewCell
+               cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? OtherFileLayout)
+                   cell.setDelegate(self, self.tableView)
+                   return cell
+                
+                  
+            default:
+                break
+            }
+        }
+        
+        
+        
+        return UITableViewCell.init()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let index = (messageList?.count ?? 0) - currentCount + indexPath.row
+        
+        if index >= messageList?.count ?? 0 || index < 0 {
+             return 0
+        }
+        
+        let message = messageList?[index]
+        
+        if message?.state ==  .MessageItemStateRevoked  {
+             let layout = MessageLayoutManager.shareInstance.layoutDic[message?.imdnId ?? ""] as? RevokeLayout
+            return layout?.calculateCellHeight() ?? 0
+        }
+        
+        if message?.messageType == .MessageItemTypeText {
+            let layout = MessageLayoutManager.shareInstance.layoutDic[message?.imdnId ?? ""] as? TextLayout
+            return layout?.calculateCellHeight() ?? 0
+        }else{
+            let layout = MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? BaseBubbleLayout
+             return layout?.calculateCellHeight() ?? 0
+            
+        }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        tap(nil)
+        
+    }
+    
+    
+    /// MessageCell Delegate
+    
+    func tableView(_ tableView: UITableView?, tapMessageCellContent message: ChatMessageObject?) {
+        
+        isDelectMessage = false
+        
+        if message?.messageType == .MessageItemTypeVideo || message?.messageType == .MessageItemTypeImage || message?.messageType == .MessageItemTypeOtherFile {
+            // 视频播放
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView?, tapMessageCellState message: ChatMessageObject?) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView?, tapMessageCellAvator message: ChatMessageObject?) {
+        
+        isDelectMessage = true
+    }
+    
+    
+    func tableView(_ tableView: UITableView?, revokeMessage message: ChatMessageObject?) {
+        
+    }
+    
+    
+    func tableView(_ tableView: UITableView?, complainMessage message: ChatMessageObject?) {
+        
+    }
+    
+    
+    func tableView(_ tableView: UITableView?, acceptExchangeVCard message: ChatMessageObject?) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView?, deletSMS message: ChatMessageObject?) {
+        
+    }
+    
     ///  InputViewDelegate
     func menuViewHide() {
         
@@ -266,7 +493,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
     }
     
     func didBeginEditing() {
-        
+        scrollToBottomWithAnimated(false)
     }
     
     func sendMessage(_ message: String?) {
@@ -299,6 +526,12 @@ class ChatDetailViewController: UIViewController,InputViewDelegate {
     
     func didVoiceRecordRecordTimeBig(_ button: ChatVoiceRecordButton) {
         
+    }
+    
+    @objc func tap(_ getTap:UITapGestureRecognizer?){
+        
+        view.endEditing(true)
+        menuViewHide()
     }
     
     deinit {

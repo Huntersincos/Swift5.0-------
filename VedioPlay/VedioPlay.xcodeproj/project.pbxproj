@@ -7,12 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E068DDE253D58F600E7E3EA /* CardMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E068DDD253D58F600E7E3EA /* CardMessageTableViewCell.swift */; };
 		6E16788624F3C1F400DD6863 /* SwiftLoadImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */; };
 		6E16788824F3C25600DD6863 /* SDWebImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788724F3C25600DD6863 /* SDWebImageManager.swift */; };
 		6E16788C24F4E62D00DD6863 /* SDImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788B24F4E62C00DD6863 /* SDImageCache.swift */; };
 		6E2616D325246A3500034CC6 /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2616D125246A3500034CC6 /* ChatListTableViewCell.swift */; };
 		6E2616D425246A3500034CC6 /* ChatListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E2616D225246A3500034CC6 /* ChatListTableViewCell.xib */; };
 		6E2616D7252472EA00034CC6 /* img_greenman_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E2616D6252472EA00034CC6 /* img_greenman_nor.png */; };
+		6E3795292539786600285D04 /* TextMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3795282539786600285D04 /* TextMessageTableViewCell.swift */; };
+		6E37952B2539821700285D04 /* LoactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E37952A2539821700285D04 /* LoactionTableViewCell.swift */; };
+		6E37952D253985CF00285D04 /* AudioMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E37952C253985CF00285D04 /* AudioMessageTableViewCell.swift */; };
+		6E37952F25398E4500285D04 /* ThumbImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E37952E25398E4500285D04 /* ThumbImageTableViewCell.swift */; };
+		6E3795312539939200285D04 /* VCardMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3795302539939200285D04 /* VCardMessageTableViewCell.swift */; };
+		6E3795332539961800285D04 /* OtherFiledMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3795322539961800285D04 /* OtherFiledMessageTableViewCell.swift */; };
+		6E3795352539986F00285D04 /* RevokeMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3795342539986F00285D04 /* RevokeMessageTableViewCell.swift */; };
 		6E38C4CE251D9E2E00201C05 /* OtherClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E38C4CD251D9E2E00201C05 /* OtherClassViewController.swift */; };
 		6E4C3B6F252081890019A6EB /* LoadURLImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E4C3B6D252081890019A6EB /* LoadURLImageViewController.xib */; };
 		6E4C3B74252083D90019A6EB /* LoadURLImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4C3B73252083D90019A6EB /* LoadURLImageViewController.swift */; };
@@ -166,12 +174,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6E068DDD253D58F600E7E3EA /* CardMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardMessageTableViewCell.swift; sourceTree = "<group>"; };
 		6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLoadImageModel.swift; sourceTree = "<group>"; };
 		6E16788724F3C25600DD6863 /* SDWebImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageManager.swift; sourceTree = "<group>"; };
 		6E16788B24F4E62C00DD6863 /* SDImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDImageCache.swift; sourceTree = "<group>"; };
 		6E2616D125246A3500034CC6 /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		6E2616D225246A3500034CC6 /* ChatListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatListTableViewCell.xib; sourceTree = "<group>"; };
 		6E2616D6252472EA00034CC6 /* img_greenman_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_greenman_nor.png; sourceTree = "<group>"; };
+		6E3795282539786600285D04 /* TextMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageTableViewCell.swift; sourceTree = "<group>"; };
+		6E37952A2539821700285D04 /* LoactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoactionTableViewCell.swift; sourceTree = "<group>"; };
+		6E37952C253985CF00285D04 /* AudioMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessageTableViewCell.swift; sourceTree = "<group>"; };
+		6E37952E25398E4500285D04 /* ThumbImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbImageTableViewCell.swift; sourceTree = "<group>"; };
+		6E3795302539939200285D04 /* VCardMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCardMessageTableViewCell.swift; sourceTree = "<group>"; };
+		6E3795322539961800285D04 /* OtherFiledMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherFiledMessageTableViewCell.swift; sourceTree = "<group>"; };
+		6E3795342539986F00285D04 /* RevokeMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeMessageTableViewCell.swift; sourceTree = "<group>"; };
 		6E38C4CD251D9E2E00201C05 /* OtherClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherClassViewController.swift; sourceTree = "<group>"; };
 		6E4C3B6D252081890019A6EB /* LoadURLImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadURLImageViewController.xib; sourceTree = "<group>"; };
 		6E4C3B73252083D90019A6EB /* LoadURLImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadURLImageViewController.swift; sourceTree = "<group>"; };
@@ -497,6 +513,14 @@
 				6EE8F66525276D0300B9FEFD /* InputView.swift */,
 				6E4E5EEF2530319500A1F317 /* ChatVoiceRecordButton.swift */,
 				6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */,
+				6E3795282539786600285D04 /* TextMessageTableViewCell.swift */,
+				6E37952A2539821700285D04 /* LoactionTableViewCell.swift */,
+				6E37952C253985CF00285D04 /* AudioMessageTableViewCell.swift */,
+				6E37952E25398E4500285D04 /* ThumbImageTableViewCell.swift */,
+				6E3795302539939200285D04 /* VCardMessageTableViewCell.swift */,
+				6E3795322539961800285D04 /* OtherFiledMessageTableViewCell.swift */,
+				6E3795342539986F00285D04 /* RevokeMessageTableViewCell.swift */,
+				6E068DDD253D58F600E7E3EA /* CardMessageTableViewCell.swift */,
 			);
 			path = IMChatView;
 			sourceTree = "<group>";
@@ -940,10 +964,14 @@
 				6EE8F65F252596A900B9FEFD /* ChatDetailViewController.swift in Sources */,
 				6E4EDCC92536E36E003DE1CC /* OtherFileLayout.swift in Sources */,
 				6E4EDCD125380A1C003DE1CC /* BaseMessageCellTableViewCell.swift in Sources */,
+				6E3795312539939200285D04 /* VCardMessageTableViewCell.swift in Sources */,
 				6E92756024F7B6C8009F5D63 /* FMUtil.m in Sources */,
+				6E068DDE253D58F600E7E3EA /* CardMessageTableViewCell.swift in Sources */,
+				6E37952D253985CF00285D04 /* AudioMessageTableViewCell.swift in Sources */,
 				6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */,
 				6E6540812531A0AB00326634 /* MessageManager.swift in Sources */,
 				6E604AB425232399009D5D1F /* ListConversationObject.swift in Sources */,
+				6E37952F25398E4500285D04 /* ThumbImageTableViewCell.swift in Sources */,
 				6EC3A4D324C43F5800B7FD3D /* AudioPlayHelper.swift in Sources */,
 				6E92755C24F7B6C8009F5D63 /* FMDatabaseAdditions.m in Sources */,
 				6EB5D40424989E5A008DA35A /* AJPhotoListCellTapView.swift in Sources */,
@@ -956,11 +984,14 @@
 				6E4C3B74252083D90019A6EB /* LoadURLImageViewController.swift in Sources */,
 				6EE8F66625276D0300B9FEFD /* InputView.swift in Sources */,
 				6E4EDCA425359517003DE1CC /* ThumbImageLayout.swift in Sources */,
+				6E3795292539786600285D04 /* TextMessageTableViewCell.swift in Sources */,
 				6E97271425134AC70075F2A9 /* SDWebImageCombinedOperation.swift in Sources */,
 				6EE8F664252756DD00B9FEFD /* MessageDBHelper.swift in Sources */,
+				6E37952B2539821700285D04 /* LoactionTableViewCell.swift in Sources */,
 				6E4EDCA825359BB9003DE1CC /* AudioLayout.swift in Sources */,
 				6E38C4CE251D9E2E00201C05 /* OtherClassViewController.swift in Sources */,
 				6E4E5F122530581300A1F317 /* EmojiTransport.m in Sources */,
+				6E3795332539961800285D04 /* OtherFiledMessageTableViewCell.swift in Sources */,
 				6E4EDCC02535A533003DE1CC /* LoactionLayout.swift in Sources */,
 				6E9B3C1024FF8A4B00C161C2 /* DBHerlper.swift in Sources */,
 				6E96D3BC2505D9C400EA3486 /* URLVedioViewController.swift in Sources */,
@@ -970,6 +1001,7 @@
 				6EB79A352493768700B56296 /* BaseNavViewController.swift in Sources */,
 				6E8F87C424B6F6DC00C85D12 /* JRFileUtil.swift in Sources */,
 				6E4E5F0F2530581300A1F317 /* EmojiEmoticons.m in Sources */,
+				6E3795352539986F00285D04 /* RevokeMessageTableViewCell.swift in Sources */,
 				6E4E5F102530581300A1F317 /* EmojiMapSymbols.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

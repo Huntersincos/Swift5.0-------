@@ -40,35 +40,35 @@ class MessageLayoutManager: NSObject {
         case .MessageItemTypeVideo:
             let thumblLayout = ThumbImageLayout.init()
             thumblLayout.configWithMessage(message, showTime, true)
-            self.layoutDic[message.imdnId] = thumblLayout
+            self.layoutDic[message.transId] = thumblLayout
             break
         
         case .MessageItemTypeAudio:
             
             let audioLayout = AudioLayout.init()
             audioLayout.configWithMessage(message, showTime, true)
-            self.layoutDic[message.imdnId] = audioLayout
+            self.layoutDic[message.transId] = audioLayout
             break
             
         case .MessageItemTypeGeo:
             
             let geoLayout = AudioLayout.init()
              geoLayout.configWithMessage(message, showTime, true)
-            self.layoutDic[message.imdnId] = geoLayout
+            self.layoutDic[message.transId] = geoLayout
             break
             
         case .MessageItemTypeVcard:
             
             let vcardLayout = CardLayout.init()
              vcardLayout.configWithMessage(message, showTime, true)
-            self.layoutDic[message.imdnId] = vcardLayout
+            self.layoutDic[message.transId] = vcardLayout
             break
             
         case .MessageItemTypeOtherFile:
             
             let otherFileLayout = OtherFileLayout.init()
             otherFileLayout.configWithMessage(message, showTime, true)
-            self.layoutDic[message.imdnId] = otherFileLayout
+            self.layoutDic[message.transId] = otherFileLayout
            break
           default:
             break

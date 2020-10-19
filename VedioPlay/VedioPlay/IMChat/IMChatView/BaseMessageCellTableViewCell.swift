@@ -10,19 +10,19 @@ import UIKit
 
 @objc protocol BaseMessageCellTableViewCellDelegate{
     
-    @objc optional func tableView(_ tableView:UITableView , tapMessageCellContent message:ChatMessageObject)
+    @objc optional func tableView(_ tableView:UITableView? , tapMessageCellContent message:ChatMessageObject?)
     
-     @objc optional func tableView(_ tableView:UITableView , tapMessageCellState message:ChatMessageObject)
+     @objc optional func tableView(_ tableView:UITableView? , tapMessageCellState message:ChatMessageObject?)
     
-     @objc optional func tableView(_ tableView:UITableView , tapMessageCellAvator message:ChatMessageObject)
+     @objc optional func tableView(_ tableView:UITableView? , tapMessageCellAvator message:ChatMessageObject?)
     
-    @objc optional func tableView(_ tableView:UITableView , revokeMessage message:ChatMessageObject)
+    @objc optional func tableView(_ tableView:UITableView? , revokeMessage message:ChatMessageObject?)
     
-    @objc optional func tableView(_ tableView:UITableView , acceptExchangeVCard message:ChatMessageObject)
+    @objc optional func tableView(_ tableView:UITableView? , acceptExchangeVCard message:ChatMessageObject?)
     
-    @objc optional func tableView(_ tableView:UITableView , complainMessage message:ChatMessageObject)
+    @objc optional func tableView(_ tableView:UITableView? , complainMessage message:ChatMessageObject?)
     
-    @objc optional func tableView(_ tableView:UITableView , sendSMS message:ChatMessageObject)
+    @objc optional func tableView(_ tableView:UITableView?, deletSMS message:ChatMessageObject?)
     
 }
 
@@ -137,18 +137,23 @@ class BaseMessageCellTableViewCell: UITableViewCell {
     }
     
     
+    func setDelegate(_ delegate:Optional<BaseMessageCellTableViewCellDelegate>,_ tableView:UITableView?){
+        
+        self.delegate = delegate
+        wTableView = tableView
+        
+    }
     
     @objc func tapAvator(){
-        
-        
+        delegate?.tableView?(wTableView, tapMessageCellAvator: layout?.message)
     }
     
     @objc func tapState(){
-        
+        delegate?.tableView?(wTableView, tapMessageCellState: layout?.message)
     }
      
     @objc func tapContent(){
-        
+        delegate?.tableView?(wTableView, tapMessageCellContent: layout?.message)
     }
     
     @objc func setupNormalMenuController(_ longPressGestureRecognizer:UILongPressGestureRecognizer){
@@ -161,7 +166,7 @@ class BaseMessageCellTableViewCell: UITableViewCell {
             let menu = UIMenuController.shared
             let deletItem = UIMenuItem.init(title: NSLocalizedString("DELETMESSAGE",tableName: nil, comment: ""), action: #selector(deletedClick))
             let revokeItem = UIMenuItem.init(title: NSLocalizedString("Revoke",tableName: nil, comment: ""), action: #selector(revoke))
-            if layout?.message?.state == .MessageItemStateReceiveOK  || layout?.message?.state == .MessageItemStateRead  || layout?.message?.state == .MessageItemStateDelivered{
+            if layout?.message?.state == .MessageItemStateSendOK  || layout?.message?.state == .MessageItemStateRead  || layout?.message?.state == .MessageItemStateDelivered{
                 menu.menuItems = [revokeItem,deletItem]
             }
             
@@ -182,17 +187,50 @@ class BaseMessageCellTableViewCell: UITableViewCell {
         return true
     }
     
-//    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-//
-//    }
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+       
+        if layout?.message?.messageType ==  .MessageItemTypeText  {
+            if layout?.message?.state == .MessageItemStateSendOK  || layout?.message?.state == .MessageItemStateRead  || layout?.message?.state == .MessageItemStateDelivered{
+                return action == #selector(copyMessage) ||  action == #selector(revoke) || action == #selector(deletedClick)
+            }else if layout?.message?.state == .MessageItemStateReceiveOK {
+                return action ==  #selector(copyMessage) || action == #selector(deletedClick) || action == #selector(complain)
+            }
+        }else if layout?.message?.messageType == .MessageItemTypeGeo{
+            if layout?.message?.state == .MessageItemStateSendOK  || layout?.message?.state == .MessageItemStateRead  || layout?.message?.state == .MessageItemStateDelivered{
+                return  action == #selector(revoke) || action == #selector(deletedClick)
+            }else if layout?.message?.state == .MessageItemStateReceiveOK {
+                return action ==  #selector(copyMessage) || action == #selector(deletedClick) || action == #selector(complain)
+            }
+        }else{
+            
+            if layout?.message?.state == .MessageItemStateSendOK  || layout?.message?.state == .MessageItemStateRead  || layout?.message?.state == .MessageItemStateDelivered{
+                 
+                return  action == #selector(revoke) || action == #selector(deletedClick)
+                
+               }else if layout?.message?.state == .MessageItemStateReceiveOK {
+                   return action ==  #selector(copyMessage) || action == #selector(deletedClick) || action == #selector(complain)
+              }
+            
+        }
+        
+        return false
+    }
     
     @objc func deletedClick() {
-        
+        delegate?.tableView?(wTableView, deletSMS: layout?.message)
     }
     
     
     @objc func revoke(){
-        
+        delegate?.tableView?(wTableView , revokeMessage: layout?.message)
+    }
+    
+    @objc func copyMessage(){
+        UIPasteboard.general.string = layout?.message?.content
+    }
+    
+    @objc func complain(){
+        delegate?.tableView?(wTableView , complainMessage: layout?.message)
     }
     
     required init?(coder: NSCoder) {

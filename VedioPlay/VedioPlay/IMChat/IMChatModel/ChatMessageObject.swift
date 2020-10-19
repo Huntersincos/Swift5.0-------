@@ -36,6 +36,9 @@ public enum JRMessageItemState:Int{
     
     /// 消息已读
     case MessageItemStateRead
+    
+    /// 发送成功
+    case MessageItemStateSendOK
 }
 
 public enum JRMessageItemType:Int{
@@ -126,6 +129,10 @@ class ChatMessageObject: Object {
     /// 文件大小
     
     @objc dynamic var fileSize = 0.0
+    
+    /// 传输唯一标识符
+    
+    @objc dynamic var transId = ""
     
     
     

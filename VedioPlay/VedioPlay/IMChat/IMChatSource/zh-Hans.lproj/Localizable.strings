@@ -23,3 +23,4 @@
 "REVOKED" = "对方撤销了一条消息";
 "DELETMESSAGE" = "删除";
 "Revoke" = "撤销";
+"AGREE" = "同意交换";
