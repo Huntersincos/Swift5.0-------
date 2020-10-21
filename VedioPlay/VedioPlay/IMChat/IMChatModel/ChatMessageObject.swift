@@ -79,22 +79,71 @@ class ChatMessageObject: Object {
     @objc dynamic var senderName = ""
     
     /// 消息渠道
-    var channelType:MessageChannelType = .MessageChannelType1On1
+    /// 默认存储s属性无法写入realm
+   // var channelType:MessageChannelType = .MessageChannelType1On1
+    // 这种写法也不行dynamic var channelType:MessageChannelType = .MessageChannelType1On1
+    // 实现get 和set 方法
+    
+    @objc dynamic private var channelPrivate = 0
+    
+    var channelType:MessageChannelType?{
+        get{
+            return MessageChannelType(rawValue: channelPrivate)
+        }
+        
+        set{
+            
+            channelPrivate = newValue?.rawValue ?? 0
+            
+        }
+    }
+    
+    /// dynamic  var  state:JRMessageItemState = .MessageItemStateInit
+    
+    
+    @objc dynamic private var statePrivate = 0
+       
+     var state:JRMessageItemState?{
+       get{
+           return JRMessageItemState(rawValue: statePrivate)
+       }
+       
+       set{
+           
+           statePrivate = newValue?.rawValue ?? 0
+           
+       }
+   }
     
     /// 消息状态
-    var state:JRMessageItemState = .MessageItemStateInit
+    //var state:JRMessageItemState = .MessageItemStateInit
     
     /// 是否@
     @objc dynamic var isAtMsg = false
     
     /// 消息类型
-    var messageType:JRMessageItemType = .MessageItemTypeUnknow
+   ///dynamic  var messageType:JRMessageItemType = .MessageItemTypeUnknow
+    
+    @objc dynamic private var messageTypePrivate = 0
+    
+    var messageType:JRMessageItemType?{
+        
+        get{
+            return JRMessageItemType(rawValue: messageTypePrivate)
+        }
+        
+        set{
+            messageTypePrivate = newValue?.rawValue ?? 0
+        }
+    }
+    
+    
     
     /// 文本内容
     @objc dynamic var content = ""
     
     /// 消息时间戳
-    @objc dynamic var timestamp:NSString = ""
+    @objc dynamic var timestamp = ""
     
     /// 消息唯一标识符
     
@@ -102,7 +151,7 @@ class ChatMessageObject: Object {
     
     /// 消息传输方向
     
-    var messageTranDirection:MessageItemDirection = .MessagirectionSend
+    dynamic var messageTranDirection:MessageItemDirection = .MessagirectionSend
     
     /// 是否抄送
     @objc dynamic var isCarbonCopy = false
@@ -134,6 +183,27 @@ class ChatMessageObject: Object {
     
     @objc dynamic var transId = ""
     
+    
+    /// 文本字体大小
+    
+    @objc dynamic var font = ""
+    
+    /// 接收用户名
+    @objc dynamic var receiverUserName = ""
+    
+    ///发送用户名
+    
+    @objc dynamic var peerUserName = ""
+    
+    
+    /// 会话id
+    
+    @objc dynamic var conversationId = ""
+    
+    
+    override class func primaryKey() -> String? {
+        return "imdnId"
+    }
     
     
     

@@ -61,10 +61,10 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
     var otherFileBtn:UIButton?
     var menuView:UIView?
     var emojiPageView:HBEmojiPageView?
-    var isMenuViewShow:Bool?
+    var isMenuViewShow = false
     var isFirstLayout:Bool?
     weak var delegate:InputViewDelegate?
-    var headHeight:CGFloat?
+    var headHeight:CGFloat = 0
     var inputViewHeight:CGFloat?
     
    
@@ -116,7 +116,7 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
             self.addSubview(audioBtn!)
         }
         
-        if audioBtn == nil{
+        if emojiBtn == nil{
            emojiBtn = UIButton.init(type: .custom)
            emojiBtn?.setImage(UIImage.init(named: "btn_smile_nor"), for: .normal)
            emojiBtn?.setImage(UIImage.init(named: "btn_smile_pre"), for: .highlighted)
@@ -205,7 +205,7 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
     
         inputTextView?.frame = CGRect(x: (audioBtn?.frame.maxX ?? 0) + 8, y: 9, width: self.frame.size.width - ((audioBtn?.frame.maxX ?? 0) + 56), height: self.frame.size.height-InputMenuViewHeight-55)
         
-        placeHolderLabel?.frame = CGRect(x: inputTextView?.frame.maxX ?? 0 + kKeyboardX , y: 9, width: inputTextView?.frame.width ?? 0, height: inputTextView?.frame.height ?? 0)
+        placeHolderLabel?.frame = CGRect(x: inputTextView?.frame.minX ?? 0 + kKeyboardX , y: 9, width: inputTextView?.frame.width ?? 0, height: inputTextView?.frame.height ?? 0)
         
         recordBtn?.frame = inputTextView?.frame ?? CGRect.zero
         
@@ -216,7 +216,7 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
         emojiPageView?.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: InputMenuViewHeight)
         
         let  margin = (self.frame.size.width - 40*5)/7.0
-        photoBtn?.frame = CGRect(x: margin, y: (inputTextView?.frame.maxX ?? 0) + 3, width: 40, height: 40)
+        photoBtn?.frame = CGRect(x: margin, y: (inputTextView?.frame.maxY ?? 0) + 3, width: 40, height: 40)
         
         cameraBtn?.frame = CGRect(x: (photoBtn?.frame.maxX ?? 0) + margin, y: photoBtn?.frame.minY ?? 0, width: 40, height: 40)
         
@@ -236,7 +236,7 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
           sizeThatFits:会计算出最优的 size 但是不会改变 自己的 size
          */
       
-        let textSize = inputTextView?.sizeThatFits(CGSize(width: inputTextView?.frame.maxX ?? 0, height: CGFloat(MAXFLOAT)))
+        let textSize = inputTextView?.sizeThatFits(CGSize(width: inputTextView?.frame.width ?? 0, height: CGFloat(MAXFLOAT)))
         let  offset:CGFloat = 10
         
         /// 有误差 error
@@ -264,10 +264,11 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
         let context = UIGraphicsGetCurrentContext()
         context?.setLineCap(CGLineCap.square)
         context?.setLineWidth(2.0)
-        context?.setStrokeColor(red: 244.0, green: 74.0, blue: 79.0, alpha: 1.0)
+       // context?.setStrokeColor(red: 244.0, green: 74.0, blue: 79.0, alpha: 1.0)
+         context?.setStrokeColor(red: 244.0, green: 0.0, blue: 0.0, alpha: 1.0)
         context?.beginPath()
         context?.move(to: CGPoint(x: 5, y: 0))
-        context?.addLine(to: CGPoint(x: self.frame.size.height - 10, y: 0))
+        context?.addLine(to: CGPoint(x: self.frame.size.width - 10, y: 0))
         context?.strokePath()
          
     }

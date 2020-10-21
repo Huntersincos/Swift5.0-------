@@ -42,7 +42,7 @@ class ChatListTableViewCell: UITableViewCell {
                     return
                 }
                 for item in (conversation?.getAllMessages())! {
-                    let obj_c =  item.senderName
+                    let obj_c =  item.peerUserName
                     self.titleLabel.text  = obj_c
                     break;
                 }

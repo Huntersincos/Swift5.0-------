@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37CB48C756E6E801A25C17FE /* Pods_VedioPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C23E4F4D92038BB5C8951 /* Pods_VedioPlay.framework */; };
 		6E068DDE253D58F600E7E3EA /* CardMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E068DDD253D58F600E7E3EA /* CardMessageTableViewCell.swift */; };
 		6E16788624F3C1F400DD6863 /* SwiftLoadImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */; };
 		6E16788824F3C25600DD6863 /* SDWebImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16788724F3C25600DD6863 /* SDWebImageManager.swift */; };
@@ -51,7 +52,6 @@
 		6E4EDCA425359517003DE1CC /* ThumbImageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */; };
 		6E4EDCA625359715003DE1CC /* btn_play@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA525359715003DE1CC /* btn_play@2x..png */; };
 		6E4EDCA825359BB9003DE1CC /* AudioLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */; };
-		6E4EDCAA2535A048003DE1CC /* msg-location-current@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA92535A048003DE1CC /* msg-location-current@2x.png */; };
 		6E4EDCAC2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */; };
 		6E4EDCAE2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */; };
 		6E4EDCB32535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */; };
@@ -70,15 +70,12 @@
 		6E4EDCD125380A1C003DE1CC /* BaseMessageCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */; };
 		6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */; };
 		6E604A992522E537009D5D1F /* RealmInitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604A982522E537009D5D1F /* RealmInitModel.swift */; };
-		6E604AA52522EDC9009D5D1F /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E604AA32522EDBC009D5D1F /* RealmSwift.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		6E604AA62522EDC9009D5D1F /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E604AA42522EDC9009D5D1F /* Realm.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		6E604AAA25231D09009D5D1F /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604AA925231D09009D5D1F /* ChatListViewController.swift */; };
 		6E604AAF25231FC7009D5D1F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E604AB125231FC7009D5D1F /* Localizable.strings */; };
 		6E604AB425232399009D5D1F /* ListConversationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604AB325232399009D5D1F /* ListConversationObject.swift */; };
 		6E604AB6252327FE009D5D1F /* ChatMessageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604AB5252327FE009D5D1F /* ChatMessageObject.swift */; };
 		6E65407A253060F700326634 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E654079253060F700326634 /* UIImage+Tint.m */; };
 		6E65407C2530646400326634 /* textNor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E65407B2530646400326634 /* textNor@2x.png */; };
-		6E65407E2530649800326634 /* btn_voice_pre@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6E65407D2530649800326634 /* btn_voice_pre@2x..png */; };
 		6E6540812531A0AB00326634 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6540802531A0AB00326634 /* MessageManager.swift */; };
 		6E699BAC2499F3FF0065115C /* AJGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E699BAB2499F3FF0065115C /* AJGradientView.swift */; };
 		6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = 6E882B8B24A84AF80001710C /* viedio.MP4 */; };
@@ -150,10 +147,10 @@
 		6EE8F66225274FD400B9FEFD /* avatar_group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66125274FD400B9FEFD /* avatar_group@2x.png */; };
 		6EE8F664252756DD00B9FEFD /* MessageDBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE8F663252756DD00B9FEFD /* MessageDBHelper.swift */; };
 		6EE8F66625276D0300B9FEFD /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE8F66525276D0300B9FEFD /* InputView.swift */; };
-		6EE8F669252A029700B9FEFD /* btn_voice_nor@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F668252A029700B9FEFD /* btn_voice_nor@2x..png */; };
-		6EE8F66B252A037F00B9FEFD /* btn_voice_pre@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66A252A037F00B9FEFD /* btn_voice_pre@2x..png */; };
-		6EE8F66D252A03B200B9FEFD /* btn_smile_nor@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66C252A03B200B9FEFD /* btn_smile_nor@2x..png */; };
-		6EE8F66F252A03CB00B9FEFD /* btn_smile_pre@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66E252A03CB00B9FEFD /* btn_smile_pre@2x..png */; };
+		6EE8F669252A029700B9FEFD /* btn_voice_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F668252A029700B9FEFD /* btn_voice_nor@2x.png */; };
+		6EE8F66B252A037F00B9FEFD /* btn_voice_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66A252A037F00B9FEFD /* btn_voice_pre@2x.png */; };
+		6EE8F66D252A03B200B9FEFD /* btn_smile_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66C252A03B200B9FEFD /* btn_smile_nor@2x.png */; };
+		6EE8F66F252A03CB00B9FEFD /* btn_smile_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EE8F66E252A03CB00B9FEFD /* btn_smile_pre@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,6 +171,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		089C23E4F4D92038BB5C8951 /* Pods_VedioPlay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VedioPlay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E068DDD253D58F600E7E3EA /* CardMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardMessageTableViewCell.swift; sourceTree = "<group>"; };
 		6E16788524F3C1F400DD6863 /* SwiftLoadImageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLoadImageModel.swift; sourceTree = "<group>"; };
 		6E16788724F3C25600DD6863 /* SDWebImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageManager.swift; sourceTree = "<group>"; };
@@ -227,7 +225,6 @@
 		6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbImageLayout.swift; sourceTree = "<group>"; };
 		6E4EDCA525359715003DE1CC /* btn_play@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_play@2x..png"; sourceTree = "<group>"; };
 		6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLayout.swift; sourceTree = "<group>"; };
-		6E4EDCA92535A048003DE1CC /* msg-location-current@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "msg-location-current@2x.png"; path = "../../../../../../../Users/wenze/Documents/5.04Branch/MobileEhallGuangxiTwo_6.01【小版本】/MobileEhallGuangxiTwo/RCS_HeFeiXin/IM/Image/msg-location-current@2x.png"; sourceTree = "<group>"; };
 		6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying@2x.png"; sourceTree = "<group>"; };
 		6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying@2x.png"; sourceTree = "<group>"; };
 		6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying000@2x.png"; sourceTree = "<group>"; };
@@ -246,8 +243,6 @@
 		6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMessageCellTableViewCell.swift; sourceTree = "<group>"; };
 		6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVVedioPlayView.swift; sourceTree = "<group>"; };
 		6E604A982522E537009D5D1F /* RealmInitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmInitModel.swift; sourceTree = "<group>"; };
-		6E604AA32522EDBC009D5D1F /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
-		6E604AA42522EDC9009D5D1F /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
 		6E604AA925231D09009D5D1F /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
 		6E604AAB25231EB5009D5D1F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		6E604AAC25231EB8009D5D1F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -258,7 +253,6 @@
 		6E654078253060F600326634 /* UIImage+Tint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Tint.h"; sourceTree = "<group>"; };
 		6E654079253060F700326634 /* UIImage+Tint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Tint.m"; sourceTree = "<group>"; };
 		6E65407B2530646400326634 /* textNor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textNor@2x.png"; sourceTree = "<group>"; };
-		6E65407D2530649800326634 /* btn_voice_pre@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_voice_pre@2x..png"; path = "../../../../../../../../../Users/wenze/Documents/5.04Branch/MobileEhallGuangxiTwo_6.01【小版本】/MobileEhallGuangxiTwo/RCS_HeFeiXin/IM/Image/btn_voice_pre@2x..png"; sourceTree = "<group>"; };
 		6E6540802531A0AB00326634 /* MessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
 		6E699BAB2499F3FF0065115C /* AJGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AJGradientView.swift; sourceTree = "<group>"; };
 		6E882B8B24A84AF80001710C /* viedio.MP4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = viedio.MP4; sourceTree = "<group>"; };
@@ -344,10 +338,12 @@
 		6EE8F66125274FD400B9FEFD /* avatar_group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_group@2x.png"; sourceTree = "<group>"; };
 		6EE8F663252756DD00B9FEFD /* MessageDBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDBHelper.swift; sourceTree = "<group>"; };
 		6EE8F66525276D0300B9FEFD /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
-		6EE8F668252A029700B9FEFD /* btn_voice_nor@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_voice_nor@2x..png"; sourceTree = "<group>"; };
-		6EE8F66A252A037F00B9FEFD /* btn_voice_pre@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_voice_pre@2x..png"; sourceTree = "<group>"; };
-		6EE8F66C252A03B200B9FEFD /* btn_smile_nor@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_smile_nor@2x..png"; sourceTree = "<group>"; };
-		6EE8F66E252A03CB00B9FEFD /* btn_smile_pre@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_smile_pre@2x..png"; sourceTree = "<group>"; };
+		6EE8F668252A029700B9FEFD /* btn_voice_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_voice_nor@2x.png"; sourceTree = "<group>"; };
+		6EE8F66A252A037F00B9FEFD /* btn_voice_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_voice_pre@2x.png"; sourceTree = "<group>"; };
+		6EE8F66C252A03B200B9FEFD /* btn_smile_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_smile_nor@2x.png"; sourceTree = "<group>"; };
+		6EE8F66E252A03CB00B9FEFD /* btn_smile_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_smile_pre@2x.png"; sourceTree = "<group>"; };
+		B0FDA243ED7F1E9BD5BB4BF1 /* Pods-VedioPlay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VedioPlay.debug.xcconfig"; path = "Target Support Files/Pods-VedioPlay/Pods-VedioPlay.debug.xcconfig"; sourceTree = "<group>"; };
+		C732AA53F14184B89B0C3A88 /* Pods-VedioPlay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VedioPlay.release.xcconfig"; path = "Target Support Files/Pods-VedioPlay/Pods-VedioPlay.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -355,10 +351,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E604AA62522EDC9009D5D1F /* Realm.framework in Frameworks */,
 				6E97C95C24D3FAE500D4CFB1 /* MapKit.framework in Frameworks */,
 				6E8D79B024AF27F000974FFC /* CoreServices.framework in Frameworks */,
-				6E604AA52522EDC9009D5D1F /* RealmSwift.framework in Frameworks */,
+				37CB48C756E6E801A25C17FE /* Pods_VedioPlay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,17 +397,16 @@
 			children = (
 				6E2616D6252472EA00034CC6 /* img_greenman_nor.png */,
 				6EE8F66125274FD400B9FEFD /* avatar_group@2x.png */,
-				6EE8F66A252A037F00B9FEFD /* btn_voice_pre@2x..png */,
-				6EE8F668252A029700B9FEFD /* btn_voice_nor@2x..png */,
-				6EE8F66C252A03B200B9FEFD /* btn_smile_nor@2x..png */,
-				6EE8F66E252A03CB00B9FEFD /* btn_smile_pre@2x..png */,
+				6EE8F66A252A037F00B9FEFD /* btn_voice_pre@2x.png */,
+				6EE8F668252A029700B9FEFD /* btn_voice_nor@2x.png */,
+				6EE8F66C252A03B200B9FEFD /* btn_smile_nor@2x.png */,
+				6EE8F66E252A03CB00B9FEFD /* btn_smile_pre@2x.png */,
 				6E4E5EF125304DA600A1F317 /* message_location@2x.png */,
 				6E4E5EF325304E7F00A1F317 /* message_photo@2x.png */,
 				6E4E5EF525304ED900A1F317 /* message_camera@2x.png */,
 				6E4E5EF725304F6900A1F317 /* message_card@2x.png */,
 				6E4E5EF92530503200A1F317 /* message_file@2x.png */,
 				6E65407B2530646400326634 /* textNor@2x.png */,
-				6E65407D2530649800326634 /* btn_voice_pre@2x..png */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -489,8 +483,6 @@
 			children = (
 				6E4E5EFB2530581300A1F317 /* EmotionView */,
 				6E2616D5252472DF00034CC6 /* images */,
-				6E604AA42522EDC9009D5D1F /* Realm.framework */,
-				6E604AA32522EDBC009D5D1F /* RealmSwift.framework */,
 				6E604AB125231FC7009D5D1F /* Localizable.strings */,
 			);
 			path = IMChatSource;
@@ -530,6 +522,7 @@
 			children = (
 				6E97C95B24D3FAE400D4CFB1 /* MapKit.framework */,
 				6E8D79AF24AF27F000974FFC /* CoreServices.framework */,
+				089C23E4F4D92038BB5C8951 /* Pods_VedioPlay.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -604,7 +597,6 @@
 				6E9B3C0E24FF88C600C161C2 /* FMDB_Base */,
 				6E92754D24F7B6C8009F5D63 /* fmdb */,
 				6EE5BA4024E24B7C0021807D /* back_white_small.png */,
-				6E4EDCA92535A048003DE1CC /* msg-location-current@2x.png */,
 				6E4EDCA525359715003DE1CC /* btn_play@2x..png */,
 				6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */,
 				6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */,
@@ -654,6 +646,7 @@
 				6EB79A1C2493697100B56296 /* VedioPlayUITests */,
 				6EB799F92493696900B56296 /* Products */,
 				6E8D79AE24AF27F000974FFC /* Frameworks */,
+				E72A304B3518903175F465B3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -733,6 +726,15 @@
 			path = HomePage;
 			sourceTree = "<group>";
 		};
+		E72A304B3518903175F465B3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B0FDA243ED7F1E9BD5BB4BF1 /* Pods-VedioPlay.debug.xcconfig */,
+				C732AA53F14184B89B0C3A88 /* Pods-VedioPlay.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -740,9 +742,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6EB79A222493697100B56296 /* Build configuration list for PBXNativeTarget "VedioPlay" */;
 			buildPhases = (
+				075E07AE599550EDBD4C2861 /* [CP] Check Pods Manifest.lock */,
 				6EB799F42493696900B56296 /* Sources */,
 				6EB799F52493696900B56296 /* Frameworks */,
 				6EB799F62493696900B56296 /* Resources */,
+				6D225C471447235DA5091665 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -843,26 +847,25 @@
 				6E4E5EF225304DA600A1F317 /* message_location@2x.png in Resources */,
 				6EDDBD2124D2A1B10087AAA7 /* ic-audio-animation-left-2@2x.png in Resources */,
 				6EDDBD2924D2A1D70087AAA7 /* ic-audio-animation-right-2@2x.png in Resources */,
-				6EE8F66D252A03B200B9FEFD /* btn_smile_nor@2x..png in Resources */,
+				6EE8F66D252A03B200B9FEFD /* btn_smile_nor@2x.png in Resources */,
 				6EB79A082493697000B56296 /* LaunchScreen.storyboard in Resources */,
 				6EDDBD2B24D2A1DF0087AAA7 /* ic-audio-animation-right-3@2x.png in Resources */,
 				6E4EDC9C25357F4D003DE1CC /* im_dispok@2x.png in Resources */,
 				6E9BB5E224E38E950040FF15 /* player_pause.png in Resources */,
 				6E4EDCBB2535A351003DE1CC /* SenderVoiceNodePlaying003@2x.png in Resources */,
 				6E97C95A24D3F97C00D4CFB1 /* msg-location-current@2x.png in Resources */,
-				6EE8F669252A029700B9FEFD /* btn_voice_nor@2x..png in Resources */,
-				6EE8F66F252A03CB00B9FEFD /* btn_smile_pre@2x..png in Resources */,
+				6EE8F669252A029700B9FEFD /* btn_voice_nor@2x.png in Resources */,
+				6EE8F66F252A03CB00B9FEFD /* btn_smile_pre@2x.png in Resources */,
 				6E4C3B6F252081890019A6EB /* LoadURLImageViewController.xib in Resources */,
 				6E4EDC9E25358234003DE1CC /* img_blueman_nor.png in Resources */,
 				6E882B8C24A84AF80001710C /* viedio.MP4 in Resources */,
 				6E97C95624D3F38600D4CFB1 /* DisplayLocationViewController.xib in Resources */,
 				6EDDBD2724D2A1CE0087AAA7 /* ic-audio-animation-right-1@2x.png in Resources */,
-				6E4EDCAA2535A048003DE1CC /* msg-location-current@2x.png in Resources */,
 				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
 				6E65407C2530646400326634 /* textNor@2x.png in Resources */,
 				6E4EDCBE2535A351003DE1CC /* SenderVoiceNodePlaying001@2x.png in Resources */,
 				6E4EDCA625359715003DE1CC /* btn_play@2x..png in Resources */,
-				6EE8F66B252A037F00B9FEFD /* btn_voice_pre@2x..png in Resources */,
+				6EE8F66B252A037F00B9FEFD /* btn_voice_pre@2x.png in Resources */,
 				6EE5BA4124E24B7C0021807D /* back_white_small.png in Resources */,
 				6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */,
 				6E4EDCB52535A33F003DE1CC /* ReceiverVoiceNodePlaying003@2x.png in Resources */,
@@ -883,7 +886,6 @@
 				6E4E5EFA2530503200A1F317 /* message_file@2x.png in Resources */,
 				6E4EDCCB2536E53B003DE1CC /* ic_default_file@2x.png in Resources */,
 				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
-				6E65407E2530649800326634 /* btn_voice_pre@2x..png in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
 				6EBD998F24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 in Resources */,
 				6E4EDC9825357C1C003DE1CC /* im_sending@2x.png in Resources */,
@@ -917,6 +919,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		075E07AE599550EDBD4C2861 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VedioPlay-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D225C471447235DA5091665 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VedioPlay/Pods-VedioPlay-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VedioPlay/Pods-VedioPlay-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VedioPlay/Pods-VedioPlay-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6EB799F42493696900B56296 /* Sources */ = {
@@ -1186,6 +1230,7 @@
 		};
 		6EB79A232493697100B56296 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0FDA243ED7F1E9BD5BB4BF1 /* Pods-VedioPlay.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1214,6 +1259,7 @@
 		};
 		6EB79A242493697100B56296 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C732AA53F14184B89B0C3A88 /* Pods-VedioPlay.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";

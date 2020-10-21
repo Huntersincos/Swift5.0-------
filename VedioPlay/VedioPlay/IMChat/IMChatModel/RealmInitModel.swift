@@ -22,7 +22,9 @@ class RealmInitModel: NSObject {
                 try?FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
             }
             
-            path = path + "/.realm"
+            path = path + "/imchat.realm"
+           
+            
             self.configuration = Realm.Configuration.init()
             self.configuration?.fileURL = URL.init(fileURLWithPath: path)
             self.configuration?.schemaVersion = UInt64(realmVersion)
@@ -31,6 +33,17 @@ class RealmInitModel: NSObject {
             self.configuration?.deleteRealmIfMigrationNeeded = false
             //self.configuration?.migrationBlock
             /// 注:如果开发中切换用户则需要将 需要在上次登录成功后将 self.configurations设置为 == nil 每个不同的用户fileURL是不一样的,在文件名后面加上用户名用来区分
+            
+            
+               #if DEBUG
+                print(path)
+            
+               // print(<#T##items: Any...##Any#>)
+
+               #else
+               
+
+               #endif
         }
         
         return self.configuration!
@@ -41,6 +54,7 @@ class RealmInitModel: NSObject {
     class func getRealmInstance() -> Realm?{
        
         let realmConfiguration = RealmInitModel.getRealmConfigBeyondCurrentUser()
+       
         var realm:Realm? = nil
         if realmConfiguration != nil {
        ///一个可选的调度队列，用于Realm领域。如果给定，这个Realm实例可以从内部使用 块调度到给定队列而不是当前线程
@@ -49,6 +63,7 @@ class RealmInitModel: NSObject {
             
             //realm = try? Realm.init(configuration: realmConfiguration!,queue: DispatchQueue.init(label: "com.getRealmInstance"))
             realm = try? Realm.init(configuration: realmConfiguration!)
+        
         }
         
         if !Thread.isMainThread {

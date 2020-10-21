@@ -38,7 +38,8 @@ class ListConversationObject: Object {
         ///NSPredicate 谓词  通过NSPredicate字符串，也可以使用%K指定键路径。该谓词和其他谓词相同
          //NSPredicate(format: "%K == \(self.peerUserName)")
         //print(String(format:"%@ boy", arguments:[string]))//输出结果：lazy boy
-         let pred = NSPredicate(format:  String(format: "%K == %@","peerUserName",self.peerUserName))
+        // let pred = NSPredicate(format:  String(format: "%@ == %@","peerUserName",self.peerUserName))
+         let pred = NSPredicate(format: "peerUserName == %@",self.peerUserName)
         //String(format: <#T##String#>, arguments: <#T##[CVarArg]#>)
         
          let result:Results<ChatMessageObject>? = realm?.objects(ChatMessageObject.self).filter(pred)
@@ -49,7 +50,7 @@ class ListConversationObject: Object {
     /// 获取未读消息数
     func getUnreadCount() -> Int{
         let realm = RealmInitModel.getRealmInstance()
-        let pred = NSPredicate(format: String(format: "%K == %@ && %K == 0","peerUserName",self.peerUserName,"isRead"))
+        let pred = NSPredicate(format: "peerUserName == %@ && isRead == 0",self.peerUserName)
         let message:Results<ChatMessageObject>? =  realm?.objects(ChatMessageObject.self).filter(pred)
         if message != nil {
              return message!.count
@@ -61,7 +62,7 @@ class ListConversationObject: Object {
     func readAllMessages(){
        let realm = RealmInitModel.getRealmInstance()
        realm?.beginWrite()
-       let pred = NSPredicate(format:String(format: "%K == %@ && %K == 0","peerUserName",self.peerUserName,"isRead"))
+       let pred = NSPredicate(format: "peerUserName == %@ && isRead == 0",self.peerUserName)
         let result:Results<ChatMessageObject>? = realm?.objects(ChatMessageObject.self).filter(pred)
         if result != nil {
             for _ in result! {
@@ -74,7 +75,7 @@ class ListConversationObject: Object {
     
     func getLastMessage() -> ChatMessageObject?{
         let realm = RealmInitModel.getRealmInstance()
-        let pred = NSPredicate(format:String(format:"%K == %@","peerUserName",self.peerUserName))
+        let pred = NSPredicate(format:"peerUserName == %@",self.peerUserName)
         let message:Results<ChatMessageObject>? = realm?.objects(ChatMessageObject.self).filter(pred)
         if message != nil {
             if message?.count == 0 {

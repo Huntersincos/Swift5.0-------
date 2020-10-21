@@ -118,6 +118,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
         let inputView = InputView.init(frame: CGRect.zero)
         inputView.addObserver(self, forKeyPath: "frame", options: .new, context: &contetntKey)
         inputView.addObserver(self, forKeyPath: "center", options: .new, context: &contetntKey)
+        inputView.backgroundColor = .clear
         inputView.delegate = self
         return inputView
     }()
@@ -213,8 +214,8 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
             return true
         }
         
-        let currentTime = messageList?[index!].timestamp
-        let previousTime = messageList?[index! - 1].timestamp
+        let currentTime = messageList?[index!].timestamp as NSString?
+        let previousTime = messageList?[index! - 1].timestamp as NSString?
         
         return (currentTime?.longLongValue ?? 0) - (previousTime?.longLongValue ?? 0) > 180000 || (index ?? 0)%9 == 1
         
@@ -297,12 +298,12 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
            
             UIView.setAnimationBeginsFromCurrentState(true)
             
-            //self.tableView.center = CGPoint(x: self.commentView.frame.origin.x, y: keyBoardEndY + (self.commentView.headHeight + InputMenuViewHeight)/2 - self.commentView.headHeight - height) 无法编译卡主 编译器无法判断类型
-            let center_inputMenuViewHeight = ((self.commentView.headHeight ?? 0) + InputMenuViewHeight)/2
+            //self.tableView.center = CGPoint(x: self.commentView.frame.origin.x, y: keyBoardEndY + (self.commentView.headHeight + InputMenuViewHeight)/2 - self.commentView.headHeight - height) 无法编译卡主 编译器无法判断类型 opiton
+//            let center_inputMenuViewHeight = (self.commentView.headHeight  + InputMenuViewHeight)/2
+//
+//            let centerY =  center_inputMenuViewHeight - self.commentView.headHeight - height
             
-            let centerY =  center_inputMenuViewHeight - (self.commentView.headHeight ?? 0) - height
-            
-            self.tableView.center = CGPoint(x: self.commentView.frame.origin.x, y: keyBoardEndY + centerY)
+            self.commentView.center = CGPoint(x: self.commentView.center.x, y: keyBoardEndY+(self.commentView.headHeight+InputMenuViewHeight)/2-self.commentView.headHeight-height)
             
         }
         
@@ -367,20 +368,20 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
                 let cell = tableView.dequeueReusableCell(withIdentifier: VCardCell, for: indexPath) as! CardMessageTableViewCell
                 cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? CardLayout)
                      cell.setDelegate(self, self.tableView)
-                    return cell
+                return cell
             case .MessageItemTypeGeo:
                 
                  let cell = tableView.dequeueReusableCell(withIdentifier: LocationCell, for: indexPath) as! LoactionTableViewCell
-                cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? LoactionLayout)
+                 cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? LoactionLayout)
                     cell.setDelegate(self, self.tableView)
-                    return cell
+                return cell
                 
             case .MessageItemTypeOtherFile:
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: OtherFileCell, for: indexPath) as! OtherFiledMessageTableViewCell
-               cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? OtherFileLayout)
-                   cell.setDelegate(self, self.tableView)
-                   return cell
+                cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? OtherFileLayout)
+                cell.setDelegate(self, self.tableView)
+                return cell
                 
                   
             default:
@@ -466,9 +467,42 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     ///  InputViewDelegate
     func menuViewHide() {
         
+        if self.commentView.isMenuViewShow {
+                
+              UIView.animate(withDuration: 0.3, animations: {
+                  
+                  UIView.setAnimationBeginsFromCurrentState(true)
+                  
+                self.commentView.center = CGPoint(x:self.commentView.center.x, y:self.view.frame.size.height + (self.commentView.headHeight + InputMenuViewHeight)/2 - self.commentView.headHeight)
+                  
+              }) { (finished:Bool) in
+                  
+                  self.commentView.isMenuViewShow = false
+              }
+              
+              
+        }
+        
     }
     
     func menuViewShow() {
+        
+        if self.commentView.isMenuViewShow == false {
+          
+            UIView.animate(withDuration: 0.3, animations: {
+                
+                UIView.setAnimationBeginsFromCurrentState(true)
+                
+                self.commentView.center = CGPoint(x: self.commentView.center.x, y: self.view.frame.size.height - self.commentView.bounds.size.height/2.0)
+                
+            }) { (finished:Bool) in
+                
+                self.commentView.isMenuViewShow = true
+            }
+            
+            
+        }
+        
         
     }
     
@@ -497,6 +531,27 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     }
     
     func sendMessage(_ message: String?) {
+        
+        if MessageManager.shareInstance.sendTextMessage(message, "张三") == false {
+            #if DEBUG
+               print("消息发送失败")
+
+               #else
+               
+
+               #endif
+            
+            
+        }else{
+            #if DEBUG
+                  print("消息发送成功")
+
+                  #else
+                  
+
+                  #endif
+            
+        }
         
     }
     

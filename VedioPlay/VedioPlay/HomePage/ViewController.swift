@@ -19,7 +19,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     
    
-    let array = ["相册","相机","麦克风","定位","本地视频播放","URL视频播放","swift-SDWebImage加载图片","其他功能"]
+    let array = ["相册","相机","麦克风","定位","本地视频播放","URL视频播放","swift-SDWebImage加载图片","其他功能","聊天列表","聊天详情页"]
     @IBOutlet weak var dataTabView: UITableView!
     var recordProgressView:VoiceRecordProgressView!
     override func viewDidLoad() {
@@ -85,10 +85,20 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             imageURLVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(imageURLVC, animated: true)
             
-        }else{
+        }else if(indexPath.row == 7){
             let otherClassVC = OtherClassViewController.init()
             otherClassVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(otherClassVC, animated: true)
+            
+        }else if(indexPath.row == 8){
+            let chatlistVC = ChatListViewController.init()
+            chatlistVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(chatlistVC, animated: true)
+            
+        }else if(indexPath.row == 9){
+            let chatDetialVC = ChatDetailViewController.init()
+            chatDetialVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(chatDetialVC, animated: true)
             
         }
     }
