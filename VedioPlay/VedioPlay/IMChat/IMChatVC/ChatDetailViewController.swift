@@ -134,6 +134,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
                 }else{
                     switch change {
                     case .initial:
+                        strongSelf.messageFirstLoad()
                         break
 ///                        可以通过传递到通知模块当中的 RealmCollectionChange 参数来访问这些变更。该对象存放了受删除 (deletions)、插入 (insertions) 以及修改 (modifications) 所影响的索引信息
                     //case .update(_, deletions: [Int], insertions: [Int], modifications: [Int]):break
@@ -155,7 +156,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
                             
                             var i = 0
                             var messageArray = [ChatMessageObject]()
-                            for _ in modifications {
+                            for _ in insertions {
                                 let message = strongSelf.messageList?[insertions[i]]
                                 messageArray.append(message ?? ChatMessageObject() )
                                 i += 1
@@ -164,10 +165,15 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
                         }
                         
                         if SDWebImageManager.IsArraySafe(deletions) {
-                            strongSelf.messageDeleted(deletions.count)
-                            
+                            if strongSelf.messageList?.count != 0  {
+                                strongSelf.messageDeleted(deletions.count)
+                            }else{
+                                strongSelf.messageDeletedAll()
+                                
+                            }
+                        
                         }else{
-                            strongSelf.messageDeletedAll()
+                           // strongSelf.messageDeletedAll()
                         }
                         
                         break
@@ -335,8 +341,8 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
             switch message?.messageType {
             case .MessageItemTypeText:
                let cell = tableView.dequeueReusableCell(withIdentifier: TextCell, for: indexPath) as! TextMessageTableViewCell
-              cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.imdnId ?? ""] as? TextLayout)
-                 cell.setDelegate(self, self.tableView)
+               cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.imdnId ?? ""] as? TextLayout)
+                cell.setDelegate(self, self.tableView)
                   return cell
               //  break
                 
@@ -532,7 +538,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     
     func sendMessage(_ message: String?) {
         
-        if MessageManager.shareInstance.sendTextMessage(message, "张三") == false {
+        if MessageManager.shareInstance.sendTextMessage(message, "小明") == false {
             #if DEBUG
                print("消息发送失败")
 

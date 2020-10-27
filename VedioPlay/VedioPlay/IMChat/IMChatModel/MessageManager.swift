@@ -35,17 +35,25 @@ class MessageManager: NSObject {
            
             let objc = ChatMessageObject.init()
             // id 主键只能赋值一次 * Terminating app due to uncaught exception 'RLMException', reason: 'Attempting to create an object of type 'ChatMessageObject' with an existing primary key value 'messagetext123456' 这个值每次要变动才行
-           
+           ////以2001-1-1 0:0:0的偏移秒数来初始化，也可以直接调用类方法 + (id)dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)seconds
+
+//           NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:80];
+//           //NSDate *date = [NSDate dateWithTimeIntervalSinceReferenceDate:80];
+//           NSLog(@"print date is %@",date) 2013-03-04 08:57:40 +0000;
+            
             objc.imdnId  = "messagetext123456 + \(Date.timeIntervalSinceReferenceDate)"
             // 模拟个接收用户
             objc.receiverUserName = peerUserName ?? ""
-            objc.timestamp =  "\(Date.timeIntervalSinceReferenceDate)"
+            objc.timestamp =  "\(Date().timeIntervalSince1970 * 1000)"
+            objc.senderName = "我"
+            
+            print("objc.timestamp  == \(objc.timestamp)")
             objc.messageType = .MessageItemTypeText
             objc.state = .MessageItemStateSendOK
             objc.messageTranDirection = .MessagirectionSend
             objc.channelType = .MessageChannelType1On1
             objc.peerUserName = peerUserName ?? ""
-            objc.isRead = true
+            objc.isRead = false
             objc.conversationId = "1587777777764"
             
             objc.content = message ?? ""
@@ -55,7 +63,7 @@ class MessageManager: NSObject {
             var conversaton = MessageDBHelper.getConversationPeerUserWith(objc.peerUserName)
             
             if conversaton == nil {
-                
+                // key step
                 conversaton = ListConversationObject.init()
                 conversaton?.peerUserName = objc.peerUserName
                 
@@ -67,7 +75,9 @@ class MessageManager: NSObject {
             
             
             conversaton?.updateTime = "\(Date().timeIntervalSince1970 * 1000)"
-        // 'RLMException', reason: 'Attempting to create an object of type 'ChatMessageObject' with an existing primary key value 'Âº†‰∏â'.
+            
+            print("conversaton?.updateTime  == \(conversaton?.updateTime)")
+    
             realm?.add(objc)
             
             

@@ -8,8 +8,18 @@
 
 import UIKit
 
-public let durationLabelHeight:CGFloat = 20
-public let durationLabelMargin:CGFloat = 15
+//public let durationLabelHeight:CGFloat = 20
+//public let durationLabelMargin:CGFloat = 15
+
+func  durationLabelHeight() -> CGFloat{
+    return 20
+}
+
+func durationLabelMargin() ->CGFloat{
+    
+    return 15
+}
+
 
 class ThumbImageLayout: BaseBubbleLayout {
   
@@ -43,7 +53,7 @@ class ThumbImageLayout: BaseBubbleLayout {
         
         thumbnailFrame = CGRect(x: 0, y: 0, width: contentViewFrame?.width ?? 0, height: contentViewFrame?.height ?? 0)
         playBtnFrame = CGRect(x: (thumbnailFrame?.size.width ?? 0)/2  - 25, y: (thumbnailFrame?.size.height ?? 0)/2  - 25, width: 25, height: 25)
-        durationLabelFrame = CGRect(x: durationLabelMargin, y: (thumbnailFrame?.size.height ?? 0) - durationLabelHeight - durationLabelMargin, width: (thumbnailFrame?.size.width ?? 0) - 2*durationLabelMargin, height: durationLabelHeight)
+        durationLabelFrame = CGRect(x: durationLabelMargin(), y: (thumbnailFrame?.size.height ?? 0) - durationLabelHeight() - durationLabelMargin(), width: (thumbnailFrame?.size.width ?? 0) - 2*durationLabelMargin(), height: durationLabelHeight())
         bubbleViewBackgroupColor  = .clear
     }
 }

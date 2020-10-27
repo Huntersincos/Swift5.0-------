@@ -22,7 +22,7 @@ class RevokeMessageTableViewCell: UITableViewCell {
         
         if revokeHintLabel == nil {
            revokeHintLabel = UILabel.init(frame: CGRect.zero)
-           revokeHintLabel?.font = TextFont
+           revokeHintLabel?.font = TextFont()
            revokeHintLabel?.backgroundColor = .clear
            revokeHintLabel?.textAlignment = .center
            revokeHintLabel?.textColor = .white

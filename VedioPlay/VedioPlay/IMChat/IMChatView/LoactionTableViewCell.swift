@@ -33,7 +33,7 @@ class LoactionTableViewCell: BaseMessageCellTableViewCell {
         
         if titleLabel == nil {
             titleLabel = UILabel.init(frame: CGRect.zero)
-            titleLabel?.font = TextFont
+            titleLabel?.font = TextFont()
             titleLabel?.backgroundColor = .clear
             titleLabel?.numberOfLines = 0
             titleLabel?.textAlignment = .center

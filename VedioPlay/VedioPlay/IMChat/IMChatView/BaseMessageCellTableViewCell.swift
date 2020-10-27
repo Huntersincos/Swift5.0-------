@@ -69,7 +69,8 @@ class BaseMessageCellTableViewCell: UITableViewCell {
         
         if avatorImage == nil {
             avatorImage = UIImageView.init(frame: CGRect.zero)
-            avatorImage?.layer.cornerRadius = AvatorSize/2
+            avatorImage?.layer.masksToBounds = true
+            avatorImage?.layer.cornerRadius = CGFloat(AvatorSize()/2)
             avatorImage?.isUserInteractionEnabled = true
             avatorImage?.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(tapAvator)))
             contentView.addSubview(avatorImage!)
@@ -79,13 +80,14 @@ class BaseMessageCellTableViewCell: UITableViewCell {
             bubbleView = UIView.init(frame: CGRect.zero)
             contentView.addSubview(bubbleView!)
             bubbleView?.layer.cornerRadius = 15
+            bubbleView?.layer.masksToBounds = true
             
         }
         
         
         if nameLabel == nil {
            nameLabel = UILabel.init(frame: CGRect.zero)
-           nameLabel?.textAlignment = .center
+           //nameLabel?.textAlignment = .center
            nameLabel?.backgroundColor =  RGBCOLOR(240, 240, 240, 1)
            nameLabel?.textColor = .gray
            nameLabel?.font = UIFont.systemFont(ofSize: 13)
@@ -104,14 +106,14 @@ class BaseMessageCellTableViewCell: UITableViewCell {
              msgContentView = UIView.init(frame: CGRect.zero)
              msgContentView?.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(tapContent)))
              msgContentView?.addGestureRecognizer(UILongPressGestureRecognizer.init(target: self, action: #selector(setupNormalMenuController)))
-             contentView.addSubview(msgContentView!)
+            bubbleView!.addSubview(msgContentView!)
         }
         
-        timeLabel?.isHidden = layout?.showName ?? false
+        timeLabel?.isHidden = !(layout?.showTime ?? false)
         timeLabel?.text = layout?.timeLabelText
         avatorImage?.image = layout?.avatorViewImage
         
-        nameLabel?.isHidden = layout?.showName ?? false
+        nameLabel?.isHidden = !(layout?.showName ?? false)
         nameLabel?.textAlignment = layout?.nameLabelTextAlignment ?? .left
         nameLabel?.text = layout?.nameLabelText
         

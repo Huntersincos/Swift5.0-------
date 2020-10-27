@@ -22,9 +22,9 @@ class TextMessageTableViewCell: BaseMessageCellTableViewCell {
         // Configure the view for the selected state
     }
     
-    override class func superclass() -> AnyClass? {
-        return TextLayout.self
-    }
+//    override class func superclass() -> AnyClass? {
+//        return TextLayout.self
+//    }
     
     
     override func configWithLayou(_ layout: BaseBubbleLayout?) {
@@ -32,12 +32,14 @@ class TextMessageTableViewCell: BaseMessageCellTableViewCell {
         
         if contentLabel == nil {
             contentLabel = UILabel.init(frame: CGRect.zero)
-            contentLabel?.font = TextFont
+            contentLabel?.font = TextFont()
             contentLabel?.backgroundColor = .clear
             contentLabel?.numberOfLines = 0
             msgContentView?.addSubview(contentLabel!)
         }
-        
+        if layout == nil {
+            return
+        }
         let textLayout = layout as! TextLayout
         
         contentLabel?.text = textLayout.contentLabelText
@@ -46,9 +48,12 @@ class TextMessageTableViewCell: BaseMessageCellTableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let textLayout = layout as! TextLayout
-        contentLabel?.textColor = textLayout.contentLabelTextColor
-        contentLabel?.frame = textLayout.contentLabelFrame ?? CGRect.zero
+        if layout != nil {
+            let textLayout = layout as! TextLayout
+            contentLabel?.textColor = textLayout.contentLabelTextColor
+            contentLabel?.frame = textLayout.contentLabelFrame ?? CGRect.zero
+        }
+       
         
     }
     

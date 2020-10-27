@@ -55,11 +55,16 @@ class ChatListTableViewCell: UITableViewCell {
             self.unreadLabel.isHidden = true
         }else{
             self.unreadLabel.isHidden = false
-            self.unreadLabel.text = "\(String(describing: conversation?.getUnreadCount()))"
+            self.unreadLabel.text = "\(conversation?.getUnreadCount() ?? 0)"
         }
         self.unreadLabel.layer.cornerRadius = 10
-        //self.unreadLabel.clipsToBounds = true
-        self.timeLabel.text = conversation?.updateTime
+        // 子视图超出父视图 不显示圆角
+        self.unreadLabel.clipsToBounds = true
+        
+        let updateTime = (conversation?.updateTime ?? "0") as NSString
+        
+        self.timeLabel.text = MHPrettyDate.prettyDate(from: Date.init(timeIntervalSince1970: updateTime.doubleValue/1000), with: MHPrettyDateFormat.init(rawValue: MHPrettyDateLongRelativeTime.rawValue))
+            //conversation?.updateTime
         //if conversation?.getLastMessage() != nil {
         self.contentLabel.text = self.contentWithMessage((conversation?.getLastMessage()))
        // }

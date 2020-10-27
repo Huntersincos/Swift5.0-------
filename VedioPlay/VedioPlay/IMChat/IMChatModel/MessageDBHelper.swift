@@ -64,9 +64,10 @@ class MessageDBHelper: NSObject {
                  messge?.isRead = true
                 // 应该回传服务端
            }
+           try?realm?.commitWrite()
         }
        
-        try?realm?.commitWrite()
+       
     }
     
     

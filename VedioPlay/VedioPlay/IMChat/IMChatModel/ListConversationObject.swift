@@ -48,7 +48,7 @@ class ListConversationObject: Object {
     
     
     /// 获取未读消息数
-    func getUnreadCount() -> Int{
+    func getUnreadCount() -> Int?{
         let realm = RealmInitModel.getRealmInstance()
         let pred = NSPredicate(format: "peerUserName == %@ && isRead == 0",self.peerUserName)
         let message:Results<ChatMessageObject>? =  realm?.objects(ChatMessageObject.self).filter(pred)

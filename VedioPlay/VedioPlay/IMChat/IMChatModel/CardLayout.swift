@@ -50,9 +50,9 @@ class CardLayout: BaseBubbleLayout {
         }
         
         bubbleViewBackgroupColor = .clear
-        vIconFrame = CGRect(x: VCardSize.width/2 - VIconSize/2, y: VCardMargin, width: VIconSize, height: VIconSize)
-        vNameLabelFrame = CGRect(x: 0, y: vIconFrame?.maxY ?? 0 + VCardMargin, width: VCardSize.width, height: VLabelHeight)
-        vNumberLabelFrame = CGRect(x: 0, y: vNameLabelFrame?.maxY ?? 0 + VCardMargin, width:VCardSize.width , height: VLabelHeight)
+        vIconFrame = CGRect(x: VCardSize().width/2 - VIconSize/2, y: VCardMargin, width: VIconSize, height: VIconSize)
+        vNameLabelFrame = CGRect(x: 0, y: vIconFrame?.maxY ?? 0 + VCardMargin, width: VCardSize().width, height: VLabelHeight)
+        vNumberLabelFrame = CGRect(x: 0, y: vNameLabelFrame?.maxY ?? 0 + VCardMargin, width:VCardSize().width , height: VLabelHeight)
         
     }
     

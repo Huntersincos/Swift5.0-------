@@ -37,7 +37,7 @@ class AudioMessageTableViewCell: BaseMessageCellTableViewCell,AudioPlayHelperDel
                
        if voiceDurationLabel == nil {
            voiceDurationLabel = UILabel.init(frame: CGRect.zero)
-           voiceDurationLabel?.font = TextFont
+           voiceDurationLabel?.font = TextFont()
            voiceDurationLabel?.backgroundColor = .clear
            msgContentView?.addSubview(voiceDurationLabel!)
        }

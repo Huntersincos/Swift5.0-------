@@ -151,7 +151,18 @@ class ChatMessageObject: Object {
     
     /// 消息传输方向
     
-    dynamic var messageTranDirection:MessageItemDirection = .MessagirectionSend
+    @objc dynamic private var messageTranDirectionPrivate = 0
+    
+    var messageTranDirection:MessageItemDirection?{
+        
+        get{
+            return MessageItemDirection(rawValue: messageTranDirectionPrivate)
+        }
+        set{
+            messageTranDirectionPrivate = newValue?.rawValue ?? 0
+        }
+        
+    }
     
     /// 是否抄送
     @objc dynamic var isCarbonCopy = false

@@ -183,7 +183,7 @@ class SDImageCache: NSObject {
         shouldDecompressImages = true
         shouldCacheImagesInMemory = true
         shouldDisableiCloud = true
-        ioQueue?.async {
+        ioQueue?.sync {
             self.fileManager = FileManager.init()
         }
         

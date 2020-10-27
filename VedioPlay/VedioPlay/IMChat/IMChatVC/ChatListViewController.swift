@@ -72,6 +72,11 @@ class ChatListViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        chatListTableView?.reloadData()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return self.conversationsArray?.count ?? 0

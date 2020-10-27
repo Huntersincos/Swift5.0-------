@@ -88,13 +88,13 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
         let result_forProper:String? = result?.value(forProperty:ALAssetPropertyType ) as? String
         if first_forProper != nil && first_forProper != nil{
             if JPhotoManger.shared.indexPathsForSelectedItems.count > 0 && first_forProper != result_forProper{
-                  JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, [String : Any]?) -> Bool in
+                JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, _: [String : Any]?) -> Bool in
                    // Any包括 struct，enum，func）。
                    // AnyObject 只适用于 class 类型
                        return false
                    })
                }else{
-                   JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, [String : Any]?) -> Bool in
+                JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, _: [String : Any]?) -> Bool in
                        return true
                    })
                }

@@ -26,7 +26,7 @@ class TextLayout: BaseBubbleLayout {
              contentLabelTextColor = .black
           }
         
-         contentLabelFrame = CGRect(x: 0, y: 0, width: self.contentLabelFrame?.width ?? 0, height: self.contentLabelFrame?.height ?? 0)
+         contentLabelFrame = CGRect(x: 0, y: 0, width: self.contentViewFrame?.width ?? 0, height: self.contentViewFrame?.height ?? 0)
         
     }
 }
