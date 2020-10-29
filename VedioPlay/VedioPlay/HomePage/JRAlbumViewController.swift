@@ -9,6 +9,11 @@
 import UIKit
 import AssetsLibrary
 
+@objc protocol  JRAlbumViewControllerDelegate{
+    
+    func  fileSelected(_ dataArray:Optional<Data>, _ isVideo:Bool)
+}
+
 class JRAlbumViewController: UIViewController,JPhotoListViewDelegate {
     // ios自动布局xib
     // Autoresizing
@@ -61,6 +66,35 @@ class JRAlbumViewController: UIViewController,JPhotoListViewDelegate {
    
     @IBAction func sender(_ sender: UIButton) {
         
+        DispatchQueue.global().async {
+            
+            let assetsArray =  JPhotoManger.shared.indexPathsForSelectedItems
+            let  isVideo = false
+            var  photoArrays = [Data]()
+            for item in assetsArray ?? []{
+                
+                let asset = item as! ALAsset
+                
+                let representation = asset.defaultRepresentation()
+                
+                let type = asset.value(forProperty: ALAssetPropertyType) as! String
+                
+                if type ==  ALAssetTypePhoto {
+                    
+                    var image:UIImage? = nil
+                    
+                    if self.originalBtn.isSelected == false {
+                        image = UIImage(cgImage: (asset.thumbnail()?.takeUnretainedValue())!)
+                        
+                    }else{
+                        image = UIImage(cgImage: (representation?.fullScreenImage())!)
+                    }
+                    
+                }
+                
+            }
+            
+        }
         
     }
     

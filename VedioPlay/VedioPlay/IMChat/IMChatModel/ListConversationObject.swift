@@ -76,7 +76,7 @@ class ListConversationObject: Object {
     func getLastMessage() -> ChatMessageObject?{
         let realm = RealmInitModel.getRealmInstance()
         let pred = NSPredicate(format:"peerUserName == %@",self.peerUserName)
-        let message:Results<ChatMessageObject>? = realm?.objects(ChatMessageObject.self).filter(pred)
+        let message:Results<ChatMessageObject>? = realm?.objects(ChatMessageObject.self).sorted(byKeyPath: "timestamp", ascending: true).filter(pred)
         if message != nil {
             if message?.count == 0 {
                 return  nil

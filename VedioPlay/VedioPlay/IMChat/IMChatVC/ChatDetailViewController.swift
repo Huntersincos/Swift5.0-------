@@ -25,7 +25,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     //var  tableView:UITableView?
     var  messageList:Results<ChatMessageObject>?
     var  messageListToken:NotificationToken?
-    var  currentCount = 1
+    var  currentCount = 0
     var  isDelectMessage = false
     
     convenience init(with peerUserName:String){
@@ -125,7 +125,8 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
 
      
     func getMessages(){
-        messageList = MessageDBHelper.getMessagesWithNumber(self.peerUserName)
+        messageList = MessageDBHelper.getMessagesWithNumber(self.peerUserName)?.sorted(byKeyPath: "timestamp", ascending: true)
+       
 
         messageListToken = messageList?.observe({ [weak self] (change:RealmCollectionChange<Results<ChatMessageObject>>?) in
              if let strongSelf = self{
@@ -139,7 +140,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
 ///                        可以通过传递到通知模块当中的 RealmCollectionChange 参数来访问这些变更。该对象存放了受删除 (deletions)、插入 (insertions) 以及修改 (modifications) 所影响的索引信息
                     //case .update(_, deletions: [Int], insertions: [Int], modifications: [Int]):break
                     case .update(_, let deletions, let insertions, let modifications):
-                        
+
                         if SDWebImageManager.IsArraySafe(modifications) {
                             //let changes = change.
                             var i = 0
@@ -151,9 +152,9 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
                             }
                             strongSelf.messageUpdated(messageArray)
                         }
-                        
+
                         if SDWebImageManager.IsArraySafe(insertions) {
-                            
+
                             var i = 0
                             var messageArray = [ChatMessageObject]()
                             for _ in insertions {
@@ -163,43 +164,50 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
                             }
                             strongSelf.messageInserted(messageArray)
                         }
-                        
+
                         if SDWebImageManager.IsArraySafe(deletions) {
                             if strongSelf.messageList?.count != 0  {
                                 strongSelf.messageDeleted(deletions.count)
                             }else{
                                 strongSelf.messageDeletedAll()
-                                
+
                             }
-                        
+
                         }else{
                            // strongSelf.messageDeletedAll()
                         }
-                        
+
                         break
                     default:
                         break
                     }
 
-                    
+
                 }
             }
         })
     
-        currentCount = 10
-        if currentCount > messageList?.count ?? 0 {
-            currentCount = messageList?.count ?? 0
-        }
+        // 不考虑下拉刷新
+//        currentCount = 10
+//        if currentCount > messageList?.count ?? 0 {
+//            currentCount = messageList?.count ?? 0
+//        }
+        
+        currentCount = messageList?.count ?? 0
+        
     }
     
     func messageFirstLoad(){
         
         var i = (messageList?.count ?? 0) - (currentCount)
         if messageList != nil {
+            
             for _ in messageList! {
                 if i  < messageList!.count {
                     let message = messageList![i]
                     MessageLayoutManager.shareInstance.creatLayoutWithMessage(message, shouldShowTime(message))
+                }else{
+                    break
                 }
                
                 i += 1
@@ -323,9 +331,11 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let index = (messageList?.count ?? 0) - currentCount + indexPath.row
+        //let index = (messageList?.count ?? 0) - currentCount + indexPath.row
         
-        if index >= messageList?.count ?? 0 || index < 0 {
+        let index = indexPath.row
+        
+        if index >= (messageList?.count ?? 0) || index < 0 {
              return UITableViewCell.init()
         }
         
@@ -401,9 +411,9 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let index = (messageList?.count ?? 0) - currentCount + indexPath.row
-        
-        if index >= messageList?.count ?? 0 || index < 0 {
+        //let index = (messageList?.count ?? 0) - currentCount + indexPath.row
+        let index = indexPath.row
+        if index >= (messageList?.count ?? 0) || index < 0 {
              return 0
         }
         
@@ -517,6 +527,9 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     }
     
     func photoBtnClicked() {
+        
+        let photoVC = JRAlbumViewController.init()
+        photoVC
         
     }
     
