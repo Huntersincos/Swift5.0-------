@@ -44,7 +44,7 @@ class ThumbImageLayout: BaseBubbleLayout {
         
         if message?.messageType == .MessageItemTypeVideo {
             playBtnImage = UIImage.init(named: "btn_play")
-            durationLabelText = "\(String(describing: message?.fileMediaDuration))\'\'"
+            durationLabelText = message?.fileMediaDuration
             showDurationLabel = true
         }else{
            playBtnImage = UIImage.init(named: "")

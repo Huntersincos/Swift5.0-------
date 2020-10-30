@@ -24,10 +24,10 @@ class OtherFiledMessageTableViewCell: BaseMessageCellTableViewCell {
         // Configure the view for the selected state
     }
     
-    override class func superclass() -> AnyClass? {
-        
-        return OtherFileLayout.self
-    }
+//    override class func superclass() -> AnyClass? {
+//        
+//        return OtherFileLayout.self
+//    }
     
     override func configWithLayou(_ layout: BaseBubbleLayout?) {
         super.configWithLayou(layout)

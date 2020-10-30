@@ -130,27 +130,40 @@ class JRFileUtil: NSObject {
                 // 正确的方向截图
                 gen?.appliesPreferredTrackTransform = true
                 // value:表示视频的帧数  timescale 每秒的帧数 帧率
-                let time:CMTime? = CMTimeMake(value: 0, timescale: 10)
+                let time = CMTimeMake(value: 0, timescale: 10)
                 
                 //CMTime 对于视频的时长 用double型是有问题 因为视频需要切分 不能用浮点型计算  CMTime定义是一个C语言的结构体，CMTime是以分数的形式表示时间，value表示分子，timescale表示分母，flags是位掩码，表示时间的指定状态。 这里value,timescale是分别以64位和32位整数来存储的
                 //timescale又是什么？ 它表示每秒分割的“切片”数。CMTime的整体精度就是受到这个限制的 timescale只是为了保证时间精度而设置的帧率，并不一定是视频最后实际的播放帧率
-                if time != nil {
+                //if time != nil {
                     
                     //Cannot convert value of type 'UnsafeMutablePointer<CMTime>?.Type' to expected argument type 'UnsafeMutablePointer<CMTime>?'
                     
                     //let isDir:Bool = false =====  'UnsafeMutablePointer<ObjCBool>?.T
                     //var pointer = ObjCBool.init(false);
-                    var actualTime =  CMTime.init()
-                    // 没测试
-                    let image:CGImage = try!(gen?.copyCGImage(at: time!, actualTime: &actualTime))!
-                    // 转化成uiimage
-                    let thumb:UIImage = UIImage.init(cgImage: image)
-                    let  fileRelativePath:String = self.createFilePathWithFileName(self .getFileNameWithType("png") as NSString, "thumb", number)
-                    //self.imageDataWithImage(thumb, maxDataSize: 6)
-                    let ns_thumb:NSData =  self.imageDataWithImage(thumb, maxDataSize: 6) as NSData
-                    ns_thumb.write(toFile: absolutePath, atomically: true)
-                    return fileRelativePath
-                }
+                    var actualTime:CMTime =   CMTimeMake(value: 0, timescale: 0)
+                    // Call can throw, but it is not marked with 'try' and the error is not handled
+                    //
+                    do {
+                        let image = try gen?.copyCGImage(at: time, actualTime: &actualTime)
+                        
+                        // 转化成uiimage
+                        let thumb:UIImage = UIImage.init(cgImage: image!)
+                        let  fileRelativePath:String = self.createFilePathWithFileName(self .getFileNameWithType("png") as NSString, "thumb", number)
+                        //self.imageDataWithImage(thumb, maxDataSize: 6)
+                        let ns_thumb:NSData =  self.imageDataWithImage(thumb, maxDataSize: 6) as NSData
+                        
+                        ns_thumb.write(toFile: self.getAbsolutePathWithFileRelativePath(fileRelativePath), atomically: true)
+                        return fileRelativePath
+                        
+                        
+                    } catch  {
+                        ///Error Domain=AVFoundationErrorDomain Code=-11829 "Cannot Open" UserInfo={NSLocalizedFailureReason=This media may be damaged., NSLocalizedDescription=Cannot Open, NSUnderlyingError=0x600003902c40 {Error Domain=NSOSStatusErrorDomain Code=-12848 "(null)"}}
+                        // 这个应该回调过去 如果失败 就不写入
+                        print(error)
+                    }
+                    
+                    
+               // }
             
                 
                 
@@ -177,10 +190,10 @@ class JRFileUtil: NSObject {
         
         var max:CGFloat = 1;
         var min:CGFloat = 0;
-        for _ in 1...6 {
+        for _ in 0...6 {
             compression  = Int((max + min)/2)
             data = image.jpegData(compressionQuality: CGFloat(compression)) ?? Data.init()
-            if data.count <  maxLength  {
+            if data.count <  maxLength * Int(0.9)  {
                 min = CGFloat(compression)
             }else if data.count > maxLength{
                 max = CGFloat(compression)
@@ -193,9 +206,11 @@ class JRFileUtil: NSObject {
         var resultImage = UIImage.init(data: data)
         if data.count < maxLength { return data}
         var lastDataLength = 0
+        let doublemaxLength:CGFloat = CGFloat(maxLength)
         while data.count > maxLength &&  data.count != lastDataLength {
             lastDataLength = data.count
-            let ratio:CGFloat =  CGFloat(maxLength/data.count)
+            let doublelastDataLength:CGFloat = CGFloat(data.count)
+            let ratio:CGFloat =  doublemaxLength/doublelastDataLength
             let size:CGSize = CGSize(width: (resultImage?.size.width ?? 0) * sqrt(ratio), height: (resultImage?.size.height ?? 0) * sqrt(ratio))
             UIGraphicsBeginImageContext(size)
             resultImage?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
@@ -221,6 +236,25 @@ class JRFileUtil: NSObject {
            try? FileManager.default.removeItem(atPath: rootPath)
         }
         return true
+    }
+    
+    class func deleteFileWithRelativePath(_ path:String ) {
+        
+        let filesPath = self.getAbsolutePathWithFileRelativePath(path)
+        
+        if FileManager.default.fileExists(atPath: filesPath) {
+            
+            do {
+                
+                try?FileManager.default.removeItem(atPath: filesPath)
+                
+            } catch  {
+                
+            }
+             
+            
+        }
+        
     }
     
     /**

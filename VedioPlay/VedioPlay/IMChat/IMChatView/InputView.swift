@@ -89,6 +89,7 @@ class InputView: UIView,UITextViewDelegate,ChatVoiceRecordButtonDelegate,HBEmoji
             inputTextView?.delegate = self
             inputTextView?.backgroundColor = RGBCOLOR(244, 244, 244, 1.0)
             inputTextView?.layer.cornerRadius = 7
+            inputTextView?.textColor = .black
             self.addSubview(inputTextView!)
         }
         

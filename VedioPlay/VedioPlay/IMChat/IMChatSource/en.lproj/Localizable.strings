@@ -12,8 +12,8 @@
 "MESSAGE_UNKNOW" = "[Unknow]";
 "MESSAGE_LOCATION" = "[location]";
 "MESSAGE_AUDIO" = "[audio]";
-"MESSAGE_IMAGE" = "photo";
-"MESSAGE_VCARD" = "card";
+"MESSAGE_IMAGE" = "[photo]";
+"MESSAGE_VCARD" = "[card]";
 "MESSAGE_VIDEO" = "[vedio]";
 "MESSAGE_FILE" = "[file]";
 "INPUT_SOMETHING" = "LoogPress Say Someting";
@@ -24,4 +24,5 @@
 "DELETMESSAGE" = "Delect Message";
 "Revoke" = "Revoke Message";
 "AGREE" = "Agree Charge";
+"COPY"  = "Copy";
 

@@ -50,7 +50,7 @@
 		6E4EDC9E25358234003DE1CC /* img_blueman_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDC9D25358234003DE1CC /* img_blueman_nor.png */; };
 		6E4EDCA2253592AE003DE1CC /* TextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA1253592AE003DE1CC /* TextLayout.swift */; };
 		6E4EDCA425359517003DE1CC /* ThumbImageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */; };
-		6E4EDCA625359715003DE1CC /* btn_play@2x..png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA525359715003DE1CC /* btn_play@2x..png */; };
+		6E4EDCA625359715003DE1CC /* btn_play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA525359715003DE1CC /* btn_play@2x.png */; };
 		6E4EDCA825359BB9003DE1CC /* AudioLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */; };
 		6E4EDCAC2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */; };
 		6E4EDCAE2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */; };
@@ -224,7 +224,7 @@
 		6E4EDC9D25358234003DE1CC /* img_blueman_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_blueman_nor.png; sourceTree = "<group>"; };
 		6E4EDCA1253592AE003DE1CC /* TextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayout.swift; sourceTree = "<group>"; };
 		6E4EDCA325359517003DE1CC /* ThumbImageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbImageLayout.swift; sourceTree = "<group>"; };
-		6E4EDCA525359715003DE1CC /* btn_play@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_play@2x..png"; sourceTree = "<group>"; };
+		6E4EDCA525359715003DE1CC /* btn_play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_play@2x.png"; sourceTree = "<group>"; };
 		6E4EDCA725359BB9003DE1CC /* AudioLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioLayout.swift; sourceTree = "<group>"; };
 		6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReceiverVoiceNodePlaying@2x.png"; sourceTree = "<group>"; };
 		6E4EDCAD2535A0F1003DE1CC /* SenderVoiceNodePlaying@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SenderVoiceNodePlaying@2x.png"; sourceTree = "<group>"; };
@@ -602,7 +602,7 @@
 				6E9B3C0E24FF88C600C161C2 /* FMDB_Base */,
 				6E92754D24F7B6C8009F5D63 /* fmdb */,
 				6EE5BA4024E24B7C0021807D /* back_white_small.png */,
-				6E4EDCA525359715003DE1CC /* btn_play@2x..png */,
+				6E4EDCA525359715003DE1CC /* btn_play@2x.png */,
 				6E4EDCAB2535A0BD003DE1CC /* ReceiverVoiceNodePlaying@2x.png */,
 				6E4EDCAF2535A33F003DE1CC /* ReceiverVoiceNodePlaying000@2x.png */,
 				6E4EDCB02535A33F003DE1CC /* ReceiverVoiceNodePlaying001@2x.png */,
@@ -869,7 +869,7 @@
 				6EB79A052493697000B56296 /* Assets.xcassets in Resources */,
 				6E65407C2530646400326634 /* textNor@2x.png in Resources */,
 				6E4EDCBE2535A351003DE1CC /* SenderVoiceNodePlaying001@2x.png in Resources */,
-				6E4EDCA625359715003DE1CC /* btn_play@2x..png in Resources */,
+				6E4EDCA625359715003DE1CC /* btn_play@2x.png in Resources */,
 				6EE8F66B252A037F00B9FEFD /* btn_voice_pre@2x.png in Resources */,
 				6EE5BA4124E24B7C0021807D /* back_white_small.png in Resources */,
 				6EB5D4082498A272008DA35A /* ic_pic_choose@2x.png in Resources */,
@@ -1239,9 +1239,9 @@
 			baseConfigurationReference = B0FDA243ED7F1E9BD5BB4BF1 /* Pods-VedioPlay.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development: xia wang (4U9H3R96V9)";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = H4F8Y6JZL2;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VedioPlay/IMChat/IMChatSource/swift-12.0",
@@ -1254,9 +1254,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay111;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = chatUI;
 				SWIFT_OBJC_BRIDGING_HEADER = VedioPlay/VedioPlayHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1268,9 +1268,9 @@
 			baseConfigurationReference = C732AA53F14184B89B0C3A88 /* Pods-VedioPlay.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development: xia wang (4U9H3R96V9)";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = H4F8Y6JZL2;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/VedioPlay/IMChat/IMChatSource/swift-12.0",
@@ -1283,9 +1283,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay111;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenze.VedioPlay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = chatUI;
 				SWIFT_OBJC_BRIDGING_HEADER = VedioPlay/VedioPlayHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -168,16 +168,26 @@ class BaseMessageCellTableViewCell: UITableViewCell {
             let menu = UIMenuController.shared
             let deletItem = UIMenuItem.init(title: NSLocalizedString("DELETMESSAGE",tableName: nil, comment: ""), action: #selector(deletedClick))
             let revokeItem = UIMenuItem.init(title: NSLocalizedString("Revoke",tableName: nil, comment: ""), action: #selector(revoke))
+            
+            
             if layout?.message?.state == .MessageItemStateSendOK  || layout?.message?.state == .MessageItemStateRead  || layout?.message?.state == .MessageItemStateDelivered{
-                menu.menuItems = [revokeItem,deletItem]
+                
+                if layout?.message?.messageType ==  .MessageItemTypeText {
+                    let coppyItem = UIMenuItem.init(title: NSLocalizedString("COPY",tableName: nil, comment: ""), action: #selector(copyMessage))
+                    menu.menuItems = [coppyItem,revokeItem,deletItem]
+                }else{
+                    
+                    menu.menuItems = [revokeItem,deletItem]
+                }
+                
             }
             
-            if #available(iOS 13.0, *) {
-                menu.showMenu(from:  bubbleView ?? UIView.init(), rect: selectedCellMessageBubbleFrame)
-            } else {
+//            if #available(iOS 13.0, *) {
+//                menu.showMenu(from:  bubbleView ?? UIView.init(), rect: selectedCellMessageBubbleFrame)
+//            } else {
                 // Fallback on earlier versions
                 menu.setTargetRect(selectedCellMessageBubbleFrame, in: bubbleView ?? UIView.init())
-            }
+          //  }
             
             menu.setMenuVisible(true, animated: true)
         }
@@ -185,9 +195,16 @@ class BaseMessageCellTableViewCell: UITableViewCell {
     }
     
     
-    override func becomeFirstResponder() -> Bool {
-        return true
+    override var canBecomeFirstResponder: Bool{
+        get{
+            return true
+        }
     }
+    
+    
+//    override func becomeFirstResponder() -> Bool {
+//        return true
+//    }
     
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
        

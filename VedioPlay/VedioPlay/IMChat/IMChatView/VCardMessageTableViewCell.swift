@@ -17,10 +17,10 @@ class VCardMessageTableViewCell: BaseMessageCellTableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-      override class func superclass() -> AnyClass? {
-           
-           return CardLayout.self
-       }
+//      override class func superclass() -> AnyClass? {
+//           
+//           return CardLayout.self
+//       }
        
        override func configWithLayou(_ layout: BaseBubbleLayout?) {
            super.configWithLayou(layout)

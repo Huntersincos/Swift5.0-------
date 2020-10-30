@@ -37,7 +37,7 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
     }
     */
     var collectionView:UICollectionView?
-    let cellIdentiferID = "AJPhotoListCollectionViewCell"
+    static let  cellIdentiferID = "AJPhotoListCollectionViewCell"
     weak var  delegate:JPhotoListViewDelegate?
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,7 +50,7 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
         collectionView = UICollectionView.init(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height), collectionViewLayout: layout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        collectionView?.register(AJPhotoListCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentiferID)
+        collectionView?.register(AJPhotoListCollectionViewCell.self, forCellWithReuseIdentifier: JPhotoListView.cellIdentiferID)
         self.addSubview(collectionView!)
         
         //Fatal error: init(coder:) has not been implemented: file
@@ -58,6 +58,10 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if collectionView != nil {
+            
+            return
+        }
         let layout = UICollectionViewFlowLayout.init()
         // 滚动方向相同的间距
        layout.minimumLineSpacing = 5
@@ -68,7 +72,7 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
        collectionView?.backgroundColor = .white
        collectionView?.delegate = self
        collectionView?.dataSource = self
-       collectionView?.register(AJPhotoListCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentiferID)
+        collectionView?.register(AJPhotoListCollectionViewCell.self, forCellWithReuseIdentifier: JPhotoListView.cellIdentiferID)
        self.addSubview(collectionView!)
         
     }
@@ -80,25 +84,32 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell:AJPhotoListCollectionViewCell? = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentiferID, for: indexPath) as? AJPhotoListCollectionViewCell
+        let cell:AJPhotoListCollectionViewCell? = collectionView.dequeueReusableCell(withReuseIdentifier: JPhotoListView.cellIdentiferID, for: indexPath) as? AJPhotoListCollectionViewCell
+        //collectionView.dequeueReusableCell(withReuseIdentifier: <#T##String#>, for: <#T##IndexPath#>)
         
-        let result:ALAsset? = JPhotoManger.shared.assets.object(at: indexPath.row) as? ALAsset
-        let frist:ALAsset? = JPhotoManger.shared.indexPathsForSelectedItems?.firstObject as? ALAsset
-        let first_forProper:String? = frist?.value(forProperty: ALAssetPropertyType) as? String
-        let result_forProper:String? = result?.value(forProperty:ALAssetPropertyType ) as? String
-        if first_forProper != nil && first_forProper != nil{
-            if JPhotoManger.shared.indexPathsForSelectedItems.count > 0 && first_forProper != result_forProper{
-                JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, _: [String : Any]?) -> Bool in
-                   // Any包括 struct，enum，func）。
-                   // AnyObject 只适用于 class 类型
-                       return false
-                   })
-               }else{
-                JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, _: [String : Any]?) -> Bool in
-                       return true
-                   })
-               }
-        }
+        let result = JPhotoManger.shared.assets[indexPath.row]
+            //as? ALAsset
+//        var frist:ALAsset? = nil
+//        if SDWebImageManager.IsArraySafe(JPhotoManger.shared.indexPathsForSelectedItems) {
+//            frist = JPhotoManger.shared.indexPathsForSelectedItems[0]
+//        }
+        
+        //let first_forProper:String? = frist?.value(forProperty: ALAssetPropertyType) as? String
+        //let result_forProper:String? = result.value(forProperty:ALAssetPropertyType ) as? String
+        
+        //if first_forProper != nil && first_forProper != nil{
+//            if JPhotoManger.shared.indexPathsForSelectedItems.count > 0 && (first_forProper != result_forProper) {
+//                JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, _: [String : Any]?) -> Bool in
+//                   // Any包括 struct，enum，func）。
+//                   // AnyObject 只适用于 class 类型
+//                       return false
+//                   })
+//               }else{
+//                JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, _: [String : Any]?) -> Bool in
+//                       return true
+//                   })
+//               }
+      //  }
 //        if JPhotoManger.shared.indexPathsForSelectedItems.count > 0 && first_forProper != result_forProper{
 //           JPhotoManger.shared.selectionFilter = NSPredicate.init(block: { (evaluatedObject:Any, [String : Any]?) -> Bool in
 //            // Any包括 struct，enum，func）。
@@ -111,11 +122,11 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
 //            })
 //        }
         var isSelected:Bool  = false
-        if result != nil && JPhotoManger.shared.indexPathsForSelectedItems != nil {
+       // if result != nil {
         // ! 注意为空的情况
-           isSelected  = JPhotoManger.shared.indexPathsForSelectedItems.contains(result!)
-        }
-        cell?.bind(JPhotoManger.shared.assets[indexPath.row] as? ALAsset, JPhotoManger.shared.selectionFilter, isSelected: isSelected)
+           isSelected  = JPhotoManger.shared.indexPathsForSelectedItems.contains(result)
+        //}
+        cell?.bind(JPhotoManger.shared.assets[indexPath.row], JPhotoManger.shared.selectionFilter, isSelected: isSelected)
         
         return cell!
         
@@ -144,22 +155,31 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         let cell:AJPhotoListCollectionViewCell?  = self.collectionView?.cellForItem(at: indexPath) as? AJPhotoListCollectionViewCell
-        let  asset:ALAsset?  = JPhotoManger.shared.assets[indexPath.row] as?ALAsset
-       //超出最大限制
-       
-        if JPhotoManger.shared.indexPathsForSelectedItems.count >= JPhotoManger.shared.maximumNumberOfSelection && JPhotoManger.shared.indexPathsForSelectedItems.contains(asset!) == false {
+        let  asset  = JPhotoManger.shared.assets[indexPath.row]
+       //超出最大限
+        if JPhotoManger.shared.indexPathsForSelectedItems.count >= JPhotoManger.shared.maximumNumberOfSelection && !JPhotoManger.shared.indexPathsForSelectedItems.contains(asset) {
             delegate?.photoPickerDidMaximum(self)
             return
         }
         
         // 取消选择
-        if JPhotoManger.shared.indexPathsForSelectedItems.contains(asset!){
-            JPhotoManger.shared.indexPathsForSelectedItems .remove(asset!)
+        if JPhotoManger.shared.indexPathsForSelectedItems.contains(asset){
+            var index = 0
+            for selectedItem in JPhotoManger.shared.indexPathsForSelectedItems {
+                
+                if selectedItem .isEqual(asset) {
+                    break
+                }
+                index += 1
+                
+            }
+            JPhotoManger.shared.indexPathsForSelectedItems.remove(at: index)
             cell?.is_Selected(false)
-            delegate?.photoPicker(self, didDeselectAsset: asset!)
+            delegate?.photoPicker(self, didDeselectAsset: asset)
             if JPhotoManger.shared.indexPathsForSelectedItems.count == 0 {
-                self.collectionView?.reloadData()
+                //self.collectionView?.reloadData()
             }
             return
         }
@@ -172,27 +192,31 @@ class JPhotoListView: UIView,UICollectionViewDataSource,UICollectionViewDelegate
         }
         
         // 选中
-        let result:ALAsset? = JPhotoManger.shared.indexPathsForSelectedItems?.firstObject as? ALAsset
-        let first_forProper:String? = asset?.value(forProperty: ALAssetPropertyType) as? String
-        let result_forProper:String? = result?.value(forProperty:ALAssetPropertyType ) as? String
-        if JPhotoManger.shared.indexPathsForSelectedItems.count == 0 || first_forProper == result_forProper  {
-            JPhotoManger.shared.indexPathsForSelectedItems.add(asset!)
+//        var result:ALAsset? = nil
+//        if  SDWebImageManager.IsArraySafe(JPhotoManger.shared.indexPathsForSelectedItems) {
+//
+//            result =  JPhotoManger.shared.indexPathsForSelectedItems[0]
+//        }
+           
+//        let first_forProper:String? = asset?.value(forProperty: ALAssetPropertyType) as? String
+//        let result_forProper:String? = result?.value(forProperty:ALAssetPropertyType ) as? String
+//        if JPhotoManger.shared.indexPathsForSelectedItems.count == 0 || (first_forProper == result_forProper)  {
+            JPhotoManger.shared.indexPathsForSelectedItems.append(asset)
             cell?.is_Selected(true)
-            let first:ALAsset? = JPhotoManger.shared.indexPathsForSelectedItems?.firstObject as? ALAsset
-            let indexPathFirst :String? = first?.value(forProperty: ALAssetPropertyType) as? String
-            if indexPathFirst == ALAssetTypePhoto{
-                JPhotoManger.shared.maximumNumberOfSelection = 9
-            }else{
-                JPhotoManger.shared.maximumNumberOfSelection = 1
-            }
+            //let first:ALAsset? = JPhotoManger.shared.indexPathsForSelectedItems.first
+           //   if indexPathFirst == ALAssetTypePhoto{
+//                JPhotoManger.shared.maximumNumberOfSelection = 9
+//            }else{
+//                JPhotoManger.shared.maximumNumberOfSelection = 1
+//            }
             delegate?.photoPicker(self, didSelectAsset: asset)
             if JPhotoManger.shared.indexPathsForSelectedItems.count == 1{
-                self.collectionView?.reloadData()
-            }
-        }else{
-            delegate?.photoPicker(self, didSelectUnexpectedAsset: asset)
-            
-        }
+               // self.collectionView?.reloadData()
+             }
+//        }else{
+//            delegate?.photoPicker(self, didSelectUnexpectedAsset: asset)
+//
+//        }
         
         
     }

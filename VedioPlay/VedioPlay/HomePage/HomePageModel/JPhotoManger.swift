@@ -13,15 +13,17 @@ class JPhotoManger: NSObject {
    // 构造单利
     fileprivate static let instacne  = JPhotoManger()
     var selectionFilter:NSPredicate!
-    var indexPathsForSelectedItems:NSMutableArray!
+    var indexPathsForSelectedItems = [ALAsset]()
     var maximumNumberOfSelection:NSInteger!
     var minimumNumberOfSelection:NSInteger!
     //lazy init 在swift存储属性必须初始化，确认类型，或者用可选类型，总之要确认类型，毕竟swift是类型安全语言，所以swift提出了lazy属性
    // var assets:NSMutableArray!
     
-    lazy var assets:NSMutableArray = {
-        return NSMutableArray.init()
-    }()
+//    lazy var assets:NSMutableArray = {
+//        return NSMutableArray.init()
+//    }()
+    
+    var assets = [ALAsset]()
     
     /**
        ALAsset 表示一个照片／视频资源实体
@@ -45,7 +47,8 @@ class JPhotoManger: NSObject {
     func clearAll() {
         maximumNumberOfSelection = 9
         minimumNumberOfSelection = 0
-        indexPathsForSelectedItems = NSMutableArray.init()
+        assets.removeAll()
+        indexPathsForSelectedItems.removeAll()
         selectionFilter = NSPredicate(value: true)
     }
     
@@ -55,15 +58,18 @@ class JPhotoManger: NSObject {
     
     func laodAssetsWithCompleteBlock(succeed:@escaping(Bool) -> Void)  {
         
-        let tempList = NSMutableArray.init()
+        //let tempList = NSMutableArray.init()
         let listGroupBlock:ALAssetsLibraryGroupsEnumerationResultsBlock? = {
              (group: ALAssetsGroup! ,stop:UnsafeMutablePointer<ObjCBool>!) in
+            //
             let assetsFilter:ALAssetsFilter? = ALAssetsFilter.allAssets()
-//            if group == nil {
-//                return
-//            }
+            
+            
+
             // 不能为空group
             if group != nil {
+                // why 调用好几次??????
+                //self.assets.removeAll()
                  group.setAssetsFilter(assetsFilter)
                   if group.numberOfAssets() > 0 {
                 //                group.enumerateAssets { (ALAsset?, <#Int#>, UnsafeMutablePointer<ObjCBool>?) in
@@ -75,25 +81,29 @@ class JPhotoManger: NSObject {
                                 //UnsafeMutablePointer Cannot invoke 'enumerateAssets' with an argument list of type解决是加感叹号/?
                 group.enumerateAssets{ (result:ALAsset?, index:NSInteger?, stop:UnsafeMutablePointer<ObjCBool>?) in
                     if (result != nil) {
-                        tempList.add(result!)
+                        //tempList.add(result!)
+                        self.assets.append(result!)
                     }
                 }
                 
-                let reversedArray = tempList.reverseObjectEnumerator().allObjects
-                
-                self.assets.removeAllObjects()
-                self.assets = NSMutableArray.init(array: reversedArray)
+//                let reversedArray = tempList.reverseObjectEnumerator().allObjects
+//
+//                self.assets.removeAllObjects()
+//                self.assets = NSMutableArray.init(array: reversedArray)
                 succeed(true)
+                    
+            
                     
                 }
             }
         
        }
      
-        let groupTypes = ALAssetsGroupAll
+        let groupTypes = ALAssetsGroupSavedPhotos
+            //ALAssetsGroupAll
         assetsLibrary.enumerateGroupsWithTypes(groupTypes, usingBlock: listGroupBlock) { (error:Error?) in
             succeed(false)
-            
+
         }
        
     

@@ -17,13 +17,20 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
     var gradientView:AJGradientView?
     func bind(_ asset:ALAsset? ,_ selectionFilter:NSPredicate?,isSelected:Bool) {
         self.asset = asset
+        self.imageView = nil
+        self.tapAssetView = nil
+        self.gradientView = nil
+        for view in self.contentView.subviews {
+            view.removeFromSuperview()
+        }
+        
         if self.imageView == nil {
             self.imageView = UIImageView.init(frame: CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height))
             self.contentView.addSubview(self.imageView!)
             self.imageView?.layer.cornerRadius = 5
             self.imageView?.contentMode = .scaleAspectFill
             self.imageView?.clipsToBounds = true
-            self.imageView?.backgroundColor = .white
+            self.backgroundColor = .white
         }
         if self.tapAssetView == nil {
             self.tapAssetView = AJPhotoListCellTapView.init(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
@@ -36,8 +43,9 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
         }else{
             // 获取图片的缩列图 aspectRatioThumbnail hread 1: EXC_BAD_INSTRUCTION (code=EXC_I386_INVOP, subcode=0x0)
             //UIImage.init(cgImage: <#T##CGImage#>)
-           // self.imageView?.image = UIImage.init(cgImage: asset?.aspectRatioThumbnail() as! CGImage)
-            self.imageView?.image = UIImage(cgImage: (asset?.thumbnail()?.takeUnretainedValue())!)
+            self.imageView?.image = UIImage.init(cgImage: (asset?.aspectRatioThumbnail()?.takeUnretainedValue())!)
+            /// thumbnail 有模糊
+            //self.imageView?.image = UIImage(cgImage: (asset?.thumbnail()?.takeUnretainedValue())!)
             //Binary operator '==' cannot be applied to operands of type 'Any?' and 'String' 在swif中只有类才可以用== 值类型是不行的 asset?.value(forProperty:ALAssetPropertyType) == ALAssetTypeVideo 不对 == 必须类型对应
             let propertyType:String? =  asset?.value(forProperty:ALAssetPropertyType) as? String
             if propertyType == ALAssetTypeVideo {
@@ -48,11 +56,11 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
                     self.contentView.insertSubview(gradientView!, aboveSubview: self.imageView!)
                     gradientView?.setupCAGradientLayer(colors, locations)
                     
-                    let videoIcon:UIImageView? = UIImageView.init(frame: CGRect(x: 5, y: self.bounds.size.height - 15, width: 15, height: 8))
-                    videoIcon?.image = UIImage.init(named: "AssetsPickerVideo")
-                    gradientView?.addSubview(videoIcon!)
+                    let videoIcon = UIImageView.init(frame: CGRect(x: 5, y: self.bounds.size.height - 15, width: 15, height: 8))
+                    videoIcon.image = UIImage.init(named: "AssetsPickerVideo")
+                    gradientView?.addSubview(videoIcon)
                     
-                    let duration = UILabel.init(frame: CGRect(x: (videoIcon?.frame.maxX)!, y: self.bounds.size.height-17, width: self.bounds.size.width - (videoIcon?.frame.maxX)! - 5, height: 12))
+                    let duration = UILabel.init(frame: CGRect(x: (videoIcon.frame.maxX), y: self.bounds.size.height-17, width: self.bounds.size.width - (videoIcon.frame.maxX) - 5, height: 12))
                     duration.font = UIFont.systemFont(ofSize: 12)
                     duration.textColor = .white
                     duration.textAlignment = .center
@@ -73,7 +81,7 @@ class AJPhotoListCollectionViewCell: UICollectionViewCell {
             }
         }
         
-        tapAssetView?.disabled = selectionFilter?.evaluate(with: asset)
+        tapAssetView?.disabled = !(selectionFilter?.evaluate(with: asset) ?? false)
         tapAssetView?.selected = isSelected
         
     }

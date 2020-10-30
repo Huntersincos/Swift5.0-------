@@ -106,7 +106,7 @@ class ChatListTableViewCell: UITableViewCell {
             
                 case .MessageItemTypeVideo:
                     
-                    return  NSLocalizedString("MESSAGE_IMAGE",tableName: nil, comment: "")
+                    return  NSLocalizedString("MESSAGE_VIDEO",tableName: nil, comment: "")
             
                 case .MessageItemTypeText:
                     return  message!.content

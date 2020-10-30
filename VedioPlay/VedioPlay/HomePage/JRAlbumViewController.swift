@@ -11,7 +11,7 @@ import AssetsLibrary
 
 @objc protocol  JRAlbumViewControllerDelegate{
     
-    func  fileSelected(_ dataArray:Optional<Data>, _ isVideo:Bool)
+    func  fileSelected(_ dataArray:[Dictionary<String, Any>])
 }
 
 class JRAlbumViewController: UIViewController,JPhotoListViewDelegate {
@@ -30,6 +30,9 @@ class JRAlbumViewController: UIViewController,JPhotoListViewDelegate {
     @IBOutlet weak var originalBtn: UIButton!
     
     @IBOutlet weak var sendBtn: UIButton!
+    
+    weak var delegate:JRAlbumViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // inherit module from target
@@ -69,8 +72,8 @@ class JRAlbumViewController: UIViewController,JPhotoListViewDelegate {
         DispatchQueue.global().async {
             
             let assetsArray =  JPhotoManger.shared.indexPathsForSelectedItems
-            let  isVideo = false
-            var  photoArrays = [Data]()
+            //var  isVideo = false
+            var  photoArrays = [Dictionary<String, Any>]()
             for item in assetsArray ?? []{
                 
                 let asset = item as! ALAsset
@@ -87,10 +90,53 @@ class JRAlbumViewController: UIViewController,JPhotoListViewDelegate {
                         image = UIImage(cgImage: (asset.thumbnail()?.takeUnretainedValue())!)
                         
                     }else{
-                        image = UIImage(cgImage: (representation?.fullScreenImage())!)
+                        
+                        let fullScreen = representation?.fullScreenImage()
+                        image = UIImage(cgImage: (fullScreen?.takeUnretainedValue())!)
+                    
                     }
                     
+                    let imageData = image?.jpegData(compressionQuality: 0.8)
+                    if imageData != nil {
+                        photoArrays.append(["blumData":imageData! ,"isVideo":false])
+                    }
+                    
+                }else if type == ALAssetTypeVideo{
+
+                   // isVideo = true
+                    
+                    let size = representation?.size()
+
+                    let data = NSMutableData.init(capacity: Int(size ?? 0))
+
+                    var buffer = data?.mutableBytes
+                    //UnsafeMutablePointer<UInt8>?
+                   // MemoryLayout.size(ofValue:8) https://zhuanlan.zhihu.com/p/26909719?utm_medium=social&utm_source=wei
+                   // MemoryLayout.alignment(ofValue: <#T##_#>) 而且在 64bit 系统下，最大的内存对齐原则是 8byte。
+                  //  MemoryLayout.stride(ofValue: <#T##_#>)
+                    //unsafeMutableRawPointer 等同于 void *
+
+                    representation?.getBytes(buffer?.assumingMemoryBound(to: UInt8.self), fromOffset: 0, length: Int(size ?? 0), error: nil)
+                    if buffer != nil {
+                        let fileData = Data.init(bytes: buffer!, count: Int(size ?? 0))
+
+                        //if fileData != nil {
+                        photoArrays.append(["blumData":fileData ,"isVideo":true])
+                       // }
+                    }
+                    
+//                        if representation != nil {
+//                          photoArrays.append(["blumData":BrigeOCSwiftModel.dataBytesAssert(representation!) ,"isVideo":true])
+//                         }
+                    
                 }
+                
+            }
+            
+            DispatchQueue.main.async {
+                
+                self.delegate?.fileSelected(photoArrays)
+                self.navigationController?.popViewController(animated: true)
                 
             }
             

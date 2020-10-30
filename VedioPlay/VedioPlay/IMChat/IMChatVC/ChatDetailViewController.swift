@@ -17,7 +17,7 @@ public let  VCardCell = "VCardCell"
 public let OtherFileCell = "OtherFileCell"
 public let RevokeCell = "RevokeCell"
 public var contetntKey = ""
-class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDelegate,UITableViewDataSource,BaseMessageCellTableViewCellDelegate {
+class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDelegate,UITableViewDataSource,BaseMessageCellTableViewCellDelegate,JRAlbumViewControllerDelegate {
     
     
     var  peerUserName:String = ""
@@ -359,7 +359,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
             case .MessageItemTypeImage:fallthrough
             case .MessageItemTypeVideo:
                 let cell = tableView.dequeueReusableCell(withIdentifier: ThumbImgCell, for: indexPath) as! ThumbImageTableViewCell
-              cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? ThumbImageLayout)
+                 cell.configWithLayou(MessageLayoutManager.shareInstance.layoutDic[message?.transId ?? ""] as? ThumbImageLayout)
                  cell.setDelegate(self, self.tableView)
                   return cell
                   //break
@@ -478,6 +478,13 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     
     func tableView(_ tableView: UITableView?, deletSMS message: ChatMessageObject?) {
         
+        // 删除消息
+        if message == nil {
+            return
+        }
+        isDelectMessage = true
+        
+        MessageManager.shareInstance.deleteMessage(message!)
     }
     
     ///  InputViewDelegate
@@ -529,8 +536,8 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     func photoBtnClicked() {
         
         let photoVC = JRAlbumViewController.init()
-        photoVC
-        
+        photoVC.delegate = self
+        navigationController?.pushViewController(photoVC, animated: true)
     }
     
     func cameraBtnClicked() {
@@ -553,7 +560,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
         
         if MessageManager.shareInstance.sendTextMessage(message, "小明") == false {
             #if DEBUG
-               print("消息发送失败")
+               print("消息文本发送失败")
 
                #else
                
@@ -563,12 +570,13 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
             
         }else{
             #if DEBUG
-                  print("消息发送成功")
+            
+            print("消息文本发送成功")
 
-                  #else
+            #else
                   
 
-                  #endif
+         #endif
             
         }
         
@@ -601,6 +609,102 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     func didVoiceRecordRecordTimeBig(_ button: ChatVoiceRecordButton) {
         
     }
+    
+    func fileSelected(_ dataArray: [Dictionary<String, Any>]) {
+        
+        if SDWebImageManager.IsArraySafe(dataArray) {
+            
+            for videoDataDic in dataArray {
+                
+                let isVideo:Bool = videoDataDic["isVideo"] as! Bool
+                
+                if isVideo {
+                    let fileRelativePath = JRFileUtil.createFilePathWithFileName(JRFileUtil.getFileNameWithType("mp4") as NSString, "video", self.peerUserName)
+                    let ns_videoData:NSData = videoDataDic["blumData"] as! NSData
+                    if ns_videoData.write(toFile: JRFileUtil.getAbsolutePathWithFileRelativePath(fileRelativePath), atomically: true) {
+                        
+                        if MessageManager.shareInstance.sendFile(fileRelativePath, JRFileUtil.getThumbPathWithFilePath(fileRelativePath, peerUserName: self.peerUserName), "video/mp4", self.peerUserName){
+                            
+                            #if DEBUG
+                               print("视频发送成功")
+
+                               #else
+
+                               #endif
+                        }
+                    }
+                    
+                }else{
+                    
+                    let fileRelativePath = JRFileUtil.createFilePathWithFileName(JRFileUtil.getFileNameWithType("png") as NSString, "image", self.peerUserName)
+                    
+                    let ns_imageData:NSData =  videoDataDic["blumData"] as! NSData
+                    
+                    if ns_imageData.write(toFile: JRFileUtil.getAbsolutePathWithFileRelativePath(fileRelativePath), atomically: true) {
+                        
+                        if MessageManager.shareInstance.sendFile(fileRelativePath, JRFileUtil.getThumbPathWithFilePath(fileRelativePath, peerUserName: self.peerUserName), "image/png", self.peerUserName){
+                            
+                            #if DEBUG
+                               print("图片发送成功")
+
+                               #else
+
+                               #endif
+                        }
+                    }
+                    
+                }
+            }
+            
+//            if isVideo {
+//                for videoData in dataArray {
+//                    let fileRelativePath = JRFileUtil.createFilePathWithFileName(JRFileUtil.getFileNameWithType("mp4") as NSString, "video", self.peerUserName)
+//                    let ns_videoData:NSData = videoData as NSData
+//                    if ns_videoData.write(toFile: JRFileUtil.getAbsolutePathWithFileRelativePath(fileRelativePath), atomically: true) {
+//
+//                        if MessageManager.shareInstance.sendFile(fileRelativePath, JRFileUtil.getThumbPathWithFilePath(fileRelativePath, peerUserName: self.peerUserName), "video/mp4", self.peerUserName){
+//
+//                            #if DEBUG
+//                               print("视频发送成功")
+//
+//                               #else
+//
+//                               #endif
+//                        }
+//                    }
+//
+//                }
+//
+//            }else{
+//
+//                for imageData in dataArray {
+//
+//                    let fileRelativePath = JRFileUtil.createFilePathWithFileName(JRFileUtil.getFileNameWithType("png") as NSString, "image", self.peerUserName)
+//
+//                    let ns_imageData:NSData = imageData as NSData
+//
+//                    if ns_imageData.write(toFile: JRFileUtil.getAbsolutePathWithFileRelativePath(fileRelativePath), atomically: true) {
+//
+//                        if MessageManager.shareInstance.sendFile(fileRelativePath, JRFileUtil.getThumbPathWithFilePath(fileRelativePath, peerUserName: self.peerUserName), "image/png", self.peerUserName){
+//
+//                            #if DEBUG
+//                               print("视频发送成功")
+//
+//                               #else
+//
+//                               #endif
+//                        }
+//                    }
+//
+//                }
+//
+//
+//            }
+        }
+        
+    }
+    
+    
     
     @objc func tap(_ getTap:UITapGestureRecognizer?){
         

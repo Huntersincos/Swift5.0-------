@@ -20,9 +20,9 @@ class AudioMessageTableViewCell: BaseMessageCellTableViewCell,AudioPlayHelperDel
         // Initialization code
     }
     
-    override class func superclass() -> AnyClass? {
-        return AudioLayout.self
-    }
+//    override class func superclass() -> AnyClass? {
+//        return AudioLayout.self
+//    }
     
     override func configWithLayou(_ layout: BaseBubbleLayout?) {
         

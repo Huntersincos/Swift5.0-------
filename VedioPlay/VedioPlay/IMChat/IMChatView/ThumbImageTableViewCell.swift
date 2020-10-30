@@ -14,10 +14,10 @@ class ThumbImageTableViewCell: BaseMessageCellTableViewCell {
     var durationLabel:UILabel?
     var playBtn:UIImageView?
     
-    override class func superclass() -> AnyClass? {
-        
-        return ThumbImageLayout.self
-    }
+//    override class func superclass() -> AnyClass? {
+//        
+//        return ThumbImageLayout.self
+//    }
     
     override func configWithLayou(_ layout: BaseBubbleLayout?) {
         super.configWithLayou(layout)
@@ -46,10 +46,10 @@ class ThumbImageTableViewCell: BaseMessageCellTableViewCell {
         }
         
         let tempLayout = layout as! ThumbImageLayout
-        playBtn?.isHidden = tempLayout.showPlayBtn ?? true
+        playBtn?.isHidden = !(tempLayout.showPlayBtn ?? false)
         playBtn?.image = tempLayout.playBtnImage
         thumbImage?.image = tempLayout.thumbnail
-        durationLabel?.isHidden = tempLayout.showDurationLabel ?? true
+        durationLabel?.isHidden = !(tempLayout.showDurationLabel ?? false)
         durationLabel?.text = tempLayout.durationLabelText
         
         bubbleView?.backgroundColor = layout?.bubbleViewBackgroupColor

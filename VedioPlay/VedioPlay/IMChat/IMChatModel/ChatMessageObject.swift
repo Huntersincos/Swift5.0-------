@@ -190,9 +190,17 @@ class ChatMessageObject: Object {
     
     @objc dynamic var fileSize = 0.0
     
+    /// 文件类型
+    @objc dynamic var fileType = ""
+    
+
+    
     /// 传输唯一标识符
     
     @objc dynamic var transId = ""
+    
+    /// 文件已传输大小
+    @objc dynamic var fileTransSize = ""
     
     
     /// 文本字体大小
