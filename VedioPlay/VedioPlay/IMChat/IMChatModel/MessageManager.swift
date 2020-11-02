@@ -141,6 +141,7 @@ class MessageManager: NSObject {
             objc.peerUserName = peerUserName
             objc.isRead = false
             objc.conversationId = "1587777777764"
+            objc.filePath = path
             objc.fileName =  thumbPath
             objc.fileType = type
             objc.fileThumbPath = thumbPath
@@ -170,6 +171,57 @@ class MessageManager: NSObject {
         return false
     }
     
+    
+    /**
+       发送定位
+     */
+    
+    func sendGeo(_ geoLabel:String, _ latitude:Double,_ longitude:Double,_ radius:Double,_ peerUserName:String) ->  Bool{
+        
+        let realm = RealmInitModel.getRealmInstance()
+        
+        if realm != nil {
+            let objc = ChatMessageObject.init()
+            objc.imdnId  = "messagetext123456\(Date.timeIntervalSinceReferenceDate)"
+            // 模拟个接收用户
+            objc.receiverUserName = peerUserName
+            objc.timestamp =  "\(Date().timeIntervalSince1970 * 1000)"
+            objc.senderName = "我"
+            objc.messageType = .MessageItemTypeGeo
+            objc.state = .MessageItemStateSendOK
+            objc.messageTranDirection = .MessagirectionSend
+            objc.channelType = .MessageChannelType1On1
+            objc.peerUserName = peerUserName
+            objc.isRead = false
+            objc.conversationId = "1587777777764"
+            objc.geoFreeText = geoLabel
+            objc.geoRadius = "\(radius)"
+            objc.geoLatitude = "\(latitude)"
+            objc.geoLongitude = "\(longitude)"
+            objc.transId = "messagetext123456\(Date.timeIntervalSinceReferenceDate)"
+            
+            var conversaton = MessageDBHelper.getConversationPeerUserWith(objc.peerUserName)
+            if conversaton == nil {
+                // key step
+                conversaton = ListConversationObject.init()
+                conversaton?.peerUserName = objc.peerUserName
+                
+            }
+            realm?.beginWrite()
+            conversaton?.conversationTitleName = objc.peerUserName
+            conversaton?.updateTime = "\(Date().timeIntervalSince1970 * 1000)"
+            print("conversaton?.updateTime  == \(conversaton?.updateTime)")
+            realm?.add(objc)
+            realm?.add(conversaton!, update: .all)
+            try?realm?.commitWrite()
+            return true
+            
+        }
+        
+        
+        
+        return false
+    }
     
     
     /// 删除消息

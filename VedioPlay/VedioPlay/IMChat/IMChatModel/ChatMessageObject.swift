@@ -179,6 +179,19 @@ class ChatMessageObject: Object {
     
     @objc dynamic var geoFreeText = ""
     
+    
+    /// 纬度
+    
+    @objc dynamic var geoLatitude = ""
+    
+    /// 精度
+    
+    @objc dynamic var geoLongitude = ""
+    
+    /// 地图半径
+    
+    @objc dynamic var geoRadius = ""
+    
     /// 文件路径
     
     @objc dynamic var filePath = ""

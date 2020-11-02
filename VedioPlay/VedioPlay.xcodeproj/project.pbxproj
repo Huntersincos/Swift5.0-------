@@ -68,6 +68,7 @@
 		6E4EDCC92536E36E003DE1CC /* OtherFileLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCC82536E36E003DE1CC /* OtherFileLayout.swift */; };
 		6E4EDCCB2536E53B003DE1CC /* ic_default_file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E4EDCCA2536E53B003DE1CC /* ic_default_file@2x.png */; };
 		6E4EDCD125380A1C003DE1CC /* BaseMessageCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */; };
+		6E508568254FECBC00530F17 /* explain.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6E508567254FECBC00530F17 /* explain.strings */; };
 		6E56076824E0EE2D00DA43FF /* AVVedioPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */; };
 		6E604A992522E537009D5D1F /* RealmInitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604A982522E537009D5D1F /* RealmInitModel.swift */; };
 		6E604AAA25231D09009D5D1F /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E604AA925231D09009D5D1F /* ChatListViewController.swift */; };
@@ -242,6 +243,7 @@
 		6E4EDCC82536E36E003DE1CC /* OtherFileLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherFileLayout.swift; sourceTree = "<group>"; };
 		6E4EDCCA2536E53B003DE1CC /* ic_default_file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_default_file@2x.png"; sourceTree = "<group>"; };
 		6E4EDCD025380A1C003DE1CC /* BaseMessageCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMessageCellTableViewCell.swift; sourceTree = "<group>"; };
+		6E508567254FECBC00530F17 /* explain.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = explain.strings; sourceTree = "<group>"; };
 		6E56076724E0EE2D00DA43FF /* AVVedioPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVVedioPlayView.swift; sourceTree = "<group>"; };
 		6E604A982522E537009D5D1F /* RealmInitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmInitModel.swift; sourceTree = "<group>"; };
 		6E604AA925231D09009D5D1F /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
@@ -439,6 +441,14 @@
 			);
 			path = EmotionView;
 			sourceTree = "<group>";
+		};
+		6E50855B254FEC6100530F17 /* YY-Kit解读 */ = {
+			isa = PBXGroup;
+			children = (
+				6E508567254FECBC00530F17 /* explain.strings */,
+			);
+			path = "YY-Kit解读";
+			sourceTree = SOURCE_ROOT;
 		};
 		6E56076624E0EDDC00DA43FF /* VedioPlayView */ = {
 			isa = PBXGroup;
@@ -668,6 +678,7 @@
 		6EB799FA2493696900B56296 /* VedioPlay */ = {
 			isa = PBXGroup;
 			children = (
+				6E50855B254FEC6100530F17 /* YY-Kit解读 */,
 				6E604A8B2522DE13009D5D1F /* IMChat */,
 				6EB5D4052498A23B008DA35A /* Source */,
 				6EB79A2F249374B400B56296 /* HomePage */,
@@ -891,6 +902,7 @@
 				6E4E5EFA2530503200A1F317 /* message_file@2x.png in Resources */,
 				6E4EDCCB2536E53B003DE1CC /* ic_default_file@2x.png in Resources */,
 				6EB5D3F22497393A008DA35A /* JRAlbumViewController.xib in Resources */,
+				6E508568254FECBC00530F17 /* explain.strings in Resources */,
 				6EB79A032493696900B56296 /* Main.storyboard in Resources */,
 				6EBD998F24EBCA7E0010F2B2 /* v02004060000bq0sotqmac2oa0c1pftg.mp4 in Resources */,
 				6E4EDC9825357C1C003DE1CC /* im_sending@2x.png in Resources */,

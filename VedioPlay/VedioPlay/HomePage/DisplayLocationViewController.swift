@@ -178,7 +178,8 @@ class DisplayLocationViewController: UIViewController,CLLocationManagerDelegate,
             let userLocation = try locations[0]
             if self.isFirstUserLocation == nil && self.isShowMessageLocation == nil && userLocation.coordinate.longitude > 0{
                 let region:MKCoordinateRegion = MKCoordinateRegion.init(center: userLocation.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
-                myMapView.setRegion(region, animated: true)
+                /// myMapView.setRegion(region, animated: true) 经纬度不对了 ?????
+                myMapView.setRegion(region, animated: false)
                 self.isFirstUserLocation = true
                 reverseGeocodeLocation()
             }
@@ -202,7 +203,7 @@ class DisplayLocationViewController: UIViewController,CLLocationManagerDelegate,
         if self.isShowMessageLocation == nil && self.isFirstUserLocation == nil && userLocation.coordinate.longitude > 0 {
             
             let region:MKCoordinateRegion = MKCoordinateRegion.init(center: userLocation.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
-            myMapView.setRegion(region, animated: true)
+            myMapView.setRegion(region, animated: false)
             self.isFirstUserLocation = true
             reverseGeocodeLocation()
             

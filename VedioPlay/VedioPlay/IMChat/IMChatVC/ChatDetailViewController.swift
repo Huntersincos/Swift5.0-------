@@ -17,8 +17,7 @@ public let  VCardCell = "VCardCell"
 public let OtherFileCell = "OtherFileCell"
 public let RevokeCell = "RevokeCell"
 public var contetntKey = ""
-class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDelegate,UITableViewDataSource,BaseMessageCellTableViewCellDelegate,JRAlbumViewControllerDelegate {
-    
+class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDelegate,UITableViewDataSource,BaseMessageCellTableViewCellDelegate,JRAlbumViewControllerDelegate,JRCameraHelperDelegate,DisplayLocationViewControllerDelegate {
     
     var  peerUserName:String = ""
     var  isFirstLoad = false
@@ -27,7 +26,7 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     var  messageListToken:NotificationToken?
     var  currentCount = 0
     var  isDelectMessage = false
-    
+    var voicePrgressView:VoiceRecordProgressView?
     convenience init(with peerUserName:String){
         self.init()
         self.peerUserName =  peerUserName
@@ -531,6 +530,25 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     
     func locationBtnClicked() {
         
+        let viewLoactionVC = DisplayLocationViewController.init()
+        viewLoactionVC.delegate = self
+        navigationController?.pushViewController(viewLoactionVC, animated: true)
+        
+    }
+    
+    ///DisplayLocationViewControllerdeleage ----
+    func didFinishLocationCompled(_ latitude: Double, _ longitude: Double, _ radius: Double, geoLocation: String) {
+        
+        if MessageManager.shareInstance.sendGeo(geoLocation, latitude, longitude, radius, self.peerUserName){
+            #if DEBUG
+               print("地图位置发送成功")
+
+               #else
+
+               #endif
+            
+        }
+        
     }
     
     func photoBtnClicked() {
@@ -540,7 +558,67 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
         navigationController?.pushViewController(photoVC, animated: true)
     }
     
+    
+    /// JRAlbumViewControllerdelegate
     func cameraBtnClicked() {
+        
+        JRCameraHelper.sharedInstance.delegate = self
+        JRCameraHelper.sharedInstance.showCameraViewControllerCameraType(.CameraTypeBoth, onViewController: self)
+    }
+    
+    func cameraPrintImage(_ image: UIImage?) {
+        
+        let imageData = image?.jpegData(compressionQuality: 0.8)
+        
+        let fileRelativePath = JRFileUtil.createFilePathWithFileName(JRFileUtil.getFileNameWithType("png") as NSString, "image", self.peerUserName)
+        
+        if imageData == nil {
+            return
+        }
+        
+        let ns_imageData:NSData =  imageData! as NSData
+        
+        if ns_imageData.write(toFile: JRFileUtil.getAbsolutePathWithFileRelativePath(fileRelativePath), atomically: true) {
+            
+            if MessageManager.shareInstance.sendFile(fileRelativePath, JRFileUtil.getThumbPathWithFilePath(fileRelativePath, peerUserName: self.peerUserName), "image/png", self.peerUserName){
+                
+                #if DEBUG
+                   print("图片发送成功")
+
+                   #else
+
+                   #endif
+            }
+        }
+        
+        
+        
+    }
+    
+    func cameraPrintVideo(_ videoUrl: NSURL?) {
+        
+        JRFileUtil.convertVideoFormat(videoUrl?.path ?? "", peerUserName: self.peerUserName) { (completed:String, fileRelativePath:String) in
+            
+            if completed == "0"{
+                if !SDWebImageManager.isBlankString(fileRelativePath) {
+                    DispatchQueue.main.async {
+                        if MessageManager.shareInstance.sendFile(fileRelativePath, JRFileUtil.getThumbPathWithFilePath(fileRelativePath, peerUserName: self.peerUserName), "video/mp4", self.peerUserName){
+                            
+                            #if DEBUG
+                               print("视频发送成功")
+
+                               #else
+
+                               #endif
+                        }
+                    }
+                   
+                    
+                }
+            }
+            
+            
+        }
         
     }
     
@@ -584,30 +662,44 @@ class ChatDetailViewController: UIViewController,InputViewDelegate,UITableViewDe
     
     func didVoiceRecordBeginRecord(_ button: ChatVoiceRecordButton) {
         
+        AudioPlayHelper.shareInstance.stopAudio()
+        tableView.isUserInteractionEnabled = false
+        if  voicePrgressView != nil{
+            voicePrgressView = VoiceRecordProgressView.init(frame: self.view.bounds)
+        }
+        voicePrgressView?.setVoiceRecord()
+        voicePrgressView?.show()
+        
     }
     
     func didVoiceRecordEndRecord(_ button: ChatVoiceRecordButton, _ duration: Int) {
+        tableView.isUserInteractionEnabled = true
+        voicePrgressView?.hide()
+        
         
     }
     
     func didVoiceRecordCancelRecord(_ button: ChatVoiceRecordButton) {
-        
+        tableView.isUserInteractionEnabled = true
+        voicePrgressView?.hide()
     }
     
     func didVoiceRecordContinueRecord(_ button: ChatVoiceRecordButton) {
-        
+        voicePrgressView?.didShow()
     }
     
     func didVoiceRecordWillCancelRecord(_ button: ChatVoiceRecordButton) {
-        
+        voicePrgressView?.willHide()
     }
     
     func didVoiceRecordRecordTimeSmall(_ button: ChatVoiceRecordButton) {
-        
+        tableView.isUserInteractionEnabled = true
+        voicePrgressView?.recordTimeSmall()
     }
     
     func didVoiceRecordRecordTimeBig(_ button: ChatVoiceRecordButton) {
-        
+        tableView.isUserInteractionEnabled = true
+        voicePrgressView?.hide()
     }
     
     func fileSelected(_ dataArray: [Dictionary<String, Any>]) {

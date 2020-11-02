@@ -17,11 +17,11 @@ class LoactionTableViewCell: BaseMessageCellTableViewCell {
         // Initialization code
     }
     
-    override class func superclass() -> AnyClass?{
-        
-        return  LoactionLayout.self
-    }
-    
+//    override class func superclass() -> AnyClass?{
+//
+//        return  LoactionLayout.self
+//    }
+//
     override func configWithLayou(_ layout: BaseBubbleLayout?) {
         super.configWithLayou(layout)
         
@@ -42,6 +42,10 @@ class LoactionTableViewCell: BaseMessageCellTableViewCell {
             msgContentView?.addSubview(titleLabel!)
         }
         
+        if layout == nil {
+            return
+        }
+        
         let tempLayout = layout as! LoactionLayout
         iconView?.image = tempLayout.iconImage
         titleLabel?.text = tempLayout.titleLabelText
@@ -54,6 +58,9 @@ class LoactionTableViewCell: BaseMessageCellTableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if layout == nil {
+            return
+        }
         let tempLayout = layout as! LoactionLayout
         iconView?.frame = tempLayout.iconImageFrame ?? CGRect.zero
         titleLabel?.frame = tempLayout.titleLabelFrame ?? CGRect.zero

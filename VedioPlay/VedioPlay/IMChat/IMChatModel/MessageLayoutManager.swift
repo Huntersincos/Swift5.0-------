@@ -52,7 +52,7 @@ class MessageLayoutManager: NSObject {
             
         case .MessageItemTypeGeo:
             
-            let geoLayout = AudioLayout.init()
+            let geoLayout = LoactionLayout.init()
              geoLayout.configWithMessage(message, showTime, true)
             self.layoutDic[message.transId] = geoLayout
             break

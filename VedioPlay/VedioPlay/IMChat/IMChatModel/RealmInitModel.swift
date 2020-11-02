@@ -13,7 +13,7 @@ import RealmSwift
 
 class RealmInitModel: NSObject {
     static var configuration:RealmSwift.Realm.Configuration?
-    static var  realmVersion = 3
+    static var  realmVersion = 4
     
     class func getRealmConfigBeyondCurrentUser()  -> Realm.Configuration? {
         if self.configuration == nil {

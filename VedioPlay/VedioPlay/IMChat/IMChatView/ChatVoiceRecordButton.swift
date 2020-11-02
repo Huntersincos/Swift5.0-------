@@ -22,8 +22,8 @@ import UIKit
 
 class ChatVoiceRecordButton: UIView {
     
-    var isRecord:Bool?
-    var cancel:Bool?
+    var isRecord:Bool = false
+    var cancel:Bool = false
     var time:Timer?
     var second:Int?
     weak var delegate:ChatVoiceRecordButtonDelegate?
@@ -89,7 +89,7 @@ class ChatVoiceRecordButton: UIView {
         }
         
         isRecord = false
-        if cancel ?? false {
+        if cancel {
             self.delegate?.voiceRecordCancelRecord(self)
             styleView.text =   NSLocalizedString("RECORD_TIPS",tableName: nil, comment: "")
             styleView.textColor = .clear
@@ -124,7 +124,7 @@ class ChatVoiceRecordButton: UIView {
            return
         }
         isRecord = false
-        if cancel ?? false {
+        if cancel {
             self.delegate?.voiceRecordCancelRecord(self)
             styleView.text =   NSLocalizedString("RECORD_TIPS",tableName: nil, comment: "")
             styleView.textColor = .clear

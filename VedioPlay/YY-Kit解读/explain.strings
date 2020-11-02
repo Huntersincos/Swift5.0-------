@@ -1,0 +1,33 @@
+/* 
+  File.strings
+  VedioPlay
+
+  Created by wenze on 2020/11/2.
+  Copyright © 2020 wenze. All rights reserved.
+*/
+
+参考:https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/
+纯属读yykit oc源码 通过swift来解读,不建议使用 可做学习使用
+1 Hsync:水平同步信号
+2 Vsync:垂直同步信号
+3 CPU 将处理好的数据 传输给GPU GPU将渲完成后将渲染结果放入帧缓冲区,随后视频控制器会按照Vsync信号读取帧缓存区的数据,然后将数据传给显示器
+4 双缓存区:
+5 V-Snyc:垂直同步  ios:双缓存 垂直同步
+6 为啥会引起卡顿呢:VSnyc信号 --- CADisplayLink ----- 通知App ---- CPU 计算显示内容 --- 传输给GPU(渲染) ----帧缓冲区 --- 显示器  由于V-Snyc:垂直同步机制 如果在这个同步机制时间内 cpu和gpu没有完成这个过程,就会出现丢帧,等待下一个机会显示,而显示器会保留之前的内容不变 从而出现了界面卡顿; 丢帧现象,需要对GPU和CPU压力进行评估和优化
+
+7 cpu消耗资源的原因
+ 7.1 使用一些重量级的对象 开发中使用轻量级对象
+ 7.2 大量重复删除视图,调整试图层次
+ 7.4 对象没有销毁
+ 7.5 布局计算/文本计算/不合理/图片解码/图片绘制等
+
+  
+
+  
+
+
+
+
+
+  
+
