@@ -742,7 +742,7 @@ class SDImageCache: NSObject {
     }
     
     
-    /// 获取磁盘图片大小
+    /// 获取磁盘图片数目大小
     func getDiskCount() -> Int{
       var count:Int = 0
         ioQueue?.async {
