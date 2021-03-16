@@ -201,6 +201,10 @@ class SDWebImageDownloader: NSObject,URLSessionTaskDelegate,URLSessionDataDelega
         var operation:SDWebImageDownloaderOperation?
         //weak var weakSelf = self
         addProgressCallback(progressBlock, completedBlock, { [weak self] () -> Void? in
+            
+            print("addProgressCallback\(Thread.current)")
+            
+            //addProgressCallback<NSThread: 0x600001a1c2c0>{number = 1, name = main}
             if let weakSelf = self {
                 
                 var  timeoutInterval = weakSelf.downloadTimeout

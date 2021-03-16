@@ -19,7 +19,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     
    
-    let array = ["相册","相机","麦克风","定位","本地视频播放","URL视频播放","swift-SDWebImage加载图片","其他功能","聊天列表","聊天详情页"]
+    let array = ["相册","相机","麦克风","定位","本地视频播放","URL视频播放","swift-SDWebImage加载图片","其他功能","聊天列表","聊天详情页","TestSocket.io"]
     @IBOutlet weak var dataTabView: UITableView!
     var recordProgressView:VoiceRecordProgressView!
     override func viewDidLoad() {
@@ -32,6 +32,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         recordProgressView = VoiceRecordProgressView.init(frame: CGRect(x: (UIScreen.main.bounds.width - 160)/2, y: (UIScreen.main.bounds.height - 160)/2, width: 160, height: 160))
         self.view .addSubview(recordProgressView)
         recordProgressView.isHidden = true
+        
+        //array[10];
         
        
     }
@@ -99,6 +101,13 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             let chatDetialVC = ChatDetailViewController.init()
             chatDetialVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(chatDetialVC, animated: true)
+            
+        }else if(indexPath.row == 10){
+            
+            let socketio = SocketIOViewController.init()
+            socketio.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(socketio, animated: true)
+            
             
         }
     }

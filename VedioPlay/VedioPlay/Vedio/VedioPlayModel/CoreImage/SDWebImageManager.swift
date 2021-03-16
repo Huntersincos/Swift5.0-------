@@ -332,6 +332,8 @@ class SDWebImageManager: NSObject {
                 completedBlock(nil,NSError.init(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist, userInfo: nil),SDImageCacheType.SDImageCacheTypeNone,url,true)
             }else{
                 DispatchQueue.main.async {
+                    
+                    print("SDWebImageDownloaderOperation\(Thread.current)")
                      completedBlock(nil,NSError.init(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist, userInfo: nil),SDImageCacheType.SDImageCacheTypeNone,url,true)
                 }
             }

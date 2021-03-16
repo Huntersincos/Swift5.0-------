@@ -157,7 +157,7 @@ class SDImageCache: NSObject {
     func initCache(withNamespace ns:String,diskCacheDirectory  directory: String?){
         //self.init()
         
-        let fullNamespace = "com.hackemist.SDWebImageCache.\(ns)"
+        let fullNamespace = "com.hackemist.SDWebImageCache_swift.\(ns)"
         kPNGSignatureData = Data.init(bytes: kPNGSignatureBytes, count: 8)
         /**
           线程       队列(任务 异步和同步)
@@ -167,7 +167,7 @@ class SDImageCache: NSObject {
          
          */
         //默认创建串行队列
-        ioQueue = DispatchQueue.init(label: "com.hackemist.SDWebImageCache")
+        ioQueue = DispatchQueue.init(label: "com.hackemist.SDWebImageCache_swift")
         // 并发队列
        // DispatchQueue.init(label: "com.hackemist.SDWebImageCache", qos: .utility, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         maxCacheAge = kDefaultCacheMaxCacheAge

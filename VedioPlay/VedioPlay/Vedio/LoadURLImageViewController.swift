@@ -31,7 +31,7 @@ class LoadURLImageViewController: UIViewController {
         self.placeholderUrlImageView.sd_setImageWithURL(URL.init(string: "https://www.gx.10086.cn/shop/staticpic/upload/attach//20200909/2020379101531.png"), placeholderImage: UIImage.init(named: "ic_pic_choose"))
          self.noCashDishImageView.sd_setImageWithURL(URL.init(string: "https://www.gx.10086.cn/shop/staticpic/upload/attach//20200120/2020420162049.jpg"), placeholderImage: nil, options: SDWebImageOptions.SDWebImageCacheMemoryOnly)
          self.highPriorityImageView.sd_setImageWithURL(URL.init(string: "https://www.gx.10086.cn/shop/staticpic/upload/attach//20200120/202042016235.jpg"), placeholderImage: nil, options: SDWebImageOptions.SDWebImageHighPriority) { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, url:URL?) -> Void? in
-             
+            print("SDWebImageHighPriority\(Thread.current)")
             /// 绘制图片为灰色
             if image != nil{
                  self.highPriorityImageView.image = self.highPriorityImageView.grayImage(image!)
@@ -41,7 +41,7 @@ class LoadURLImageViewController: UIViewController {
         }
        
         self.progressiveDownloadImageView.sd_setImageWithURL(URL.init(string: "https://www.gx.10086.cn/shop/release/pages/dayActivity/20208112102001/dayActivityHome/images/t1.png"), placeholderImage: nil, options: SDWebImageOptions.SDWebImageProgressiveDownload, completed: { (image:UIImage?, error:Error?, cacheType:SDImageCacheType, url:URL?) -> Void? in
-             
+            print("progressiveDownloadImageView\(Thread.current)")
             return nil
         }) { (receivedSize:Int,expectedSize :Int64?) -> Void? in
             

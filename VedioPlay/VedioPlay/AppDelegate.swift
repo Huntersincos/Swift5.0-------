@@ -8,9 +8,12 @@
 
 import UIKit
 
+
 //@available(iOS 13.0, *) 工程用stroyboard搭建 简单界面用xlb 复杂界面用代码实现
+// @UIApplicationMain 相当于oc的main函数
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
     
     var isForceLandscape:Bool = false
     var isForcePortrait:Bool = false
@@ -19,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
        // SDWebImageDownloader.initializeOnceMethod()
+        
         return true
     }
 

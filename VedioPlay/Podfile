@@ -4,6 +4,7 @@ xcodeproj ‘VedioPlay.xcodeproj’
 
 pod 'RealmSwift'
 pod 'Realm'
+pod 'Socket.IO-Client-Swift'
 
 use_frameworks!
 

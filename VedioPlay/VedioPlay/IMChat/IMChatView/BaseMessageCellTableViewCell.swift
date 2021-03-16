@@ -51,6 +51,7 @@ class BaseMessageCellTableViewCell: UITableViewCell {
         
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
+        
     
     }
     
